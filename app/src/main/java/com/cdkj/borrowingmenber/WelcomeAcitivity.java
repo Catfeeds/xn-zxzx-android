@@ -51,5 +51,4 @@ public class WelcomeAcitivity extends BaseActivity {
                 }, Throwable::printStackTrace));
     }
 
-
 }
