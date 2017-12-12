@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#0eb8ae</color>
+    <color name="colorPrimaryDark">#0eb8ae</color>
+    <color name="colorAccent">#0eb8ae</color>
+
+
+
+    <color name="btn_click_app">#0e978f</color>
+    <color name="btn_click_un_app">#0eb8ae</color>
+
+    <color name="main_tab_text_select">#0cb8ae</color>
+
+    <color name="title_bg_app">#0cb8ae</color>
+</resources>

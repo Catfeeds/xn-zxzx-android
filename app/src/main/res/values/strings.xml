@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">借款员</string>
+    <string name="upload_idcard_positive">上传身份证正面照片</string>
+    <string name="upload_idcard_reverse">上传身份证反面照片</string>
+    <string name="upload_idcard_people">上传手持身份证照片</string>
+    <string name="upload_idcard_tips">您的照片仅用于审核，我们将为您严格保密</string>
+    <string name="next_step">下一步</string>
+    <string name="check_id_info">验证身份信息</string>
+    <string name="real_name">真实姓名</string>
+    <string name="please_input_name">请输入姓名</string>
+    <string name="please_input_idcard_num">请输入身份证号码</string>
+    <string name="id_number">身份证号</string>
+    <string name="id_check_tips">请如实填写本人信息，否则将影响测评</string>
+    <string name="certification">认证</string>
+    <string name="setting">设置</string>
+    <string name="no_cert_list">暂无调查</string>
+    <string name="start_certification">  向你发起调查</string>
+    <string name="my_report_page">我的资信报告</string>
+</resources>

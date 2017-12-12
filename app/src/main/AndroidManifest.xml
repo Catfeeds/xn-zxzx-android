@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.cdkj.borrowingmenber">
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
+    <application
+        android:name=".MyApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".WelcomeAcitivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".module.user.SettingActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+
+        <!--主页-->
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <!--通讯录认证-->
+        <activity
+            android:name=".module.certification.AddressBookCertActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".module.user.LoginActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <!--基本信息认证-->
+        <activity
+            android:name=".module.certification.BasicInfoCertActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <!--身份证上传-->
+        <activity
+            android:name=".module.certification.IdcardUploadActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <!--行业关注清单-->
+        <activity
+            android:name=".module.certification.IndustryFocusOnActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+
+        <!--定位认证-->
+        <activity
+            android:name=".module.certification.LocationCertActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/transparenStyle"
+            android:windowSoftInputMode="adjustPan" />
+        <!--3要素认证-->
+        <activity
+            android:name=".module.certification.ThreeDataCertActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/transparenStyle"
+            android:windowSoftInputMode="adjustPan" />
+        <!--同盾运营商认证-->
+        <activity
+            android:name=".module.certification.TdOperatorCertActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/transparenStyle"
+            android:windowSoftInputMode="adjustPan" />
+        <!--芝麻分数获取-->
+        <activity
+            android:name=".module.certification.ZMScoreGetActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+
+        <!--我的报告-->
+        <activity
+            android:name=".module.user.MyReportActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <!--芝麻认证-->
+        <activity
+            android:name=".module.certification.ZMCertificationActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan">
+
+            <!-- 需要添加下面的intent-filter配置 -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!--cddata://certi.back-->
+                <data
+                    android:host="certi.back"
+                    android:scheme="borrowing" />
+            </intent-filter>
+        </activity>
+
+    </application>
+
+</manifest>

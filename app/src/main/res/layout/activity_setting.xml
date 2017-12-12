@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:background="@color/bg_gray"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <com.cdkj.baselibrary.views.RowMoreInfoLayout
+            android:id="@+id/update_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:txt_title="修改手机号" />
+
+        <com.cdkj.baselibrary.views.RowMoreInfoLayout
+            android:id="@+id/update_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:txt_title="修改登录密码" />
+
+        <Button
+            android:id="@+id/tv_logout"
+            style="@style/common_button"
+            android:layout_marginTop="100dp"
+            android:text="退出登录" />
+
+
+    </LinearLayout>
+</layout>

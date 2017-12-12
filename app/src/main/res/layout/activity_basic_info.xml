@@ -1,0 +1,512 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/bg_gray"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/selector_gray"
+                    android:orientation="horizontal"
+                    android:paddingBottom="15dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="20dp"
+                    android:paddingTop="15dp"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="70dp"
+                        android:text="性别"
+                        android:textColor="@color/text_color"
+                        android:textSize="15sp" />
+
+                    <RadioGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="男" />
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="60dp"
+                            android:text="女" />
+
+
+                    </RadioGroup>
+
+                </LinearLayout>
+
+
+                <com.cdkj.baselibrary.views.RowMoreInfoLayout
+                    android:id="@+id/row_study_sing"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:txt_info_hint="请选择"
+                    app:txt_title="学历" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:background="@drawable/selector_gray"
+                    android:orientation="horizontal"
+                    android:paddingBottom="15dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="20dp"
+                    android:paddingTop="15dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="40dp"
+                        android:text="毕业院校"
+                        android:textColor="@color/text_color"
+                        android:textSize="15sp" />
+
+                    <EditText
+                        android:id="@+id/edit_school"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:hint="请填写您的毕业院校"
+                        android:textSize="15sp" />
+
+
+                </LinearLayout>
+
+
+                <com.cdkj.baselibrary.views.RowMoreInfoLayout
+                    android:id="@+id/row_marriage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:txt_info_hint="请选择"
+                    app:txt_title="婚姻状况" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:background="@drawable/selector_gray"
+                    android:orientation="horizontal"
+                    android:paddingBottom="15dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="20dp"
+                    android:paddingTop="15dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="40dp"
+                        android:text="子女个数"
+                        android:textColor="@color/text_color"
+                        android:textSize="15sp" />
+
+                    <EditText
+                        android:id="@+id/edit_child"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:hint="请输入子女个数"
+                        android:inputType="number"
+                        android:textColorHint="@color/text_hint_color"
+                        android:textSize="15sp" />
+
+
+                </LinearLayout>
+
+                <com.cdkj.baselibrary.views.RowMoreInfoLayout
+                    android:id="@+id/row_city"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:txt_info_hint="请选择"
+                    app:txt_title="现居住地址" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:background="@drawable/selector_gray"
+                    android:orientation="horizontal"
+                    android:paddingBottom="15dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="20dp"
+                    android:paddingTop="15dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="40dp"
+                        android:text="详细地址"
+                        android:textColor="@color/text_color"
+                        android:textSize="15sp" />
+
+                    <EditText
+                        android:id="@+id/edit_address"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:hint="请填写您的详细地址"
+                        android:textColorHint="@color/text_hint_color"
+                        android:textSize="15sp" />
+
+
+                </LinearLayout>
+
+                <com.cdkj.baselibrary.views.RowMoreInfoLayout
+                    android:id="@+id/row_live_days"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:txt_info_hint="请选择"
+                    app:txt_title="居住年限" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:background="@drawable/selector_gray"
+                    android:orientation="horizontal"
+                    android:paddingBottom="15dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="20dp"
+                    android:paddingTop="15dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="40dp"
+                        android:text="QQ"
+                        android:textColor="@color/text_color"
+                        android:textSize="15sp" />
+
+                    <EditText
+                        android:id="@+id/edit_qq"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:hint="选填"
+                        android:textColorHint="@color/text_hint_color"
+                        android:textSize="15sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:background="@drawable/selector_gray"
+                    android:orientation="horizontal"
+                    android:paddingBottom="15dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="20dp"
+                    android:paddingTop="15dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="40dp"
+                        android:text="电子邮箱"
+                        android:textColor="@color/text_color"
+                        android:textSize="15sp" />
+
+                    <EditText
+                        android:id="@+id/edit_email"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:hint="选填"
+                        android:textColorHint="@color/text_hint_color"
+                        android:textSize="15sp" />
+
+                </LinearLayout>
+
+
+                <com.cdkj.baselibrary.views.RowMoreInfoLayout
+                    android:id="@+id/row_job"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:txt_info_hint="请选择"
+                    app:txt_title="职业身份" />
+
+                <com.cdkj.baselibrary.views.RowMoreInfoLayout
+                    android:id="@+id/row_job_money"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:txt_info_hint="请选择"
+                    app:txt_title="月收入" />
+
+                <com.cdkj.baselibrary.views.RowMoreInfoLayout
+                    android:id="@+id/row_job_city"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:txt_info_hint="请选择"
+                    app:txt_title="单位省份" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:background="@drawable/selector_gray"
+                    android:orientation="horizontal"
+                    android:paddingBottom="15dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="20dp"
+                    android:paddingTop="15dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="40dp"
+                        android:text="单位地址"
+                        android:textColor="@color/text_color"
+                        android:textSize="15sp" />
+
+                    <EditText
+                        android:id="@+id/edit_job_address"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:hint="请输入单位地址"
+                        android:textColorHint="@color/text_hint_color"
+                        android:textSize="15sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:background="@drawable/selector_gray"
+                    android:orientation="horizontal"
+                    android:paddingBottom="15dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="20dp"
+                    android:paddingTop="15dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="40dp"
+                        android:text="单位名称"
+                        android:textColor="@color/text_color"
+                        android:textSize="15sp" />
+
+                    <EditText
+                        android:id="@+id/edit_job_name"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:hint="请输入单位名称"
+                        android:textColorHint="@color/text_hint_color"
+                        android:textSize="15sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:background="@drawable/selector_gray"
+                    android:orientation="horizontal"
+                    android:paddingBottom="15dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="20dp"
+                    android:paddingTop="15dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="40dp"
+                        android:text="单位电话"
+                        android:textColor="@color/text_color"
+                        android:textSize="15sp" />
+
+                    <EditText
+                        android:id="@+id/edit_job_phone"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:hint="选填"
+                        android:textColorHint="@color/text_hint_color"
+                        android:textSize="15sp" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/white"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="10dp"
+                    android:text="紧急联系人1"
+                    android:textColor="@color/text_color"
+                    android:textSize="12sp" />
+
+                <com.cdkj.baselibrary.views.RowMoreInfoLayout
+                    android:id="@+id/row_family_relation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:txt_info_hint="请选择"
+                    app:txt_title="亲属关系" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="horizontal"
+                    android:paddingBottom="10dp"
+                    android:weightSum="3">
+
+                    <EditText
+                        android:id="@+id/edit_family_name"
+                        android:layout_width="0dp"
+                        android:layout_height="35dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="30dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/gray_line_input_edtext"
+                        android:gravity="center_vertical"
+                        android:hint="姓名"
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:paddingTop="10dp"
+                        android:textColorHint="@color/text_hint_color"
+                        android:textSize="14sp" />
+
+                    <EditText
+                        android:id="@+id/edit_family_phone"
+                        android:layout_width="0dp"
+                        android:layout_height="35dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_weight="2"
+                        android:background="@drawable/gray_line_input_edtext"
+                        android:gravity="center_vertical"
+                        android:hint="手机号"
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:paddingTop="10dp"
+                        android:textColorHint="@color/text_hint_color"
+                        android:textSize="14sp" />
+
+
+                </LinearLayout>
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:background="@color/white"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="10dp"
+                    android:text="紧急联系人2"
+                    android:textColor="@color/text_color"
+                    android:textSize="12sp" />
+
+                <com.cdkj.baselibrary.views.RowMoreInfoLayout
+                    android:id="@+id/row_society_relation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:txt_info_hint="请选择"
+                    app:txt_title="社会关系" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="horizontal"
+                    android:paddingBottom="10dp"
+                    android:weightSum="3">
+
+                    <EditText
+                        android:id="@+id/edit_societys_name"
+                        android:layout_width="0dp"
+                        android:layout_height="35dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="30dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/gray_line_input_edtext"
+                        android:gravity="center_vertical"
+                        android:hint="姓名"
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:paddingTop="10dp"
+                        android:textColorHint="@color/text_hint_color"
+                        android:textSize="14sp" />
+
+                    <EditText
+                        android:id="@+id/edit_societys_phone"
+                        android:layout_width="0dp"
+                        android:layout_height="35dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_weight="2"
+                        android:background="@drawable/gray_line_input_edtext"
+                        android:gravity="center_vertical"
+                        android:hint="手机号"
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:paddingTop="10dp"
+                        android:textColorHint="@color/text_hint_color"
+                        android:textSize="14sp" />
+
+
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white">
+
+            <Button
+                android:id="@+id/btn_next"
+                style="@style/common_button"
+                android:text="@string/next_step" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+</layout>
