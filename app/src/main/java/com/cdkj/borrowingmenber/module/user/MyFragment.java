@@ -7,9 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.cdkj.baselibrary.appmanager.SPUtilHelpr;
 import com.cdkj.baselibrary.base.BaseLazyFragment;
 import com.cdkj.borrowingmenber.R;
 import com.cdkj.borrowingmenber.databinding.FragmentMyBinding;
+import com.cdkj.borrowingmenber.module.report.MyReportActivity;
 
 /**
  * 认证列表界面
@@ -37,6 +39,13 @@ public class MyFragment extends BaseLazyFragment {
 
         return mBinding.getRoot();
 
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mBinding.tvUserName.setText(SPUtilHelpr.getUserPhoneNum());
     }
 
     private void initListener() {

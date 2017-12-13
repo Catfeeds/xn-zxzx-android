@@ -66,6 +66,13 @@
             android:screenOrientation="portrait"
             android:theme="@style/transparenStyle"
             android:windowSoftInputMode="adjustPan" />
+
+        <!--同盾认证-->
+        <activity
+            android:name=".module.certification.TdAllCertActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/transparenStyle"
+            android:windowSoftInputMode="adjustPan" />
         <!--3要素认证-->
         <activity
             android:name=".module.certification.ThreeDataCertActivity"
@@ -86,7 +93,7 @@
 
         <!--我的报告-->
         <activity
-            android:name=".module.user.MyReportActivity"
+            android:name=".module.report.MyReportActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <!--芝麻认证-->

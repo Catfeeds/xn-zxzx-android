@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.cdkj.baselibrary.api.ResponseInListModel;
+import com.cdkj.baselibrary.appmanager.SPUtilHelpr;
 import com.cdkj.baselibrary.base.BaseLazyFragment;
 import com.cdkj.baselibrary.interfaces.BaseRefreshCallBack2;
 import com.cdkj.baselibrary.interfaces.RefreshHelper2;
@@ -53,9 +54,10 @@ public class CertificationListFragment extends BaseLazyFragment {
         //TODO inflater问题
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_certification_list, null, false);
         initRefresh();
-
         return mBinding.getRoot();
     }
+
+
 
     @Override
     public void onResume() {
@@ -148,6 +150,7 @@ public class CertificationListFragment extends BaseLazyFragment {
         map.put("orderColumn", "create_datetime");
         map.put("orderDir", "desc");
         map.put("statusList", getStatusList());
+        map.put("loanUser", SPUtilHelpr.getUserId());
 //        map.put("status", "0,1");
 
         if (isShowDialog) {

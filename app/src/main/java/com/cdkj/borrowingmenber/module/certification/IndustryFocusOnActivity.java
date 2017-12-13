@@ -3,7 +3,6 @@ package com.cdkj.borrowingmenber.module.certification;
 import android.os.Bundle;
 import android.text.TextUtils;
 
-import com.alibaba.fastjson.JSON;
 import com.cdkj.baselibrary.appmanager.EventTags;
 import com.cdkj.baselibrary.dialog.UITipDialog;
 import com.cdkj.baselibrary.nets.BaseResponseModelCallBack;
@@ -14,7 +13,7 @@ import com.cdkj.borrowingmenber.R;
 import com.cdkj.borrowingmenber.model.IdAndNameModel;
 import com.cdkj.borrowingmenber.model.IndustryFocusOnModel;
 import com.cdkj.borrowingmenber.module.api.MyApiServer;
-import com.cdkj.borrowingmenber.module.user.MyReportActivity;
+import com.cdkj.borrowingmenber.module.report.MyReportActivity;
 
 import org.greenrobot.eventbus.Subscribe;
 

@@ -104,7 +104,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="5dp"
-                android:text="2.提供通讯录信息，有助于您通过审核。"
+                android:text="2.提供通讯录信息，有助于您通过认证。"
                 android:textColor="@color/txt_gray" />
 
             <TextView
@@ -112,7 +112,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="5dp"
-                android:text="3.九州宝将严格遵守协议，保护用户隐私。"
+                android:text="3.我们将严格遵守协议，保护用户隐私。"
                 android:textColor="@color/txt_gray" />
 
 

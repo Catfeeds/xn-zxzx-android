@@ -17,10 +17,12 @@ import com.cdkj.borrowingmenber.module.certification.BasicInfoCertActivity;
 import com.cdkj.borrowingmenber.module.certification.IdcardUploadActivity;
 import com.cdkj.borrowingmenber.module.certification.IndustryFocusOnActivity;
 import com.cdkj.borrowingmenber.module.certification.LocationCertActivity;
+import com.cdkj.borrowingmenber.module.certification.TdAllCertActivity;
 import com.cdkj.borrowingmenber.module.certification.TdOperatorCertActivity;
 import com.cdkj.borrowingmenber.module.certification.ThreeDataCertActivity;
 import com.cdkj.borrowingmenber.module.certification.ZMCertificationActivity;
 import com.cdkj.borrowingmenber.module.certification.ZMScoreGetActivity;
+import com.cdkj.borrowingmenber.module.report.MyReportActivity;
 
 import java.util.Map;
 
@@ -115,8 +117,13 @@ public class CertificationStepHelper {
         }
         //打开同盾认证
         if (isNeedCertTd(certListModel) | isNeedCertTd(reportModel, certListModel)) {
+            openStepPage(context, TdAllCertActivity.class, certListModel, reportModel);
             return;
         }
+
+        //打开认证报告
+        MyReportActivity.open(context);
+
     }
 
     /**
@@ -138,8 +145,8 @@ public class CertificationStepHelper {
         call.enqueue(new BaseResponseModelCallBack<ReportModel>(context) {
             @Override
             protected void onSuccess(ReportModel data, String SucMessage) {
-//                CertificationStepHelper.openStepPage(context, TdOperatorCertActivity.class, certListModel, data);
-                CertificationStepHelper.checkStartStep(context, certListModel, data);
+                CertificationStepHelper.openStepPage(context, AddressBookCertActivity.class, certListModel, data);
+//                CertificationStepHelper.checkStartStep(context, certListModel, data);
             }
 
             @Override

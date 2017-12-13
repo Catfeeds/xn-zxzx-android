@@ -46,14 +46,16 @@ public class ThreeDataCertActivity extends BaseCertStepActivity {
             @Override
             public void doAfterGrand(String... permission) {
                 mCanGetIemi = true;
+                certRequest();
             }
 
             @Override
             public void doAfterDenied(String... permission) {
                 mCanGetIemi = false;
+                certRequest();
             }
         }, Manifest.permission.READ_PHONE_STATE);
-        certRequest();
+
     }
 
 

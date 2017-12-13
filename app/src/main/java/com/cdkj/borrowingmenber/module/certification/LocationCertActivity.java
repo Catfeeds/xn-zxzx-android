@@ -107,7 +107,8 @@ public class LocationCertActivity extends BaseCertStepActivity {
         map.put("city", locationModel.getCity() + ".");
         map.put("latitude", locationModel.getLatitude() + ".");
         map.put("longitude", locationModel.getLongitude() + ".");
-        map.put("province", locationModel.getProvince() + ".");
+        map.put("province", locationModel.getDistrict() + ".");
+        map.put("area", locationModel.getProvince() + ".");
         map.put("searchCode", mCertListModel.getCode());
 
         showLoadingDialog();

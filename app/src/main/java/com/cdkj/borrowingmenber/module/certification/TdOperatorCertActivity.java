@@ -18,6 +18,8 @@ import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 
 import com.cdkj.baselibrary.databinding.ActivityWebviewBinding;
+import com.cdkj.baselibrary.dialog.UITipDialog;
+import com.cdkj.baselibrary.model.IsSuccessModes;
 import com.cdkj.baselibrary.nets.BaseResponseModelCallBack;
 import com.cdkj.baselibrary.nets.RetrofitUtils;
 import com.cdkj.baselibrary.utils.LogUtil;
@@ -60,9 +62,6 @@ public class TdOperatorCertActivity extends BaseCertStepActivity {
         initLayout();
         mBaseBinding.titleView.setMidTitle("运营商认证");
 
-        LogUtil.E("测试" + getTaskIdByUrl(tdUrl));
-
-
         webView.loadUrl(getLoadUrl());
 
 //        TdParseProgressDialog dialog = new TdParseProgressDialog(this, "数据认证中", false);
@@ -100,7 +99,6 @@ public class TdOperatorCertActivity extends BaseCertStepActivity {
         if (!TextUtils.isEmpty(mobile)) {
             stringBuffer.append("&user_mobile=" + getUserPhoneNum());//手机号
         }
-
 
         LogUtil.E("同盾" + stringBuffer.toString());
 
@@ -163,22 +161,34 @@ public class TdOperatorCertActivity extends BaseCertStepActivity {
     private void taskIdCheck(String url) {
 
         if (mCertListModel == null) return;
+
+        String taskId = getTaskIdByUrl(url);
+
+        if (TextUtils.isEmpty(taskId)) {
+            UITipDialog.showFall(TdOperatorCertActivity.this, "认证失败，请退出重试");
+            return;
+        }
+
         Map map = RetrofitUtils.getRequestMap();
 
         map.put("searchCode", mCertListModel.getCode());
-        map.put("taskId", getTaskIdByUrl(url));
+        map.put("taskId", taskId);
 
         showLoadingDialog();
-        Call call = RetrofitUtils.getBaseAPiService().stringRequest("805256", StringUtils.getJsonToString(map));
+        Call call = RetrofitUtils.getBaseAPiService().successRequest("805256", StringUtils.getJsonToString(map));
 
         addCall(call);
 
-        call.enqueue(new BaseResponseModelCallBack(this) {
+        call.enqueue(new BaseResponseModelCallBack<IsSuccessModes>(this) {
             @Override
-            protected void onSuccess(Object data, String SucMessage) {
-                mCertListModel.setPYYS4("N");
-                CertificationStepHelper.checkRequest(TdOperatorCertActivity.this, mCertListModel);
-                finish();
+            protected void onSuccess(IsSuccessModes data, String SucMessage) {
+                if (data.isSuccess()) {
+                    mCertListModel.setPYYS4("N");
+                    CertificationStepHelper.checkRequest(TdOperatorCertActivity.this, mCertListModel);
+                    finish();
+                } else {
+                    UITipDialog.showFall(TdOperatorCertActivity.this, "认证失败，请重试");
+                }
             }
 
             @Override
@@ -225,6 +235,16 @@ public class TdOperatorCertActivity extends BaseCertStepActivity {
 
 
     @Override
+    protected boolean canFinish() {
+        return false;
+    }
+
+    @Override
+    public void topTitleViewleftClick() {
+        goBack();
+    }
+
+    @Override
     protected void onDestroy() {
         if (webView != null) {
             webView.clearHistory();
@@ -241,7 +261,7 @@ public class TdOperatorCertActivity extends BaseCertStepActivity {
     }
 
     private void goBack() {
-        if (webView.canGoBack()) {
+        if (webView != null && webView.canGoBack()) {
             webView.goBack();
         } else {
             finish();
