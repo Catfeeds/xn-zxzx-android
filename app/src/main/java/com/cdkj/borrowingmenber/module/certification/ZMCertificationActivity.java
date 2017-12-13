@@ -22,7 +22,7 @@ import com.cdkj.borrowingmenber.BaseCertStepActivity;
 import com.cdkj.borrowingmenber.R;
 import com.cdkj.borrowingmenber.databinding.ActivityCardandnameCheckBinding;
 import com.cdkj.borrowingmenber.model.ZMCertFirstStepModel;
-import com.cdkj.borrowingmenber.module.MyApiServer;
+import com.cdkj.borrowingmenber.module.api.MyApiServer;
 import com.cdkj.borrowingmenber.weiget.CertificationStepHelper;
 
 import java.net.URLEncoder;

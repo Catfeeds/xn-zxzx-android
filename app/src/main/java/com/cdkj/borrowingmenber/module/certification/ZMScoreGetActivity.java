@@ -6,13 +6,12 @@ import android.text.TextUtils;
 import com.alibaba.fastjson.JSON;
 import com.cdkj.baselibrary.nets.BaseResponseModelCallBack;
 import com.cdkj.baselibrary.nets.RetrofitUtils;
-import com.cdkj.baselibrary.utils.LogUtil;
 import com.cdkj.baselibrary.utils.StringUtils;
 import com.cdkj.borrowingmenber.BaseZmPermissionsCheckActivity;
 import com.cdkj.borrowingmenber.R;
 import com.cdkj.borrowingmenber.model.IdAndNameModel;
 import com.cdkj.borrowingmenber.model.ZmScoreGetModel;
-import com.cdkj.borrowingmenber.module.MyApiServer;
+import com.cdkj.borrowingmenber.module.api.MyApiServer;
 import com.cdkj.borrowingmenber.weiget.CertificationStepHelper;
 
 import java.util.HashMap;
@@ -42,12 +41,8 @@ public class ZMScoreGetActivity extends BaseZmPermissionsCheckActivity {
 
     /*"{"isSuccess":false,"idNo":"522321199509111655","realName":"李先俊"}"*/
     private void setShowData() {
-        if (mReportModel == null || TextUtils.isEmpty(mReportModel.getF2())) {
-            return;
-        }
-
-
-        IdAndNameModel idAndNameModel = JSON.parseObject(mReportModel.getF2(), IdAndNameModel.class);
+        IdAndNameModel idAndNameModel = getIdAndName();
+        if (idAndNameModel == null) return;
         mBinding.editCardNumber.setText(idAndNameModel.getIdNo());
         mBinding.editName.setText(idAndNameModel.getRealName());
 

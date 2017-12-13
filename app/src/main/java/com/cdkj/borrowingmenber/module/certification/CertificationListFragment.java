@@ -19,7 +19,7 @@ import com.cdkj.borrowingmenber.R;
 import com.cdkj.borrowingmenber.adapters.CertListAdapter;
 import com.cdkj.borrowingmenber.databinding.FragmentCertificationListBinding;
 import com.cdkj.borrowingmenber.model.CertListModel;
-import com.cdkj.borrowingmenber.module.MyApiServer;
+import com.cdkj.borrowingmenber.module.api.MyApiServer;
 import com.cdkj.borrowingmenber.weiget.CertificationStepHelper;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -124,7 +124,7 @@ public class CertificationListFragment extends BaseLazyFragment {
             if (certListModel == null) {
                 return;
             }
-
+//            CertificationStepHelper.openStepPage(mActivity, TdOperatorCertActivity.class, certListModel, null);
             CertificationStepHelper.checkRequest(mActivity, certListModel);
         });
 

@@ -11,7 +11,7 @@ import com.cdkj.baselibrary.nets.RetrofitUtils;
 import com.cdkj.baselibrary.utils.StringUtils;
 import com.cdkj.borrowingmenber.model.CertListModel;
 import com.cdkj.borrowingmenber.model.ReportModel;
-import com.cdkj.borrowingmenber.module.MyApiServer;
+import com.cdkj.borrowingmenber.module.api.MyApiServer;
 import com.cdkj.borrowingmenber.module.certification.AddressBookCertActivity;
 import com.cdkj.borrowingmenber.module.certification.BasicInfoCertActivity;
 import com.cdkj.borrowingmenber.module.certification.IdcardUploadActivity;
@@ -93,9 +93,9 @@ public class CertificationStepHelper {
             openStepPage(context, AddressBookCertActivity.class, certListModel, reportModel);
             return;
         }
-
+        //打开运营商认证
         if (isNeedCertIEMI(certListModel) || isNeedCertIEMI(reportModel, certListModel)) {
-            //打开运营商认证
+            openStepPage(context, TdOperatorCertActivity.class, certListModel, reportModel);
             return;
         }
         //打开芝麻分认证
@@ -103,8 +103,8 @@ public class CertificationStepHelper {
             openStepPage(context, ZMScoreGetActivity.class, certListModel, reportModel);
             return;
         }
+        //打开行业清单认证
         if (isNeedCertHyqd(certListModel) || isNeedCertHyqd(reportModel, certListModel)) {
-            //打开行业清单认证
             openStepPage(context, IndustryFocusOnActivity.class, certListModel, reportModel);
             return;
         }
@@ -113,8 +113,8 @@ public class CertificationStepHelper {
             openStepPage(context, ThreeDataCertActivity.class, certListModel, reportModel);
             return;
         }
+        //打开同盾认证
         if (isNeedCertTd(certListModel) | isNeedCertTd(reportModel, certListModel)) {
-            //打开同盾认证
             return;
         }
     }
@@ -138,8 +138,8 @@ public class CertificationStepHelper {
         call.enqueue(new BaseResponseModelCallBack<ReportModel>(context) {
             @Override
             protected void onSuccess(ReportModel data, String SucMessage) {
-                CertificationStepHelper.openStepPage(context, TdOperatorCertActivity.class, certListModel, data);
-//                CertificationStepHelper.checkStartStep(context, certListModel, data);
+//                CertificationStepHelper.openStepPage(context, TdOperatorCertActivity.class, certListModel, data);
+                CertificationStepHelper.checkStartStep(context, certListModel, data);
             }
 
             @Override

@@ -13,12 +13,10 @@ import com.cdkj.borrowingmenber.BaseZmPermissionsCheckActivity;
 import com.cdkj.borrowingmenber.R;
 import com.cdkj.borrowingmenber.model.IdAndNameModel;
 import com.cdkj.borrowingmenber.model.IndustryFocusOnModel;
-import com.cdkj.borrowingmenber.module.MyApiServer;
+import com.cdkj.borrowingmenber.module.api.MyApiServer;
 import com.cdkj.borrowingmenber.module.user.MyReportActivity;
 
 import org.greenrobot.eventbus.Subscribe;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.Map;
 
@@ -90,11 +88,8 @@ public class IndustryFocusOnActivity extends BaseZmPermissionsCheckActivity {
 
     /*"{"isSuccess":false,"idNo":"522321199509111655","realName":"李先俊"}"*/
     private void setShowData() {
-        if (mReportModel == null || TextUtils.isEmpty(mReportModel.getF2())) {
-            return;
-        }
-
-        IdAndNameModel idAndNameModel = JSON.parseObject(mReportModel.getF2(), IdAndNameModel.class);
+        IdAndNameModel idAndNameModel = getIdAndName();
+        if (idAndNameModel == null) return;
         mBinding.editCardNumber.setText(idAndNameModel.getIdNo());
         mBinding.editName.setText(idAndNameModel.getRealName());
 

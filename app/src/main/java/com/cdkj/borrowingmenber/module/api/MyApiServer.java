@@ -1,4 +1,4 @@
-package com.cdkj.borrowingmenber.module;
+package com.cdkj.borrowingmenber.module.api;
 
 import com.cdkj.baselibrary.api.BaseResponseListModel;
 import com.cdkj.baselibrary.api.BaseResponseModel;

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
 
+import com.cdkj.baselibrary.dialog.UITipDialog;
 import com.cdkj.baselibrary.interfaces.GaoDeLocation;
 import com.cdkj.baselibrary.interfaces.LocationCallBackListener;
 import com.cdkj.baselibrary.interfaces.LocationHelper;
@@ -32,6 +33,8 @@ public class LocationCertActivity extends BaseCertStepActivity {
 
     LocationHelper locationHelper;
 
+    private UITipDialog tipDialog;
+
     @Override
     public View addMainView() {
         return null;
@@ -45,7 +48,7 @@ public class LocationCertActivity extends BaseCertStepActivity {
         locationHelper = new LocationHelper(this, new GaoDeLocation(), new LocationCallBackListener() {
             @Override
             public void locationSuccessful(LocationModel locationModel) {
-                disMissLoading();
+                dismissLocationDialog();
                 if (mCertListModel == null || locationModel == null) {
                     showToast("定位失败，请重试");
                     return;
@@ -55,24 +58,25 @@ public class LocationCertActivity extends BaseCertStepActivity {
 
             @Override
             public void locationFailure(String msg) {
-                disMissLoading();
+                dismissLocationDialog();
                 showDoubleWarnListen("定位失败，无法进行下一步认证，请重试", view -> {
                     finish();
                 }, view -> {
-                    showLoadingDialog();
+                    showLocationDialog();
                     locationHelper.startLocation();
                 });
             }
 
             @Override
             public void noPermissions() {
-                disMissLoading();
+                dismissLocationDialog();
                 showSureDialog("没有定位权限，无法进行下一步认证，请到设置界面授予APP定位权限", view -> {
                     finish();
                 });
             }
         });
 
+        showLocationDialog();
         locationHelper.startLocation();
 
     }
@@ -144,7 +148,26 @@ public class LocationCertActivity extends BaseCertStepActivity {
             }
         });
 
+    }
 
+    public void showLocationDialog() {
+        if (tipDialog == null) {
+            tipDialog = new UITipDialog.Builder(this)
+                    .setIconType(UITipDialog.Builder.ICON_TYPE_LOADING)
+                    .setTipWord("定位中...")
+                    .create();
+        }
+        if (tipDialog.isShowing()) {
+            tipDialog.dismiss();
+        }
+
+        tipDialog.show();
+    }
+
+    public void dismissLocationDialog() {
+        if (tipDialog != null && tipDialog.isShowing()) {
+            tipDialog.dismiss();
+        }
     }
 
 }

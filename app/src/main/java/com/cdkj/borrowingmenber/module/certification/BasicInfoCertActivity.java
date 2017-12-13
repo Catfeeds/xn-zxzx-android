@@ -19,7 +19,7 @@ import com.cdkj.borrowingmenber.BaseCertStepActivity;
 import com.cdkj.borrowingmenber.R;
 import com.cdkj.borrowingmenber.databinding.ActivityBasicInfoBinding;
 import com.cdkj.borrowingmenber.model.KeyDataModel;
-import com.cdkj.borrowingmenber.module.MyApiServer;
+import com.cdkj.borrowingmenber.module.api.MyApiServer;
 import com.cdkj.borrowingmenber.weiget.CertificationStepHelper;
 import com.lljjcoder.citypickerview.widget.CityPicker;
 

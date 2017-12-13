@@ -27,7 +27,7 @@ import com.cdkj.borrowingmenber.model.KeyDataModel;
 import com.cdkj.borrowingmenber.model.MyLocalFocusOnListModel;
 import com.cdkj.borrowingmenber.model.ReportModel;
 import com.cdkj.borrowingmenber.model.ReportUserInfoModel;
-import com.cdkj.borrowingmenber.module.MyApiServer;
+import com.cdkj.borrowingmenber.module.api.MyApiServer;
 import com.cdkj.borrowingmenber.weiget.LocalFocusOnDataParseHelper;
 
 import org.json.JSONException;
