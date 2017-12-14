@@ -444,7 +444,7 @@ public class BasicInfoCertActivity extends BaseCertStepActivity {
         map.put("companyCode", MyCdConfig.COMPANYCODE);
         map.put("systemCode", MyCdConfig.SYSTEMCODE);
         map.put("parentKey", "family_relation");
-        Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("623907", StringUtils.getJsonToString(map));
+        Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("805906", StringUtils.getJsonToString(map));
         addCall(call);
         showLoadingDialog();
         call.enqueue(new BaseResponseListCallBack<KeyDataModel>(this) {
@@ -477,7 +477,7 @@ public class BasicInfoCertActivity extends BaseCertStepActivity {
         map.put("companyCode", MyCdConfig.COMPANYCODE);
         map.put("systemCode", MyCdConfig.SYSTEMCODE);
         map.put("parentKey", "society_relation");
-        Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("623907", StringUtils.getJsonToString(map));
+        Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("805906", StringUtils.getJsonToString(map));
         addCall(call);
         showLoadingDialog();
         call.enqueue(new BaseResponseListCallBack<KeyDataModel>(this) {
@@ -511,7 +511,7 @@ public class BasicInfoCertActivity extends BaseCertStepActivity {
         map.put("systemCode", MyCdConfig.SYSTEMCODE);
         map.put("parentKey", "occupation");
 
-        Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("623907", StringUtils.getJsonToString(map));
+        Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("805906", StringUtils.getJsonToString(map));
         addCall(call);
         showLoadingDialog();
         call.enqueue(new BaseResponseListCallBack<KeyDataModel>(this) {
@@ -549,7 +549,7 @@ public class BasicInfoCertActivity extends BaseCertStepActivity {
         map.put("companyCode", MyCdConfig.COMPANYCODE);
         map.put("systemCode", MyCdConfig.SYSTEMCODE);
         map.put("parentKey", "education");
-        Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("623907", StringUtils.getJsonToString(map));
+        Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("805906", StringUtils.getJsonToString(map));
         addCall(call);
         showLoadingDialog();
         call.enqueue(new BaseResponseListCallBack<KeyDataModel>(this) {
@@ -584,7 +584,7 @@ public class BasicInfoCertActivity extends BaseCertStepActivity {
         map.put("companyCode", MyCdConfig.COMPANYCODE);
         map.put("systemCode", MyCdConfig.SYSTEMCODE);
         map.put("parentKey", "marriage");
-        Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("623907", StringUtils.getJsonToString(map));
+        Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("805906", StringUtils.getJsonToString(map));
         addCall(call);
         showLoadingDialog();
         call.enqueue(new BaseResponseListCallBack<KeyDataModel>(this) {
@@ -663,7 +663,7 @@ public class BasicInfoCertActivity extends BaseCertStepActivity {
         map.put("companyCode", MyCdConfig.COMPANYCODE);
         map.put("systemCode", MyCdConfig.SYSTEMCODE);
         map.put("parentKey", "live_time");
-        Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("623907", StringUtils.getJsonToString(map));
+        Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("805906", StringUtils.getJsonToString(map));
         addCall(call);
         showLoadingDialog();
         call.enqueue(new BaseResponseListCallBack<KeyDataModel>(this) {
@@ -697,7 +697,7 @@ public class BasicInfoCertActivity extends BaseCertStepActivity {
         map.put("companyCode", MyCdConfig.COMPANYCODE);
         map.put("systemCode", MyCdConfig.SYSTEMCODE);
         map.put("parentKey", "income");
-        Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("623907", StringUtils.getJsonToString(map));
+        Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("805906", StringUtils.getJsonToString(map));
         addCall(call);
         showLoadingDialog();
         call.enqueue(new BaseResponseListCallBack<KeyDataModel>(this) {

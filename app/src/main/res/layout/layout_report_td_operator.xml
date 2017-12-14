@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <!--
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/bg_gray"
+            android:paddingBottom="10dp"
+            android:paddingLeft="15dp"
+            android:paddingTop="10dp"
+            android:text="用户信息" />
+
+        <LinearLayout style="@style/report_row_h">
+
+            <TextView
+                style="@style/report_row_title"
+                android:text="姓名" />
+
+            <TextView
+                android:id="@+id/tv_td_name"
+                style="@style/report_row_info"
+                tools:text="姓名" />
+
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_td_name_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="5dp"
+            android:text="运营商登记姓名" />
+
+        <TextView
+            android:id="@+id/tv_name_match"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="5dp"
+            android:text="和运营商数据不匹配" />
+
+        <View style="@style/style_split_line" />
+
+        <LinearLayout style="@style/report_row_h">
+
+            <TextView
+                style="@style/report_row_title"
+                android:text="身份证" />
+
+            <TextView
+                android:id="@+id/tv_id_card"
+                style="@style/report_row_info"
+                tools:text="姓名" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="5dp"
+            android:text="身份证有效" />
+
+
+        <View style="@style/style_split_line" />
+
+        <LinearLayout style="@style/report_row_h">
+
+            <TextView
+                style="@style/report_row_title"
+                android:text="性别" />
+
+            <TextView
+                android:id="@+id/tv_gender"
+                style="@style/report_row_info"
+                tools:text="姓名" />
+
+        </LinearLayout>
+
+        <View style="@style/style_split_line" />
+
+        <LinearLayout style="@style/report_row_h">
+
+            <TextView
+                style="@style/report_row_title"
+                android:text="年龄" />
+
+            <TextView
+                android:id="@+id/tv_age"
+                style="@style/report_row_info"
+                tools:text="姓名" />
+
+        </LinearLayout>
+
+        <View style="@style/style_split_line" />
+
+        <LinearLayout style="@style/report_row_h">
+
+            <TextView
+                style="@style/report_row_title"
+                android:text="家庭地址" />
+
+            <TextView
+                android:id="@+id/tv_home_address"
+                style="@style/report_row_info"
+                tools:text="姓名" />
+
+        </LinearLayout>
+
+        <View style="@style/style_split_line" />
+
+        <LinearLayout style="@style/report_row_h">
+
+            <TextView
+                style="@style/report_row_title"
+                android:text="家庭电话" />
+
+            <TextView
+                android:id="@+id/tv_home_tell"
+                style="@style/report_row_info"
+                tools:text="姓名" />
+
+        </LinearLayout>
+
+        <View style="@style/style_split_line" />
+
+        <LinearLayout style="@style/report_row_h">
+
+            <TextView
+                style="@style/report_row_title"
+                android:text="工作单位" />
+
+            <TextView
+                android:id="@+id/tv_company_name"
+                style="@style/report_row_info"
+                tools:text="姓名" />
+
+        </LinearLayout>
+
+        <View style="@style/style_split_line" />
+
+        <LinearLayout style="@style/report_row_h">
+
+            <TextView
+                style="@style/report_row_title"
+                android:text="工作地址" />
+
+            <TextView
+                android:id="@+id/tv_company_address"
+                style="@style/report_row_info"
+                tools:text="姓名" />
+
+        </LinearLayout>
+
+        <View style="@style/style_split_line" />
+
+        <LinearLayout style="@style/report_row_h">
+
+            <TextView
+                style="@style/report_row_title"
+                android:text="单位电话" />
+
+            <TextView
+                android:id="@+id/tv_company_tell"
+                style="@style/report_row_info"
+                tools:text="姓名" />
+
+        </LinearLayout>
+
+        <View style="@style/style_split_line" />
+
+        <LinearLayout style="@style/report_row_h">
+
+            <TextView
+                style="@style/report_row_title"
+                android:text="邮箱" />
+
+            <TextView
+                android:id="@+id/tv_td_email"
+                style="@style/report_row_info"
+                tools:text="姓名" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/bg_gray"
+            android:paddingBottom="10dp"
+            android:paddingLeft="15dp"
+            android:paddingTop="10dp"
+            android:text="手机信息" />
+
+
+        <View style="@style/style_split_line" />
+
+        <LinearLayout style="@style/report_row_h">
+
+            <TextView
+                style="@style/report_row_title"
+                android:text="手机号码" />
+
+            <TextView
+                android:id="@+id/tv_td_phone"
+                style="@style/report_row_info"
+                tools:text="姓名" />
+
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/tv_name_real"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="5dp"
+            android:text="已实名认证" />
+
+        <View style="@style/style_split_line" />
+
+        <LinearLayout style="@style/report_row_h">
+
+            <TextView
+                style="@style/report_row_title"
+                android:text="手机归属地" />
+
+            <TextView
+                android:id="@+id/tv_tell_address"
+                style="@style/report_row_info"
+                tools:text="姓名" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_phone_addr_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="5dp"
+            android:text="和运营商数据不匹配" />
+
+        <View style="@style/style_split_line" />
+
+        <LinearLayout style="@style/report_row_h">
+
+            <TextView
+                style="@style/report_row_title"
+                android:text="运营商" />
+
+            <TextView
+                android:id="@+id/tv_operator"
+                style="@style/report_row_info"
+                tools:text="姓名" />
+
+        </LinearLayout>
+
+        <View style="@style/style_split_line" />
+
+        <LinearLayout style="@style/report_row_h">
+
+            <TextView
+                style="@style/report_row_title"
+                android:text="账户状态" />
+
+            <TextView
+                android:id="@+id/tv_td_tell_state"
+                style="@style/report_row_info"
+                tools:text="姓名" />
+
+        </LinearLayout>
+
+        <View style="@style/style_split_line" />
+
+        <LinearLayout style="@style/report_row_h">
+
+            <TextView
+                style="@style/report_row_title"
+                android:text="账户余额" />
+
+            <TextView
+                android:id="@+id/tv_phone_money"
+                style="@style/report_row_info"
+                tools:text="姓名" />
+
+        </LinearLayout>
+
+        <View style="@style/style_split_line" />
+
+        <LinearLayout style="@style/report_row_h">
+
+            <TextView
+                style="@style/report_row_title"
+                android:text="入网时间" />
+
+            <TextView
+                android:id="@+id/tv_td_in_time"
+                style="@style/report_row_info"
+                tools:text="姓名" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/bg_gray"
+            android:paddingBottom="10dp"
+            android:paddingLeft="15dp"
+            android:paddingTop="10dp"
+            android:text="紧急联系人" />
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            style="@style/report_row_h">
+
+            <TextView
+                style="@style/report_row_contact"
+                android:layout_weight="1"
+                android:text="电话号码" />
+
+            <TextView
+                style="@style/report_row_contact"
+                android:layout_weight="1"
+                android:text="标签" />
+
+            <TextView
+                style="@style/report_row_contact"
+                android:layout_weight="1"
+                android:text="归属地" />
+
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_contact"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+        </android.support.v7.widget.RecyclerView>
+
+
+    </LinearLayout>
+
+    <!--</ScrollView>-->
+
+</layout>

@@ -145,8 +145,8 @@ public class CertificationStepHelper {
         call.enqueue(new BaseResponseModelCallBack<ReportModel>(context) {
             @Override
             protected void onSuccess(ReportModel data, String SucMessage) {
-                CertificationStepHelper.openStepPage(context, AddressBookCertActivity.class, certListModel, data);
-//                CertificationStepHelper.checkStartStep(context, certListModel, data);
+//                CertificationStepHelper.openStepPage(context, AddressBookCertActivity.class, certListModel, data);
+                CertificationStepHelper.checkStartStep(context, certListModel, data);
             }
 
             @Override

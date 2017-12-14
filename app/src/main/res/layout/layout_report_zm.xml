@@ -2,11 +2,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout style="@style/report_row_h">
+    <LinearLayout
+        style="@style/report_row_h"
+        android:background="@color/white">
 
         <TextView
             style="@style/report_row_title"
-            android:text="芝麻信用分" />
+            android:text="芝麻分" />
 
         <TextView
             android:id="@+id/tv_score"

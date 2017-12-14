@@ -21,12 +21,14 @@ import com.cdkj.baselibrary.nets.BaseResponseListCallBack;
 import com.cdkj.baselibrary.nets.BaseResponseModelCallBack;
 import com.cdkj.baselibrary.nets.RetrofitUtils;
 import com.cdkj.baselibrary.utils.AppUtils;
+import com.cdkj.baselibrary.utils.BigDecimalUtils;
 import com.cdkj.baselibrary.utils.ImgUtils;
 import com.cdkj.baselibrary.utils.LogUtil;
 import com.cdkj.baselibrary.utils.StringUtils;
 import com.cdkj.borrowingmenber.R;
 import com.cdkj.borrowingmenber.adapters.AddressBookReportAdapter;
 import com.cdkj.borrowingmenber.adapters.FocusonListAdapter;
+import com.cdkj.borrowingmenber.adapters.ReportContactPhoneNumAdapter;
 import com.cdkj.borrowingmenber.databinding.ActivityMyReportBinding;
 import com.cdkj.borrowingmenber.databinding.LayoutBasicUserInfoBinding;
 import com.cdkj.borrowingmenber.databinding.LayoutReportAddressbokBinding;
@@ -35,6 +37,7 @@ import com.cdkj.borrowingmenber.databinding.LayoutReportFraudBinding;
 import com.cdkj.borrowingmenber.databinding.LayoutReportIdcardBinding;
 import com.cdkj.borrowingmenber.databinding.LayoutReportLocationBinding;
 import com.cdkj.borrowingmenber.databinding.LayoutReportPhoneBinding;
+import com.cdkj.borrowingmenber.databinding.LayoutReportTdOperatorBinding;
 import com.cdkj.borrowingmenber.databinding.LayoutReportZmBinding;
 import com.cdkj.borrowingmenber.databinding.LayoutReportZmCertBinding;
 import com.cdkj.borrowingmenber.model.AddressBookReportModel;
@@ -45,8 +48,10 @@ import com.cdkj.borrowingmenber.model.IndustryFocusOnListModel;
 import com.cdkj.borrowingmenber.model.KeyDataModel;
 import com.cdkj.borrowingmenber.model.LocationReportModel;
 import com.cdkj.borrowingmenber.model.MyLocalFocusOnListModel;
+import com.cdkj.borrowingmenber.model.ReportContactModel;
 import com.cdkj.borrowingmenber.model.ReportModel;
 import com.cdkj.borrowingmenber.model.ReportUserInfoModel;
+import com.cdkj.borrowingmenber.model.TdOperatorModel;
 import com.cdkj.borrowingmenber.model.ThreeDataReportModel;
 import com.cdkj.borrowingmenber.model.ZMScoreReportModel;
 import com.cdkj.borrowingmenber.module.api.MyApiServer;
@@ -105,6 +110,7 @@ public class MyReportActivity extends AbsBaseLoadActivity {
     List<AddressBookReportModel.AddressBookListBean> mAddressBookReportAList = new ArrayList<>();
     List<FocusOnParseShowModel> mFocusOnList = new ArrayList<>();
 
+    //认证数据展示布局
     private LayoutReportPhoneBinding phoneLayout;
     private LayoutReportZmCertBinding zmCertLayout;
     private LayoutBasicUserInfoBinding basicinfoLayout;
@@ -114,6 +120,7 @@ public class MyReportActivity extends AbsBaseLoadActivity {
     private LayoutReportZmBinding zmScoreLayout;
     private LayoutReportFocusOnBinding focusOnLayout;
     private LayoutReportFraudBinding fraudLayout;
+    private LayoutReportTdOperatorBinding tdOperatorLayout;
 
 
     public static void open(Context context) {
@@ -171,9 +178,13 @@ public class MyReportActivity extends AbsBaseLoadActivity {
         focusOnLayout = DataBindingUtil.inflate(getLayoutInflater(), R.layout.layout_report_focus_on, null, false);
         mBinding.showViewFocusOn.addShowView(focusOnLayout.getRoot());
 
-        //关注清单
+        //欺诈接口
         fraudLayout = DataBindingUtil.inflate(getLayoutInflater(), R.layout.layout_report_fraud, null, false);
         mBinding.showViewFraud.addShowView(fraudLayout.getRoot());
+
+        //运营商 （同盾）
+        tdOperatorLayout = DataBindingUtil.inflate(getLayoutInflater(), R.layout.layout_report_td_operator, null, false);
+        mBinding.showViewTdOperator.addShowView(tdOperatorLayout.getRoot());
 
         initAddressBookAdapter();
 
@@ -247,6 +258,96 @@ public class MyReportActivity extends AbsBaseLoadActivity {
     private void setShowData(ReportModel data) {
         if (data == null) {
             return;
+        }
+
+        LogUtil.E("P" + data.getPTD8());
+
+        if (!TextUtils.isEmpty(data.getPYYS4())) {//运营商认证
+            TdOperatorModel tdOperatorModel = JSON.parseObject(data.getPYYS4(), TdOperatorModel.class);
+
+            if (tdOperatorModel != null && tdOperatorModel.getUser_info() != null) {
+                tdOperatorLayout.tvTdName.setText(tdOperatorModel.getUser_info().getReal_name());
+                tdOperatorLayout.tvIdCard.setText(tdOperatorModel.getUser_info().getIdentity_code());
+                tdOperatorLayout.tvGender.setText(tdOperatorModel.getUser_info().getGender());
+                tdOperatorLayout.tvAge.setText(tdOperatorModel.getUser_info().getAge());
+                tdOperatorLayout.tvHomeAddress.setText(tdOperatorModel.getUser_info().getHome_addr());
+                tdOperatorLayout.tvHomeTell.setText(tdOperatorModel.getUser_info().getHome_tel());
+                tdOperatorLayout.tvCompanyName.setText(tdOperatorModel.getUser_info().getCompany_name());
+                tdOperatorLayout.tvCompanyAddress.setText(tdOperatorModel.getUser_info().getWork_addr());
+                tdOperatorLayout.tvCompanyTell.setText(tdOperatorModel.getUser_info().getWork_tel());
+                tdOperatorLayout.tvTdEmail.setText(tdOperatorModel.getUser_info().getEmail());
+            }
+
+            if (tdOperatorModel != null && tdOperatorModel.getMobile_info() != null) {
+                tdOperatorLayout.tvTdName2.setText("运营商登记姓名： " + tdOperatorModel.getMobile_info().getReal_name());
+                tdOperatorLayout.tvTdPhone.setText(tdOperatorModel.getMobile_info().getUser_mobile());
+                tdOperatorLayout.tvOperator.setText(tdOperatorModel.getMobile_info().getMobile_carrier());
+                tdOperatorLayout.tvTellAddress.setText(tdOperatorModel.getMobile_info().getMobile_net_addr());
+                tdOperatorLayout.tvPhoneMoney.setText(BigDecimalUtils.doubleValue(tdOperatorModel.getMobile_info().getAccount_balance()) / 100 + "");
+                tdOperatorLayout.tvTdInTime.setText(tdOperatorModel.getMobile_info().getMobile_net_time());
+                tdOperatorLayout.tvTdTellState.setText(tdOperatorModel.getMobile_info().getAccount_status());
+            }
+
+            if (tdOperatorModel != null && tdOperatorModel.getInfo_match() != null) {
+                if (TextUtils.equals(tdOperatorModel.getInfo_match().getReal_name_check_yys(), "完全匹配") ||
+                        TextUtils.equals(tdOperatorModel.getInfo_match().getReal_name_check_yys(), "模糊匹配")
+                        ) {
+                    tdOperatorLayout.tvNameMatch.setText("和运营商数据匹配");
+                } else {
+                    tdOperatorLayout.tvNameMatch.setText("和运营商数据不匹配");
+                }
+
+            }
+
+            if (tdOperatorModel != null && tdOperatorModel.getInfo_check() != null) { //是否实名
+                if (TextUtils.equals(tdOperatorModel.getInfo_check().getIs_identity_code_reliable(), "是")) {
+                    tdOperatorLayout.tvNameReal.setText("已实名认证");//姓名和运营商是否匹配
+                } else {
+                    tdOperatorLayout.tvNameReal.setText("未实名认证");//姓名和运营商是否匹配
+                }
+                if (TextUtils.equals(tdOperatorModel.getInfo_check().getIs_net_addr_call_addr_1month(), "是")) {
+                    tdOperatorLayout.tvPhoneAddrState.setText("和常用通话地址一致");//姓名和运营商是否匹配
+                } else {
+                    tdOperatorLayout.tvPhoneAddrState.setText("和常用通话地址不一致");//姓名和运营商是否匹配
+                }
+
+
+            }
+
+
+            //紧急联系人
+            List<ReportContactModel> reportContactModelList = new ArrayList<>();
+
+            if (tdOperatorModel.getEmergency_contact1_detail() != null && !TextUtils.isEmpty(tdOperatorModel.getEmergency_contact1_detail().getContact_number())) {
+                reportContactModelList.add(tdOperatorModel.getEmergency_contact1_detail());
+            }
+            if (tdOperatorModel.getEmergency_contact2_detail() != null && !TextUtils.isEmpty(tdOperatorModel.getEmergency_contact2_detail().getContact_number())) {
+                reportContactModelList.add(tdOperatorModel.getEmergency_contact2_detail());
+            }
+            if (tdOperatorModel.getEmergency_contact3_detail() != null && !TextUtils.isEmpty(tdOperatorModel.getEmergency_contact3_detail().getContact_number())) {
+                reportContactModelList.add(tdOperatorModel.getEmergency_contact3_detail());
+            }
+            if (tdOperatorModel.getEmergency_contact4_detail() != null && !TextUtils.isEmpty(tdOperatorModel.getEmergency_contact4_detail().getContact_number())) {
+                reportContactModelList.add(tdOperatorModel.getEmergency_contact4_detail());
+            }
+            if (tdOperatorModel.getEmergency_contact5_detail() != null && !TextUtils.isEmpty(tdOperatorModel.getEmergency_contact5_detail().getContact_number())) {
+                reportContactModelList.add(tdOperatorModel.getEmergency_contact5_detail());
+            }
+
+
+            ReportContactPhoneNumAdapter contactPhoneNumAdapter = new ReportContactPhoneNumAdapter(reportContactModelList);
+
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false) {
+                @Override
+                public boolean canScrollVertically() {
+                    return false;
+                }
+            };
+            mFocusonListAdapter.setEmptyView(getEmptyTextView("暂无关注"));
+            tdOperatorLayout.recyclerContact.setLayoutManager(linearLayoutManager);
+            tdOperatorLayout.recyclerContact.setAdapter(contactPhoneNumAdapter);
+
+
         }
 
 
@@ -477,7 +578,7 @@ public class MyReportActivity extends AbsBaseLoadActivity {
         map.put("companyCode", MyCdConfig.COMPANYCODE);
         map.put("systemCode", MyCdConfig.SYSTEMCODE);
         map.put("parentKey", "marriage");
-        Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("623907", StringUtils.getJsonToString(map));
+        Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("805906", StringUtils.getJsonToString(map));
         addCall(call);
         call.enqueue(new BaseResponseListCallBack<KeyDataModel>(this) {
 
@@ -515,7 +616,7 @@ public class MyReportActivity extends AbsBaseLoadActivity {
         map.put("companyCode", MyCdConfig.COMPANYCODE);
         map.put("systemCode", MyCdConfig.SYSTEMCODE);
         map.put("parentKey", "education");
-        Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("623907", StringUtils.getJsonToString(map));
+        Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("805906", StringUtils.getJsonToString(map));
         addCall(call);
         call.enqueue(new BaseResponseListCallBack<KeyDataModel>(this) {
 
@@ -554,7 +655,7 @@ public class MyReportActivity extends AbsBaseLoadActivity {
         map.put("companyCode", MyCdConfig.COMPANYCODE);
         map.put("systemCode", MyCdConfig.SYSTEMCODE);
         map.put("parentKey", "live_time");
-        Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("623907", StringUtils.getJsonToString(map));
+        Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("805906", StringUtils.getJsonToString(map));
         addCall(call);
         call.enqueue(new BaseResponseListCallBack<KeyDataModel>(this) {
 
@@ -592,7 +693,7 @@ public class MyReportActivity extends AbsBaseLoadActivity {
         map.put("companyCode", MyCdConfig.COMPANYCODE);
         map.put("systemCode", MyCdConfig.SYSTEMCODE);
         map.put("parentKey", "occupation");
-        Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("623907", StringUtils.getJsonToString(map));
+        Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("805906", StringUtils.getJsonToString(map));
         addCall(call);
         call.enqueue(new BaseResponseListCallBack<KeyDataModel>(this) {
 
@@ -631,7 +732,7 @@ public class MyReportActivity extends AbsBaseLoadActivity {
         map.put("companyCode", MyCdConfig.COMPANYCODE);
         map.put("systemCode", MyCdConfig.SYSTEMCODE);
         map.put("parentKey", "income");
-        Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("623907", StringUtils.getJsonToString(map));
+        Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("805906", StringUtils.getJsonToString(map));
         addCall(call);
         call.enqueue(new BaseResponseListCallBack<KeyDataModel>(this) {
 
@@ -669,7 +770,7 @@ public class MyReportActivity extends AbsBaseLoadActivity {
         map.put("companyCode", MyCdConfig.COMPANYCODE);
         map.put("systemCode", MyCdConfig.SYSTEMCODE);
         map.put("parentKey", "family_relation");
-        Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("623907", StringUtils.getJsonToString(map));
+        Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("805906", StringUtils.getJsonToString(map));
         addCall(call);
         call.enqueue(new BaseResponseListCallBack<KeyDataModel>(this) {
 
@@ -707,7 +808,7 @@ public class MyReportActivity extends AbsBaseLoadActivity {
         map.put("companyCode", MyCdConfig.COMPANYCODE);
         map.put("systemCode", MyCdConfig.SYSTEMCODE);
         map.put("parentKey", "society_relation");
-        Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("623907", StringUtils.getJsonToString(map));
+        Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("805906", StringUtils.getJsonToString(map));
         addCall(call);
         call.enqueue(new BaseResponseListCallBack<KeyDataModel>(this) {
 
