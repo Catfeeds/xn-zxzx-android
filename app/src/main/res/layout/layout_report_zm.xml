@@ -2,60 +2,18 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp" />
+    <LinearLayout style="@style/report_row_h">
 
-        <FrameLayout
-            android:id="@+id/fra_zm"
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:background="@color/title_bg_app">
+        <TextView
+            style="@style/report_row_title"
+            android:text="芝麻信用分" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="15dp"
-                android:text="芝麻信用信息"
-                android:textColor="@color/white" />
+        <TextView
+            android:id="@+id/tv_score"
+            style="@style/report_row_info"
+            tools:text="姓名" />
 
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_gravity="center_vertical|right"
-                android:layout_marginRight="10dp"
-                android:src="@drawable/more_right_white" />
-
-        </FrameLayout>
-
-        <LinearLayout
-            android:id="@+id/lin_zm_score"
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="15dp">
-
-            <TextView
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:text="芝麻信用分"
-                android:textColor="@color/text_black_cd" />
-
-            <TextView
-                android:id="@+id/tv_score"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/text_black_cd"
-                tools:text="姓名" />
-
-
-        </LinearLayout>
 
     </LinearLayout>
+
 </layout>

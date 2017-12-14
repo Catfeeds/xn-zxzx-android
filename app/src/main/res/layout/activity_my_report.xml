@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <ScrollView
@@ -15,45 +16,126 @@
             android:focusableInTouchMode="true"
             android:orientation="vertical">
 
-            <include
-                android:id="@+id/basicinfo_layout"
-                layout="@layout/layout_basic_user_info" />
+            <com.cdkj.borrowingmenber.weiget.views.ReportShowAndHideLayout
+                android:id="@+id/show_view_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                app:txt_report_title="手机认证" />
 
-            <include
-                android:id="@+id/idcard_layout"
-                layout="@layout/layout_report_idcard" />
+            <com.cdkj.borrowingmenber.weiget.views.ReportShowAndHideLayout
+                android:id="@+id/show_view_zm_cert"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                app:txt_report_title="芝麻认证" />
 
-            <include
-                android:id="@+id/job_layout"
-                layout="@layout/layout_job_info" />
+            <com.cdkj.borrowingmenber.weiget.views.ReportShowAndHideLayout
+                android:id="@+id/show_view_basicinfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                app:txt_report_title="基本信息" />
 
-            <include
-                android:id="@+id/contact_layout"
-                layout="@layout/layout_report_contact" />
+            <com.cdkj.borrowingmenber.weiget.views.ReportShowAndHideLayout
+                android:id="@+id/show_view_idcard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                app:txt_report_title="身份证认证" />
 
-            <include
-                android:id="@+id/zm_layout"
-                layout="@layout/layout_report_zm" />
+            <com.cdkj.borrowingmenber.weiget.views.ReportShowAndHideLayout
+                android:id="@+id/show_view_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                app:txt_report_title="定位信息" />
 
-            <include
-                android:id="@+id/location_layout"
-                layout="@layout/layout_report_location" />
+            <com.cdkj.borrowingmenber.weiget.views.ReportShowAndHideLayout
+                android:id="@+id/show_view_addressbook"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                app:txt_report_title="通讯录认证" />
 
-            <include
-                android:id="@+id/address_book_layout"
-                layout="@layout/layout_report_addressbok" />
+            <com.cdkj.borrowingmenber.weiget.views.ReportShowAndHideLayout
+                android:id="@+id/show_view_td_operator"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                app:txt_report_title="运营商认证" />
 
-            <include
-                android:id="@+id/focus_on_layout"
-                layout="@layout/layout_report_focus_on" />
+            <com.cdkj.borrowingmenber.weiget.views.ReportShowAndHideLayout
+                android:id="@+id/show_view_zm_score"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                app:txt_report_title="芝麻信用分" />
 
-            <include
-                android:id="@+id/foraud_layout"
-                layout="@layout/layout_report_fraud" />
+            <com.cdkj.borrowingmenber.weiget.views.ReportShowAndHideLayout
+                android:id="@+id/show_view_focus_on"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                app:txt_report_title="行业关注清单" />
 
-            <include
-                android:id="@+id/td_layout"
-                layout="@layout/layout_report_td" />
+            <com.cdkj.borrowingmenber.weiget.views.ReportShowAndHideLayout
+                android:id="@+id/show_view_fraud"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                app:txt_report_title="欺诈认证" />
+
+            <com.cdkj.borrowingmenber.weiget.views.ReportShowAndHideLayout
+                android:id="@+id/show_view_td"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                app:txt_report_title="同盾认证" />
+
+            <!--<include-->
+            <!--android:id="@+id/basicinfo_layout"-->
+            <!--layout="@layout/layout_basic_user_info" />-->
+
+            <!--<include-->
+            <!--android:id="@+id/idcard_layout"-->
+            <!--layout="@layout/layout_report_idcard" />-->
+
+            <!--<include-->
+            <!--android:id="@+id/job_layout"-->
+            <!--layout="@layout/layout_job_info" />-->
+
+            <!-- <include
+                 android:id="@+id/contact_layout"
+                 layout="@layout/layout_report_contact" />
+ -->
+
+            <!--<include-->
+            <!--android:id="@+id/location_layout"-->
+            <!--layout="@layout/layout_report_location" />-->
+
+            <!--<include-->
+            <!--android:id="@+id/address_book_layout"-->
+            <!--layout="@layout/layout_report_addressbok" />-->
+
+
+            <!--<include-->
+            <!--android:id="@+id/zm_layout"-->
+            <!--layout="@layout/layout_report_zm" />-->
+
+
+            <!--<include-->
+            <!--android:id="@+id/focus_on_layout"-->
+            <!--layout="@layout/layout_report_focus_on" />-->
+
+            <!--<include-->
+            <!--android:id="@+id/foraud_layout"-->
+            <!--layout="@layout/layout_report_fraud" />-->
+
+            <!--<include-->
+            <!--android:id="@+id/td_layout"-->
+            <!--layout="@layout/layout_report_td" />-->
+
         </LinearLayout>
 
 

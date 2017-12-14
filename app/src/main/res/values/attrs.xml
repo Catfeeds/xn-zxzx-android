@@ -1,0 +1,8 @@
+<resources>
+
+
+    <declare-styleable name="ReportShowAndHideStyle">
+        <attr name="txt_report_title" format="string"></attr>
+    </declare-styleable>
+
+</resources>

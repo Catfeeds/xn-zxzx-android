@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 26
-
     defaultConfig {
         applicationId "com.cdkj.borrowingmenber"
         minSdkVersion 18
@@ -54,16 +53,15 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile project(':cdcommon')
+    implementation  fileTree(dir: 'libs', include: ['*.jar'])
+    api project(':cdcommon')
 
     //路由
     //arouter
-    compile 'com.alibaba:arouter-api:1.2.2'
-    compile 'com.alibaba:arouter-compiler:1.1.3'
+    implementation  'com.alibaba:arouter-api:1.2.2'
+    implementation  'com.alibaba:arouter-compiler:1.1.3'
     /*芝麻认证*/
-    compile(name: 'ZMCert_SDK', ext: 'aar')
-    compile files('libs/zmxySDKALCmini_V1.01450366738902_release.jar')
+//    api(name: 'ZMCert_SDK', ext: 'aar')
+    api files('libs/zmxySDKALCmini_V1.01450366738902_release.jar')
+    api files('libs/ZMCert_SDK.aar')
 }

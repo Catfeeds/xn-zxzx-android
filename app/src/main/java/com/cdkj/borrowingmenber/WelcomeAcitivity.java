@@ -37,7 +37,7 @@ public class WelcomeAcitivity extends BaseActivity {
         setContentView(R.layout.activity_welcom);
         ImageView img = (ImageView) findViewById(R.id.img_start);
 //        img.setImageResource(R.drawable.start);
-        mSubscription.add(Observable.timer(2, TimeUnit.SECONDS)
+        mSubscription.add(Observable.timer(1, TimeUnit.SECONDS)
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(aLong -> {//延迟两秒进行跳转

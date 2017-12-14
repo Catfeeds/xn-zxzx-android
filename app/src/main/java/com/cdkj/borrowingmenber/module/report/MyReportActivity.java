@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.view.View;
@@ -19,14 +21,26 @@ import com.cdkj.baselibrary.nets.BaseResponseListCallBack;
 import com.cdkj.baselibrary.nets.BaseResponseModelCallBack;
 import com.cdkj.baselibrary.nets.RetrofitUtils;
 import com.cdkj.baselibrary.utils.AppUtils;
+import com.cdkj.baselibrary.utils.ImgUtils;
 import com.cdkj.baselibrary.utils.LogUtil;
 import com.cdkj.baselibrary.utils.StringUtils;
 import com.cdkj.borrowingmenber.R;
 import com.cdkj.borrowingmenber.adapters.AddressBookReportAdapter;
 import com.cdkj.borrowingmenber.adapters.FocusonListAdapter;
 import com.cdkj.borrowingmenber.databinding.ActivityMyReportBinding;
+import com.cdkj.borrowingmenber.databinding.LayoutBasicUserInfoBinding;
+import com.cdkj.borrowingmenber.databinding.LayoutReportAddressbokBinding;
+import com.cdkj.borrowingmenber.databinding.LayoutReportFocusOnBinding;
+import com.cdkj.borrowingmenber.databinding.LayoutReportFraudBinding;
+import com.cdkj.borrowingmenber.databinding.LayoutReportIdcardBinding;
+import com.cdkj.borrowingmenber.databinding.LayoutReportLocationBinding;
+import com.cdkj.borrowingmenber.databinding.LayoutReportPhoneBinding;
+import com.cdkj.borrowingmenber.databinding.LayoutReportZmBinding;
+import com.cdkj.borrowingmenber.databinding.LayoutReportZmCertBinding;
 import com.cdkj.borrowingmenber.model.AddressBookReportModel;
 import com.cdkj.borrowingmenber.model.FocusOnParseShowModel;
+import com.cdkj.borrowingmenber.model.IdAndNameModel;
+import com.cdkj.borrowingmenber.model.IdCardUrlReportModel;
 import com.cdkj.borrowingmenber.model.IndustryFocusOnListModel;
 import com.cdkj.borrowingmenber.model.KeyDataModel;
 import com.cdkj.borrowingmenber.model.LocationReportModel;
@@ -36,7 +50,6 @@ import com.cdkj.borrowingmenber.model.ReportUserInfoModel;
 import com.cdkj.borrowingmenber.model.ThreeDataReportModel;
 import com.cdkj.borrowingmenber.model.ZMScoreReportModel;
 import com.cdkj.borrowingmenber.module.api.MyApiServer;
-import com.cdkj.borrowingmenber.module.report.viewbinding.IdcardReportBinding;
 import com.cdkj.borrowingmenber.weiget.LocalFocusOnDataParseHelper;
 
 import org.json.JSONException;
@@ -84,12 +97,23 @@ public class MyReportActivity extends AbsBaseLoadActivity {
 
     private List<KeyDataModel> mSocietys = new ArrayList<>();//社会关系数据
     private String mSocietysCode;//社会关系code
-    private IdcardReportBinding idcardReportBinding;
 
 
+    private FocusonListAdapter mFocusonListAdapter;
     private AddressBookReportAdapter mAddressBookReportAdapter;
 
     List<AddressBookReportModel.AddressBookListBean> mAddressBookReportAList = new ArrayList<>();
+    List<FocusOnParseShowModel> mFocusOnList = new ArrayList<>();
+
+    private LayoutReportPhoneBinding phoneLayout;
+    private LayoutReportZmCertBinding zmCertLayout;
+    private LayoutBasicUserInfoBinding basicinfoLayout;
+    private LayoutReportIdcardBinding idCardLayout;
+    private LayoutReportLocationBinding locationLayout;
+    private LayoutReportAddressbokBinding addressBookLayout;
+    private LayoutReportZmBinding zmScoreLayout;
+    private LayoutReportFocusOnBinding focusOnLayout;
+    private LayoutReportFraudBinding fraudLayout;
 
 
     public static void open(Context context) {
@@ -110,21 +134,62 @@ public class MyReportActivity extends AbsBaseLoadActivity {
     @Override
     public void afterCreate(Bundle savedInstanceState) {
         mBaseBinding.titleView.setMidTitle(getString(R.string.my_report_page));
-        initListener();
+
+        initViews();
+    }
+
+    private void initViews() {
+        //电话
+        phoneLayout = DataBindingUtil.inflate(getLayoutInflater(), R.layout.layout_report_phone, null, false);
+        mBinding.showViewPhone.addShowView(phoneLayout.getRoot());
+
+        //芝麻认证
+        zmCertLayout = DataBindingUtil.inflate(getLayoutInflater(), R.layout.layout_report_zm_cert, null, false);
+        mBinding.showViewZmCert.addShowView(zmCertLayout.getRoot());
+
+        //基本信息
+        basicinfoLayout = DataBindingUtil.inflate(getLayoutInflater(), R.layout.layout_basic_user_info, null, false);
+        mBinding.showViewBasicinfo.addShowView(basicinfoLayout.getRoot());
+
+        //身份证
+        idCardLayout = DataBindingUtil.inflate(getLayoutInflater(), R.layout.layout_report_idcard, null, false);
+        mBinding.showViewIdcard.addShowView(idCardLayout.getRoot());
+
+        //定位
+        locationLayout = DataBindingUtil.inflate(getLayoutInflater(), R.layout.layout_report_location, null, false);
+        mBinding.showViewLocation.addShowView(locationLayout.getRoot());
+
+        //通讯录
+        addressBookLayout = DataBindingUtil.inflate(getLayoutInflater(), R.layout.layout_report_addressbok, null, false);
+        mBinding.showViewAddressbook.addShowView(addressBookLayout.getRoot());
+
+        //芝麻分
+        zmScoreLayout = DataBindingUtil.inflate(getLayoutInflater(), R.layout.layout_report_zm, null, false);
+        mBinding.showViewZmScore.addShowView(zmScoreLayout.getRoot());
+
+        //关注清单
+        focusOnLayout = DataBindingUtil.inflate(getLayoutInflater(), R.layout.layout_report_focus_on, null, false);
+        mBinding.showViewFocusOn.addShowView(focusOnLayout.getRoot());
+
+        //关注清单
+        fraudLayout = DataBindingUtil.inflate(getLayoutInflater(), R.layout.layout_report_fraud, null, false);
+        mBinding.showViewFraud.addShowView(fraudLayout.getRoot());
+
+        initAddressBookAdapter();
+
+        initFocusOnAdapter(mFocusOnList);
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        mAddressBookReportAdapter = new AddressBookReportAdapter(mAddressBookReportAList);
-        TextView textView = new TextView(this);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.leftMargin = 15;
-        params.topMargin = 10;
-        params.bottomMargin = 10;
-        textView.setLayoutParams(params);
-        textView.setText("暂无通讯录数据");
+        getReportRequest();
+    }
 
+    private void initAddressBookAdapter() {
+        mAddressBookReportAdapter = new AddressBookReportAdapter(mAddressBookReportAList);
+        TextView textView = getEmptyTextView("暂无通讯录数据");
         mAddressBookReportAdapter.setEmptyView(textView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false) {
             @Override
@@ -132,86 +197,23 @@ public class MyReportActivity extends AbsBaseLoadActivity {
                 return false;
             }
         };
-        mBinding.addressBookLayout.recyclerAddressbook.setLayoutManager(linearLayoutManager);
-        mBinding.addressBookLayout.recyclerAddressbook.setAdapter(mAddressBookReportAdapter);
-
-        getReportRequest();
-
-        idcardReportBinding = new IdcardReportBinding(mBinding);
-
+        addressBookLayout.recyclerAddressbook.setLayoutManager(linearLayoutManager);
+        addressBookLayout.recyclerAddressbook.setAdapter(mAddressBookReportAdapter);
     }
 
-    private void initListener() {
-
-        //基本信息点击
-        mBinding.basicinfoLayout.fraUserInfo.setOnClickListener(v -> {
-            if (mBinding.basicinfoLayout.linUserInfo.getVisibility() == View.GONE) {
-                mBinding.basicinfoLayout.linUserInfo.setVisibility(View.VISIBLE);
-            } else {
-                mBinding.basicinfoLayout.linUserInfo.setVisibility(View.GONE);
-            }
-        });
-        //职业信息点击
-        mBinding.jobLayout.tvFraJob.setOnClickListener(v -> {
-            if (mBinding.jobLayout.linJobInfo.getVisibility() == View.GONE) {
-                mBinding.jobLayout.linJobInfo.setVisibility(View.VISIBLE);
-            } else {
-                mBinding.jobLayout.linJobInfo.setVisibility(View.GONE);
-            }
-        });
-        //联系人点击
-        mBinding.contactLayout.fraContactInfo.setOnClickListener(v -> {
-            if (mBinding.contactLayout.linContactInfo.getVisibility() == View.GONE) {
-                mBinding.contactLayout.linContactInfo.setVisibility(View.VISIBLE);
-            } else {
-                mBinding.contactLayout.linContactInfo.setVisibility(View.GONE);
-            }
-        });
-        //行业关注清单点击
-        mBinding.focusOnLayout.fraFocusList.setOnClickListener(v -> {
-            if (mBinding.focusOnLayout.recyclerFocus.getVisibility() == View.GONE) {
-                mBinding.focusOnLayout.recyclerFocus.setVisibility(View.VISIBLE);
-            } else {
-                mBinding.focusOnLayout.recyclerFocus.setVisibility(View.GONE);
-            }
-        });
-
-        //芝麻信用分
-        mBinding.zmLayout.fraZm.setOnClickListener(v -> {
-            if (mBinding.zmLayout.linZmScore.getVisibility() == View.GONE) {
-                mBinding.zmLayout.linZmScore.setVisibility(View.VISIBLE);
-            } else {
-                mBinding.zmLayout.linZmScore.setVisibility(View.GONE);
-            }
-        });
-        //定位
-        mBinding.locationLayout.fraLocatin.setOnClickListener(v -> {
-            if (mBinding.locationLayout.linLocation.getVisibility() == View.GONE) {
-                mBinding.locationLayout.linLocation.setVisibility(View.VISIBLE);
-            } else {
-                mBinding.locationLayout.linLocation.setVisibility(View.GONE);
-            }
-        });
-        //欺诈信息
-        mBinding.foraudLayout.fraFraud.setOnClickListener(v -> {
-            if (mBinding.foraudLayout.linFraud.getVisibility() == View.GONE) {
-                mBinding.foraudLayout.linFraud.setVisibility(View.VISIBLE);
-            } else {
-                mBinding.foraudLayout.linFraud.setVisibility(View.GONE);
-            }
-        });
-        //通讯录
-        mBinding.addressBookLayout.fraAddressbook.setOnClickListener(v -> {
-
-            if (mBinding.addressBookLayout.recyclerAddressbook.getVisibility() == View.GONE) {
-                mBinding.addressBookLayout.recyclerAddressbook.setVisibility(View.VISIBLE);
-            } else {
-                mBinding.addressBookLayout.recyclerAddressbook.setVisibility(View.GONE);
-            }
-
-        });
-
+    @NonNull
+    private TextView getEmptyTextView(String str) {
+        TextView textView = new TextView(this);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.leftMargin = 30;
+        params.topMargin = 15;
+        params.bottomMargin = 15;
+        textView.setLayoutParams(params);
+        textView.setText(str);
+        textView.setTextColor(ContextCompat.getColor(this, R.color.text_black_cd));
+        return textView;
     }
+
 
     /**
      * 获取报告单数据
@@ -247,31 +249,42 @@ public class MyReportActivity extends AbsBaseLoadActivity {
             return;
         }
 
-        idcardReportBinding.setShowData(MyReportActivity.this, data.getPID1()); //加载身份证图片
+
+        if (!TextUtils.isEmpty(data.getPID1())) {
+            IdCardUrlReportModel idCardUrlReportModel = JSON.parseObject(data.getPID1(), IdCardUrlReportModel.class);
+
+            if (idCardUrlReportModel != null) {
+                ImgUtils.loadImg(MyReportActivity.this, idCardUrlReportModel.getIdentifyPic(), idCardLayout.imgIdcardPositive);  //正面
+                ImgUtils.loadImg(MyReportActivity.this, idCardUrlReportModel.getIdentifyPicReverse(), idCardLayout.imgIdcardReverse);  //反面
+                ImgUtils.loadImg(MyReportActivity.this, idCardUrlReportModel.getIdentifyPicHand(), idCardLayout.imgIdcardPeople); //正面
+            }
+
+        }
+
 
         if (!TextUtils.isEmpty(data.getPZM5())) {  //芝麻分
             ZMScoreReportModel zmScore = JSON.parseObject(data.getPZM5(), ZMScoreReportModel.class);
             if (zmScore != null) {
-                mBinding.zmLayout.tvScore.setText(zmScore.getSearchCode());
+                zmScoreLayout.tvScore.setText(zmScore.getSearchCode());
             }
         }
 
         if (!TextUtils.isEmpty(data.getPDW2())) {  //定位信息
             LocationReportModel locationReportModel = JSON.parseObject(data.getPDW2(), LocationReportModel.class);
             if (locationReportModel != null) {
-                mBinding.locationLayout.tvAddress.setText(locationReportModel.getAddress());
-                mBinding.locationLayout.tvLatitude.setText(locationReportModel.getLatitude());
-                mBinding.locationLayout.tvLongitude.setText(locationReportModel.getLongitude());
-                mBinding.locationLayout.tvCity.setText(locationReportModel.getProvince() + " " + locationReportModel.getCity() + " " + locationReportModel.getProvince());
+                locationLayout.tvAddress.setText(locationReportModel.getAddress());
+                locationLayout.tvLatitude.setText(locationReportModel.getLatitude());
+                locationLayout.tvLongitude.setText(locationReportModel.getLongitude());
+                locationLayout.tvCity.setText(locationReportModel.getProvince() + " " + locationReportModel.getCity() + " " + locationReportModel.getProvince());
             }
         }
 
         if (!TextUtils.isEmpty(data.getPZM7())) {  //欺诈三接口
             ThreeDataReportModel threeDataReportModel = JSON.parseObject(data.getPZM5(), ThreeDataReportModel.class);
             if (threeDataReportModel != null) {
-                mBinding.foraudLayout.tvIemi.setText(threeDataReportModel.getImei());
-                mBinding.foraudLayout.tvIp.setText(threeDataReportModel.getIp());
-                mBinding.foraudLayout.tvMac.setText(threeDataReportModel.getWifimac());
+                fraudLayout.tvIemi.setText(threeDataReportModel.getImei());
+                fraudLayout.tvIp.setText(threeDataReportModel.getIp());
+                fraudLayout.tvMac.setText(threeDataReportModel.getWifimac());
             }
         }
 
@@ -286,15 +299,38 @@ public class MyReportActivity extends AbsBaseLoadActivity {
 
         try {
 
+
+            if (!TextUtils.isEmpty(data.getF1())) { //电话
+                JSONObject jsonObject2 = new JSONObject(data.getF1());
+                if (phoneLayout != null) {
+                    phoneLayout.tvPhoneNum.setText(jsonObject2.getString("mobile"));
+                }
+            }
+
+
             if (!TextUtils.isEmpty(data.getF2())) {    //用户信息
-                JSONObject jsonObject = new JSONObject(data.getF2());
-                mBinding.basicinfoLayout.tvIdcard.setText(jsonObject.getString("idNo"));
-                mBinding.basicinfoLayout.tvName.setText(jsonObject.getString("realName"));
+
+                IdAndNameModel idAndNameModel = JSON.parseObject(data.getF2(), IdAndNameModel.class);
+
+                if (idAndNameModel != null) {
+                    if (basicinfoLayout != null) {          //基本信息
+                        basicinfoLayout.tvIdcard.setText(idAndNameModel.getIdNo());
+                        basicinfoLayout.tvName.setText(idAndNameModel.getRealName());
+                    }
+
+                    if (zmCertLayout != null) {            //芝麻认证
+                        zmCertLayout.tvIdNum.setText(idAndNameModel.getIdNo());
+                        zmCertLayout.tvName.setText(idAndNameModel.getRealName());
+                    }
+                }
+
             }
 
             if (!TextUtils.isEmpty(data.getF1())) { //电话
                 JSONObject jsonObject2 = new JSONObject(data.getF1());
-                mBinding.basicinfoLayout.tvPhoneNum.setText(jsonObject2.getString("mobile"));
+                if (basicinfoLayout != null) {
+                    basicinfoLayout.tvPhoneNum.setText(jsonObject2.getString("mobile"));
+                }
             }
 
             if (!TextUtils.isEmpty(data.getF3())) {//基本信息
@@ -331,28 +367,30 @@ public class MyReportActivity extends AbsBaseLoadActivity {
             e.printStackTrace();
         }
 
-
     }
 
 
-    private void setFocusonListData(List<FocusOnParseShowModel> data) {
+    /**
+     * 行业关注清单适配器
+     *
+     * @param data
+     */
+    private void initFocusOnAdapter(List<FocusOnParseShowModel> data) {
 
-        FocusonListAdapter mFocusonListAdapter = new FocusonListAdapter(data);
+        mFocusonListAdapter = new FocusonListAdapter(data);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false) {
             @Override
             public boolean canScrollVertically() {
                 return false;
             }
         };
-        mBinding.focusOnLayout.recyclerFocus.setLayoutManager(linearLayoutManager);
 
-        TextView textView = new TextView(this);
+        focusOnLayout.recyclerFocus.setLayoutManager(linearLayoutManager);
 
-        textView.setText("adfs");
+        mFocusonListAdapter.setEmptyView(getEmptyTextView("暂无行业关注"));
 
-        mFocusonListAdapter.setEmptyView(textView);
+        focusOnLayout.recyclerFocus.setAdapter(mFocusonListAdapter);
 
-        mBinding.focusOnLayout.recyclerFocus.setAdapter(mFocusonListAdapter);
 
     }
 
@@ -374,11 +412,14 @@ public class MyReportActivity extends AbsBaseLoadActivity {
                 .map(localFocusOnDataParseHelper -> {
                     return localFocusOnDataParseHelper.parseShowData(data);
                 })
-                .filter(focusOnParseShowModels -> focusOnParseShowModels != null && !focusOnParseShowModels.isEmpty())
+                .filter(focusOnParseShowModels -> focusOnParseShowModels != null)
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> disMissLoading())
                 .subscribe(s -> {
-                    setFocusonListData(s);
+                    mFocusOnList.clear();
+                    mFocusOnList.addAll(s);
+                    mFocusonListAdapter.notifyDataSetChanged();
+
                 }, throwable -> {
                     LogUtil.E("数据错误" + throwable);
                 }));
@@ -392,22 +433,22 @@ public class MyReportActivity extends AbsBaseLoadActivity {
      * @param reportUserInfoModel
      */
     private void showUserInfo(ReportUserInfoModel reportUserInfoModel) {
-        mBinding.basicinfoLayout.tvChildNum.setText(reportUserInfoModel.getChildrenNum());
-        mBinding.basicinfoLayout.tvLiveCity.setText(reportUserInfoModel.getProvinceCity());
-        mBinding.basicinfoLayout.tvAddress.setText(reportUserInfoModel.getAddress());
-        mBinding.basicinfoLayout.tvQq.setText(reportUserInfoModel.getQq());
-        mBinding.basicinfoLayout.tvEmail.setText(reportUserInfoModel.getEmail());
+        basicinfoLayout.tvChildNum.setText(reportUserInfoModel.getChildrenNum());
+        basicinfoLayout.tvLiveCity.setText(reportUserInfoModel.getProvinceCity());
+        basicinfoLayout.tvAddress.setText(reportUserInfoModel.getAddress());
+        basicinfoLayout.tvQq.setText(reportUserInfoModel.getQq());
+        basicinfoLayout.tvEmail.setText(reportUserInfoModel.getEmail());
 
-        mBinding.jobLayout.tvJobCity.setText(reportUserInfoModel.getCompanyProvinceCity());
-        mBinding.jobLayout.tvJobAddress.setText(reportUserInfoModel.getCompanyAddress());
-        mBinding.jobLayout.tvJobCompanyName.setText(reportUserInfoModel.getCompany());
-        mBinding.jobLayout.tvJobPhone.setText(reportUserInfoModel.getPhone());
+        basicinfoLayout.jobLayout.tvJobCity.setText(reportUserInfoModel.getCompanyProvinceCity());
+        basicinfoLayout.jobLayout.tvJobAddress.setText(reportUserInfoModel.getCompanyAddress());
+        basicinfoLayout.jobLayout.tvJobCompanyName.setText(reportUserInfoModel.getCompany());
+        basicinfoLayout.jobLayout.tvJobPhone.setText(reportUserInfoModel.getPhone());
 
-        mBinding.contactLayout.tvFamilyName.setText(reportUserInfoModel.getFamilyName());
-        mBinding.contactLayout.tvFamilyPhone.setText(reportUserInfoModel.getFamilyMobile());
+        basicinfoLayout.contactLayout.tvFamilyName.setText(reportUserInfoModel.getFamilyName());
+        basicinfoLayout.contactLayout.tvFamilyPhone.setText(reportUserInfoModel.getFamilyMobile());
 
-        mBinding.contactLayout.tvSocietyName.setText(reportUserInfoModel.getSocietyName());
-        mBinding.contactLayout.tvSocietyPhone.setText(reportUserInfoModel.getSocietyMobile());
+        basicinfoLayout.contactLayout.tvSocietyName.setText(reportUserInfoModel.getSocietyName());
+        basicinfoLayout.contactLayout.tvSocietyPhone.setText(reportUserInfoModel.getSocietyMobile());
 
         mEducationCode = reportUserInfoModel.getEducation();
         mMarriagesCode = reportUserInfoModel.getMarriage();
@@ -459,7 +500,7 @@ public class MyReportActivity extends AbsBaseLoadActivity {
             if (kmodel == null) continue;
 
             if (TextUtils.equals(kmodel.getDkey(), mMarriagesCode)) {
-                mBinding.basicinfoLayout.tvMarg.setText(kmodel.getDvalue());
+                basicinfoLayout.tvMarg.setText(kmodel.getDvalue());
                 break;
             }
 
@@ -498,7 +539,7 @@ public class MyReportActivity extends AbsBaseLoadActivity {
             if (kmodel == null) continue;
 
             if (TextUtils.equals(kmodel.getDkey(), mEducationCode)) {
-                mBinding.basicinfoLayout.tvStudySing.setText(kmodel.getDvalue());
+                basicinfoLayout.tvStudySing.setText(kmodel.getDvalue());
                 break;
             }
 
@@ -536,7 +577,7 @@ public class MyReportActivity extends AbsBaseLoadActivity {
             if (kmodel == null) continue;
 
             if (TextUtils.equals(kmodel.getDkey(), mLiveDaysCode)) {
-                mBinding.basicinfoLayout.tvLiveDays.setText(kmodel.getDvalue());
+                basicinfoLayout.tvLiveDays.setText(kmodel.getDvalue());
                 break;
             }
 
@@ -574,7 +615,7 @@ public class MyReportActivity extends AbsBaseLoadActivity {
             if (kmodel == null) continue;
 
             if (TextUtils.equals(kmodel.getDkey(), mJobCode)) {
-                mBinding.jobLayout.tvJob.setText(kmodel.getDvalue());
+                basicinfoLayout.jobLayout.tvJob.setText(kmodel.getDvalue());
                 break;
             }
 
@@ -613,7 +654,7 @@ public class MyReportActivity extends AbsBaseLoadActivity {
             if (kmodel == null) continue;
 
             if (TextUtils.equals(kmodel.getDkey(), mInMoneyCode)) {
-                mBinding.jobLayout.tvInMoney.setText(kmodel.getDvalue());
+                basicinfoLayout.jobLayout.tvInMoney.setText(kmodel.getDvalue());
                 break;
             }
 
@@ -651,7 +692,7 @@ public class MyReportActivity extends AbsBaseLoadActivity {
             if (kmodel == null) continue;
 
             if (TextUtils.equals(kmodel.getDkey(), mFamilyCode)) {
-                mBinding.contactLayout.tvFamily.setText(kmodel.getDvalue());
+                basicinfoLayout.contactLayout.tvFamily.setText(kmodel.getDvalue());
                 break;
             }
 
@@ -689,7 +730,7 @@ public class MyReportActivity extends AbsBaseLoadActivity {
             if (kmodel == null) continue;
 
             if (TextUtils.equals(kmodel.getDkey(), mSocietysCode)) {
-                mBinding.contactLayout.tvSociety.setText(kmodel.getDvalue());
+                basicinfoLayout.contactLayout.tvSociety.setText(kmodel.getDvalue());
                 break;
             }
 
