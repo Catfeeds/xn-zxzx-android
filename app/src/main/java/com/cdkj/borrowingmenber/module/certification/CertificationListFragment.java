@@ -62,7 +62,7 @@ public class CertificationListFragment extends BaseLazyFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (mBinding != null) {
+        if (mBinding != null && getUserVisibleHint()) {
             mRefreshHelper.onDefaluteMRefresh(true);
         }
     }

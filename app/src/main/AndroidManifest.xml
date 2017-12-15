@@ -83,7 +83,6 @@
         <activity
             android:name=".module.certification.TdOperatorCertActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/transparenStyle"
             android:windowSoftInputMode="adjustPan" />
         <!--芝麻分数获取-->
         <activity

@@ -6,13 +6,13 @@ package com.cdkj.borrowingmenber.model;
  */
 
 public class ZMScoreReportModel {
-    private String searchCode;
+    private String zmScore;
 
-    public String getSearchCode() {
-        return searchCode;
+    public String getZmScore() {
+        return zmScore;
     }
 
-    public void setSearchCode(String searchCode) {
-        this.searchCode = searchCode;
+    public void setZmScore(String zmScore) {
+        this.zmScore = zmScore;
     }
 }

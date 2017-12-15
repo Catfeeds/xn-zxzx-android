@@ -60,6 +60,7 @@ public class LocationCertActivity extends BaseCertStepActivity {
             public void locationFailure(String msg) {
                 dismissLocationDialog();
                 showDoubleWarnListen("定位失败，无法进行下一步认证，请重试", view -> {
+                    EventBus.getDefault().post(LOCATIONSUCC);//定位失败结束上一个界面
                     finish();
                 }, view -> {
                     showLocationDialog();
@@ -71,14 +72,19 @@ public class LocationCertActivity extends BaseCertStepActivity {
             public void noPermissions() {
                 dismissLocationDialog();
                 showSureDialog("没有定位权限，无法进行下一步认证，请到设置界面授予APP定位权限", view -> {
+                    EventBus.getDefault().post(LOCATIONSUCC);//定位失败结束上一个界面
                     finish();
                 });
             }
         });
+        showDoubleWarnListen("是否进行定位认证？需要您授予定位权限", view -> {
+            EventBus.getDefault().post(LOCATIONSUCC);//定位失败结束上一个界面
+            finish();
+        }, view -> {
+            showLocationDialog();
+            locationHelper.startLocation();
 
-        showLocationDialog();
-        locationHelper.startLocation();
-
+        });
     }
 
     @Override
@@ -127,6 +133,7 @@ public class LocationCertActivity extends BaseCertStepActivity {
                     finish();
                 } else {
                     showDoubleWarnListen("定位失败，无法进行下一步认证，请重试", view -> {
+                        EventBus.getDefault().post(LOCATIONSUCC);//定位失败结束上一个界面
                         finish();
                     }, view -> {
                         locationHelper.startLocation();
@@ -137,7 +144,9 @@ public class LocationCertActivity extends BaseCertStepActivity {
             @Override
             protected void onReqFailure(String errorCode, String errorMessage) {
                 showDoubleWarnListen("定位失败，无法进行下一步认证，请重试", view -> {
+                    EventBus.getDefault().post(LOCATIONSUCC);//定位失败结束上一个界面
                     finish();
+
                 }, view -> {
                     locationHelper.startLocation();
                 });

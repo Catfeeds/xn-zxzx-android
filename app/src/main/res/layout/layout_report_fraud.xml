@@ -3,74 +3,37 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
-        android:background="@color/white"
         android:id="@+id/lin_fraud"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:orientation="vertical">
 
         <LinearLayout style="@style/report_row_h">
 
             <TextView
                 style="@style/report_row_title"
-                android:text="iemi" />
+                android:text="欺诈评分" />
 
             <TextView
-                android:id="@+id/tv_iemi"
-                style="@style/report_row_info"
-                tools:text="姓名" />
+                android:id="@+id/tv_fraud_score"
+                style="@style/report_row_info" />
 
 
         </LinearLayout>
 
-        <View style="@style/style_split_line" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <LinearLayout style="@style/report_row_h">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_fraud"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <TextView
-                style="@style/report_row_title"
-                android:text="ip" />
+            </android.support.v7.widget.RecyclerView>
 
-            <TextView
-                android:id="@+id/tv_ip"
-                style="@style/report_row_info"
-                tools:text="姓名" />
-
-
-        </LinearLayout>
-
-        <View style="@style/style_split_line" />
-
-        <LinearLayout style="@style/report_row_h">
-
-            <TextView
-                style="@style/report_row_title"
-                android:text="mac" />
-
-            <TextView
-                android:id="@+id/tv_mac"
-                style="@style/report_row_info"
-                tools:text="姓名" />
-
-
-        </LinearLayout>
-
-        <View style="@style/style_split_line" />
-
-        <LinearLayout style="@style/report_row_h">
-
-            <TextView
-                style="@style/report_row_title"
-                android:text="wifi mac" />
-
-            <TextView
-                android:id="@+id/tv_wifi_mac"
-                style="@style/report_row_info"
-                tools:text="姓名" />
-
-
-        </LinearLayout>
-
+        </RelativeLayout>
 
     </LinearLayout>
 </layout>

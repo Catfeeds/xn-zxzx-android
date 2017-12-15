@@ -29,8 +29,7 @@
 
             <TextView
                 android:id="@+id/tv_td_name"
-                style="@style/report_row_info"
-                tools:text="姓名" />
+                style="@style/report_row_info" />
 
 
         </LinearLayout>
@@ -41,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="5dp"
-            android:text="运营商登记姓名" />
+            android:text="运营商登记姓名：暂无" />
 
         <TextView
             android:id="@+id/tv_name_match"
@@ -50,7 +49,7 @@
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="5dp"
-            android:text="和运营商数据不匹配" />
+            android:text="和运营商数据匹配:暂无" />
 
         <View style="@style/style_split_line" />
 
@@ -62,8 +61,7 @@
 
             <TextView
                 android:id="@+id/tv_id_card"
-                style="@style/report_row_info"
-                tools:text="姓名" />
+                style="@style/report_row_info" />
 
         </LinearLayout>
 
@@ -73,7 +71,7 @@
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="5dp"
-            android:text="身份证有效" />
+            android:text="暂无身份证信息" />
 
 
         <View style="@style/style_split_line" />
@@ -86,8 +84,7 @@
 
             <TextView
                 android:id="@+id/tv_gender"
-                style="@style/report_row_info"
-                tools:text="姓名" />
+                style="@style/report_row_info" />
 
         </LinearLayout>
 
@@ -101,8 +98,7 @@
 
             <TextView
                 android:id="@+id/tv_age"
-                style="@style/report_row_info"
-                tools:text="姓名" />
+                style="@style/report_row_info" />
 
         </LinearLayout>
 
@@ -116,8 +112,7 @@
 
             <TextView
                 android:id="@+id/tv_home_address"
-                style="@style/report_row_info"
-                tools:text="姓名" />
+                style="@style/report_row_info" />
 
         </LinearLayout>
 
@@ -131,8 +126,7 @@
 
             <TextView
                 android:id="@+id/tv_home_tell"
-                style="@style/report_row_info"
-                tools:text="姓名" />
+                style="@style/report_row_info" />
 
         </LinearLayout>
 
@@ -146,8 +140,7 @@
 
             <TextView
                 android:id="@+id/tv_company_name"
-                style="@style/report_row_info"
-                tools:text="姓名" />
+                style="@style/report_row_info" />
 
         </LinearLayout>
 
@@ -161,8 +154,7 @@
 
             <TextView
                 android:id="@+id/tv_company_address"
-                style="@style/report_row_info"
-                tools:text="姓名" />
+                style="@style/report_row_info" />
 
         </LinearLayout>
 
@@ -176,8 +168,7 @@
 
             <TextView
                 android:id="@+id/tv_company_tell"
-                style="@style/report_row_info"
-                tools:text="姓名" />
+                style="@style/report_row_info" />
 
         </LinearLayout>
 
@@ -191,8 +182,7 @@
 
             <TextView
                 android:id="@+id/tv_td_email"
-                style="@style/report_row_info"
-                tools:text="姓名" />
+                style="@style/report_row_info" />
 
         </LinearLayout>
 
@@ -216,8 +206,7 @@
 
             <TextView
                 android:id="@+id/tv_td_phone"
-                style="@style/report_row_info"
-                tools:text="姓名" />
+                style="@style/report_row_info" />
 
         </LinearLayout>
 
@@ -229,7 +218,7 @@
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="5dp"
-            android:text="已实名认证" />
+            android:text="实名认证信息:暂无" />
 
         <View style="@style/style_split_line" />
 
@@ -241,8 +230,7 @@
 
             <TextView
                 android:id="@+id/tv_tell_address"
-                style="@style/report_row_info"
-                tools:text="姓名" />
+                style="@style/report_row_info" />
 
         </LinearLayout>
 
@@ -253,7 +241,7 @@
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="5dp"
-            android:text="和运营商数据不匹配" />
+            android:text="运营商数据匹配信息：暂无" />
 
         <View style="@style/style_split_line" />
 
@@ -265,8 +253,7 @@
 
             <TextView
                 android:id="@+id/tv_operator"
-                style="@style/report_row_info"
-                tools:text="姓名" />
+                style="@style/report_row_info" />
 
         </LinearLayout>
 
@@ -280,8 +267,7 @@
 
             <TextView
                 android:id="@+id/tv_td_tell_state"
-                style="@style/report_row_info"
-                tools:text="姓名" />
+                style="@style/report_row_info" />
 
         </LinearLayout>
 
@@ -295,8 +281,7 @@
 
             <TextView
                 android:id="@+id/tv_phone_money"
-                style="@style/report_row_info"
-                tools:text="姓名" />
+                style="@style/report_row_info" />
 
         </LinearLayout>
 
@@ -310,8 +295,7 @@
 
             <TextView
                 android:id="@+id/tv_td_in_time"
-                style="@style/report_row_info"
-                tools:text="姓名" />
+                style="@style/report_row_info" />
 
         </LinearLayout>
 
@@ -345,14 +329,19 @@
 
         </LinearLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_contact"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_contact"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        </android.support.v7.widget.RecyclerView>
 
+            </android.support.v7.widget.RecyclerView>
+
+        </RelativeLayout>
 
     </LinearLayout>
 

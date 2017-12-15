@@ -51,6 +51,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/text_black_cd</item>
+        <item name="android:hint">暂无</item>
     </style>
 
     <style name="report_row_contact">

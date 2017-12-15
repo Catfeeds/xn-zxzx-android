@@ -12,6 +12,8 @@ import com.cdkj.baselibrary.utils.PermissionHelper;
 import com.cdkj.baselibrary.utils.StringUtils;
 import com.cdkj.baselibrary.utils.SystemUtils;
 import com.cdkj.borrowingmenber.BaseCertStepActivity;
+import com.cdkj.borrowingmenber.model.FraudCertModel;
+import com.cdkj.borrowingmenber.module.api.MyApiServer;
 import com.cdkj.borrowingmenber.weiget.CertificationStepHelper;
 
 import org.greenrobot.eventbus.EventBus;
@@ -42,19 +44,24 @@ public class ThreeDataCertActivity extends BaseCertStepActivity {
         mBaseBinding.titleView.setVisibility(View.GONE);
         mHelper = new PermissionHelper(this);
 
-        mHelper.requestPermissions(new PermissionHelper.PermissionListener() {
-            @Override
-            public void doAfterGrand(String... permission) {
-                mCanGetIemi = true;
-                certRequest();
-            }
 
-            @Override
-            public void doAfterDenied(String... permission) {
-                mCanGetIemi = false;
-                certRequest();
-            }
-        }, Manifest.permission.READ_PHONE_STATE);
+        showDoubleWarnListen("是否进行欺诈信息认证？", view -> {
+            finish();
+        }, view -> {
+            mHelper.requestPermissions(new PermissionHelper.PermissionListener() {
+                @Override
+                public void doAfterGrand(String... permission) {
+                    mCanGetIemi = true;
+                    certRequest();
+                }
+
+                @Override
+                public void doAfterDenied(String... permission) {
+                    mCanGetIemi = false;
+                    certRequest();
+                }
+            }, Manifest.permission.READ_PHONE_STATE);
+        });
 
     }
 
@@ -80,17 +87,16 @@ public class ThreeDataCertActivity extends BaseCertStepActivity {
         map.put("wifimac", SystemUtils.getMacAddress(this));
 
 
-        Call call = RetrofitUtils.getBaseAPiService().successRequest("805260", StringUtils.getJsonToString(map));
+        Call call = RetrofitUtils.createApi(MyApiServer.class).fraudCertRequest("805260", StringUtils.getJsonToString(map));
 
         showLoadingDialog();
 
-        call.enqueue(new BaseResponseModelCallBack<IsSuccessModes>(this) {
+        call.enqueue(new BaseResponseModelCallBack<FraudCertModel>(this) {
             @Override
-            protected void onSuccess(IsSuccessModes data, String SucMessage) {
-                if (data.isSuccess()) {
+            protected void onSuccess(FraudCertModel data, String SucMessage) {
+                if (data.isAuthorized()) { //是否授权
                     mCertListModel.setPZM7("N");
                     CertificationStepHelper.checkRequest(ThreeDataCertActivity.this, mCertListModel);
-                    EventBus.getDefault().post(THREECERTSUCC);//定位成功结束上一个界面
                     finish();
 
                 } else {
@@ -107,6 +113,7 @@ public class ThreeDataCertActivity extends BaseCertStepActivity {
 
             @Override
             protected void onFinish() {
+                EventBus.getDefault().post(THREECERTSUCC);//定位成功结束上一个界面
                 disMissLoading();
             }
         });

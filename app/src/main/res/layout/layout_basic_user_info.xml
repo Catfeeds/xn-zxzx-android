@@ -31,9 +31,7 @@
 
             <TextView
                 android:id="@+id/tv_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/text_black_cd"
+                style="@style/report_row_info"
                 tools:text="姓名" />
 
 
@@ -57,9 +55,7 @@
 
             <TextView
                 android:id="@+id/tv_idcard"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/text_black_cd"
+                style="@style/report_row_info"
                 tools:text="姓名" />
 
 
@@ -83,9 +79,7 @@
 
             <TextView
                 android:id="@+id/tv_phone_num"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/text_black_cd"
+                style="@style/report_row_info"
                 tools:text="姓名" />
 
 
@@ -109,9 +103,7 @@
 
             <TextView
                 android:id="@+id/tv_study_sing"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/text_black_cd"
+                style="@style/report_row_info"
                 tools:text="姓名" />
 
 
@@ -135,9 +127,7 @@
 
             <TextView
                 android:id="@+id/tv_marg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/text_black_cd"
+                style="@style/report_row_info"
                 tools:text="姓名" />
 
 
@@ -161,9 +151,7 @@
 
             <TextView
                 android:id="@+id/tv_child_num"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/text_black_cd"
+                style="@style/report_row_info"
                 tools:text="姓名" />
 
 
@@ -187,9 +175,7 @@
 
             <TextView
                 android:id="@+id/tv_live_city"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/text_black_cd"
+                style="@style/report_row_info"
                 tools:text="姓名" />
 
 
@@ -213,9 +199,7 @@
 
             <TextView
                 android:id="@+id/tv_address"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/text_black_cd"
+                style="@style/report_row_info"
                 tools:text="姓名" />
 
 
@@ -239,9 +223,7 @@
 
             <TextView
                 android:id="@+id/tv_live_days"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/text_black_cd"
+                style="@style/report_row_info"
                 tools:text="姓名" />
 
 
@@ -265,9 +247,7 @@
 
             <TextView
                 android:id="@+id/tv_qq"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/text_black_cd"
+                style="@style/report_row_info"
                 tools:text="姓名" />
 
 
@@ -291,9 +271,7 @@
 
             <TextView
                 android:id="@+id/tv_email"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/text_black_cd"
+                style="@style/report_row_info"
                 tools:text="姓名" />
 
         </LinearLayout>

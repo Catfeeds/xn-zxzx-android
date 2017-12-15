@@ -117,6 +117,7 @@ public class IdcardUploadActivity extends BaseCertStepActivity {
                 if (data.isSuccess()) {
                     mCertListModel.setPID1("N");
                     CertificationStepHelper.checkRequest(IdcardUploadActivity.this, mCertListModel);
+                    finish();
                 } else {
                     UITipDialog.showInfo(IdcardUploadActivity.this, "上传失败,请退出重试");
                 }
@@ -226,15 +227,15 @@ public class IdcardUploadActivity extends BaseCertStepActivity {
                 switch (type) {
                     case PHOTOFLAG1:
                         mPicQiURL1 = key;
-                        ImgUtils.loadImg(IdcardUploadActivity.this, MyCdConfig.QINIUURL + key, mBinding.imgIdcardPositive);
+                        ImgUtils.loadImg(IdcardUploadActivity.this, path, mBinding.imgIdcardPositive);
                         break;
                     case PHOTOFLAG2:
                         mPicQiURL2 = key;
-                        ImgUtils.loadImg(IdcardUploadActivity.this, MyCdConfig.QINIUURL + key, mBinding.imgIdcardReverse);
+                        ImgUtils.loadImg(IdcardUploadActivity.this, path, mBinding.imgIdcardReverse);
                         break;
                     case PHOTOFLAG3:
                         mPicQiURL3 = key;
-                        ImgUtils.loadImg(IdcardUploadActivity.this, MyCdConfig.QINIUURL + key, mBinding.imgIdcardPeople);
+                        ImgUtils.loadImg(IdcardUploadActivity.this, path, mBinding.imgIdcardPeople);
                         break;
                 }
             }

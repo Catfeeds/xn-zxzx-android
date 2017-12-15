@@ -11,9 +11,13 @@ import com.cdkj.baselibrary.utils.StringUtils;
 import com.cdkj.borrowingmenber.BaseCertStepActivity;
 import com.cdkj.borrowingmenber.weiget.CertificationStepHelper;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.Map;
 
 import retrofit2.Call;
+
+import static com.cdkj.baselibrary.appmanager.EventTags.LOCATIONSUCC;
 
 /**
  * 同盾认证
@@ -33,7 +37,12 @@ public class TdAllCertActivity extends BaseCertStepActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        tdCertRequest();
+        showDoubleWarnListen("是否进行同盾认证", view -> {
+            finish();
+        }, view -> {
+            tdCertRequest();
+        });
+
     }
 
     /**

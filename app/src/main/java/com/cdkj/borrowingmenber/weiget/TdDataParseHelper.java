@@ -7,6 +7,12 @@ package com.cdkj.borrowingmenber.weiget;
 
 public class TdDataParseHelper {
 
+    /**
+     * 获取联系人关系标签
+     *
+     * @param tag
+     * @return
+     */
     public static String getContactRelationString(String tag) {
 
         switch (tag) {
@@ -30,6 +36,24 @@ public class TdDataParseHelper {
 
         return tag;
 
+    }
+
+    /**
+     * 获取同盾认证结果描述
+     *
+     * @return
+     */
+    public static String getTdFinalDecision(String tag) {
+
+        switch (tag) {
+            case "Accept":
+                return "申请用户未检出高危风险，建议通过";
+            case "Review":
+                return "申请用户存在较大风险，建议进行人工审核";
+            case "Reject":
+                return "申请用户检测出高危风险，建议拒绝";
+        }
+        return "";
     }
 
 }

@@ -74,12 +74,13 @@ public abstract class BaseResponseModelCallBack<T> implements Callback<BaseRespo
         if (call.isCanceled()) {                //如果是主动请求取消的就不执行
             return;
         }
+
         onFinish();
+
         if (!NetUtils.isNetworkConnected(CdApplication.getContext())) {
             onNoNet("暂无网络");
             return;
         }
-
 
         onReqFailure(getThrowableStateCode(t), getThrowableStateString(t));
 

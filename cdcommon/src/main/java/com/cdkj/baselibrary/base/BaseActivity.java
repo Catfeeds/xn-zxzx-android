@@ -97,7 +97,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     public void disMissLoading() {
 
-        if (loadingDialog != null && loadingDialog.isShowing()) {
+        if (loadingDialog != null) {
             loadingDialog.closeDialog();
         }
     }
@@ -109,7 +109,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (loadingDialog == null) {
             loadingDialog = new LoadingDialog(this);
         }
-        if (loadingDialog != null && !loadingDialog.isShowing()) {
+        if (loadingDialog != null) {
             loadingDialog.showDialog();
         }
     }

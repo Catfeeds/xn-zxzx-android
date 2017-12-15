@@ -4,6 +4,7 @@ import com.cdkj.baselibrary.api.BaseResponseListModel;
 import com.cdkj.baselibrary.api.BaseResponseModel;
 import com.cdkj.baselibrary.api.ResponseInListModel;
 import com.cdkj.borrowingmenber.model.CertListModel;
+import com.cdkj.borrowingmenber.model.FraudCertModel;
 import com.cdkj.borrowingmenber.model.IndustryFocusOnModel;
 import com.cdkj.borrowingmenber.model.KeyDataModel;
 import com.cdkj.borrowingmenber.model.ReportModel;
@@ -83,6 +84,16 @@ public interface MyApiServer {
     @FormUrlEncoded
     @POST("api")
     Call<BaseResponseModel<ZmScoreGetModel>> getZmScore(@Field("code") String code, @Field("json") String json);
+
+    /**
+     *zm 分获取
+     * @param code
+     * @param json
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api")
+    Call<BaseResponseModel<FraudCertModel>> fraudCertRequest(@Field("code") String code, @Field("json") String json);
 
 
 }

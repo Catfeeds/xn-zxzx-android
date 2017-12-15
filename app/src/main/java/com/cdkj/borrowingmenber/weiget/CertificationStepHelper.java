@@ -86,10 +86,10 @@ public class CertificationStepHelper {
         }
 
         //位置定位
-        if (isNeedCertLocatin(certListModel) || isNeedCertLocatin(reportModel, certListModel)) {
-            openStepPage(context, LocationCertActivity.class, certListModel, reportModel);
-            return;
-        }
+//        if (isNeedCertLocatin(certListModel) || isNeedCertLocatin(reportModel, certListModel)) {
+//            openStepPage(context, LocationCertActivity.class, certListModel, reportModel);
+//            return;
+//        }
         //打开通讯录认证
         if (isNeedCertAddressBook(certListModel) || isNeedCertAddressBook(reportModel, certListModel)) {
             openStepPage(context, AddressBookCertActivity.class, certListModel, reportModel);
@@ -116,7 +116,7 @@ public class CertificationStepHelper {
             return;
         }
         //打开同盾认证
-        if (isNeedCertTd(certListModel) | isNeedCertTd(reportModel, certListModel)) {
+        if (isNeedCertTd(certListModel) || isNeedCertTd(reportModel, certListModel)) {
             openStepPage(context, TdAllCertActivity.class, certListModel, reportModel);
             return;
         }
@@ -136,7 +136,7 @@ public class CertificationStepHelper {
         Map map = RetrofitUtils.getRequestMap();
         map.put("reportCode", certListModel.getReportCode());
 
-        Call call = RetrofitUtils.createApi(MyApiServer.class).getReportData("805331", StringUtils.getJsonToString(map));
+        Call call = RetrofitUtils.createApi(MyApiServer.class).getReportData("805332", StringUtils.getJsonToString(map));
 
         if (context instanceof BaseActivity) {
             ((BaseActivity) context).showLoadingDialog();
@@ -146,7 +146,7 @@ public class CertificationStepHelper {
             @Override
             protected void onSuccess(ReportModel data, String SucMessage) {
 //                CertificationStepHelper.openStepPage(context, AddressBookCertActivity.class, certListModel, data);
-                CertificationStepHelper.checkStartStep(context, certListModel, data);
+//                CertificationStepHelper.checkStartStep(context, certListModel, data);
             }
 
             @Override

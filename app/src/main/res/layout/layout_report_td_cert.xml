@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:hint="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <LinearLayout style="@style/report_row_h">
+
+            <TextView
+                style="@style/report_row_title"
+                android:text="风险指数" />
+
+            <TextView
+                android:id="@+id/tv_td_score"
+                style="@style/report_row_info" />
+        </LinearLayout>
+
+        <View style="@style/style_split_line" />
+
+
+        <LinearLayout style="@style/report_row_h">
+
+            <TextView
+                android:id="@+id/tv_td_state"
+                style="@style/report_row_info"
+                android:hint="风险信息:暂无" />
+
+        </LinearLayout>
+
+        <View style="@style/style_split_line" />
+
+        <LinearLayout style="@style/report_row_h">
+
+            <TextView
+                android:id="@+id/tv_risk_info"
+                style="@style/report_row_info"
+                android:hint="详细信息：暂无" />
+
+        </LinearLayout>
+
+        <View style="@style/style_split_line" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_td_risk"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+            </android.support.v7.widget.RecyclerView>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+</layout>
