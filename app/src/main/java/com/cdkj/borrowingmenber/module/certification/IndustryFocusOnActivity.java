@@ -14,6 +14,7 @@ import com.cdkj.borrowingmenber.model.IdAndNameModel;
 import com.cdkj.borrowingmenber.model.IndustryFocusOnModel;
 import com.cdkj.borrowingmenber.module.api.MyApiServer;
 import com.cdkj.borrowingmenber.module.report.MyReportActivity;
+import com.cdkj.borrowingmenber.weiget.CertificationStepHelper;
 
 import org.greenrobot.eventbus.Subscribe;
 
@@ -53,6 +54,9 @@ public class IndustryFocusOnActivity extends BaseZmPermissionsCheckActivity {
 
     private void checkIndustryFocusOn() {
 
+        if (mCertListModel == null) {
+            return;
+        }
         Map map = RetrofitUtils.getRequestMap();
 
         map.put("isH5", "0");
@@ -69,7 +73,8 @@ public class IndustryFocusOnActivity extends BaseZmPermissionsCheckActivity {
             protected void onSuccess(IndustryFocusOnModel data, String SucMessage) {
                 if (data.isAuthorized()) {
                     UITipDialog.showSuccess(IndustryFocusOnActivity.this, "成功", dialog -> {
-                        MyReportActivity.open(IndustryFocusOnActivity.this);
+                        mCertListModel.setPZM6("N");
+                        CertificationStepHelper.checkRequest(IndustryFocusOnActivity.this, mCertListModel);
                         finish();
                     });
                 } else {

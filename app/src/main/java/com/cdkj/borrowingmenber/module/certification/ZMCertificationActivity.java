@@ -1,5 +1,6 @@
 package com.cdkj.borrowingmenber.module.certification;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -21,9 +22,14 @@ import com.cdkj.baselibrary.utils.StringUtils;
 import com.cdkj.borrowingmenber.BaseCertStepActivity;
 import com.cdkj.borrowingmenber.R;
 import com.cdkj.borrowingmenber.databinding.ActivityCardandnameCheckBinding;
+import com.cdkj.borrowingmenber.model.CertListModel;
+import com.cdkj.borrowingmenber.model.ReportModel;
 import com.cdkj.borrowingmenber.model.ZMCertFirstStepModel;
 import com.cdkj.borrowingmenber.module.api.MyApiServer;
 import com.cdkj.borrowingmenber.weiget.CertificationStepHelper;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -91,7 +97,7 @@ public class ZMCertificationActivity extends BaseCertStepActivity {
         map.put("returnUrl", "borrowing://certi.back");
         map.put("searchCode", mCertListModel.getCode());//调查单编号
 
-        Call call = RetrofitUtils.createApi(MyApiServer.class).ZmCertFirstStep("805258", StringUtils.getJsonToString(map));
+        Call call = RetrofitUtils.createApi(MyApiServer.class).ZmCertFirstStep("805251", StringUtils.getJsonToString(map));
 
         addCall(call);
 
@@ -226,6 +232,5 @@ public class ZMCertificationActivity extends BaseCertStepActivity {
         });
 
     }
-
 
 }

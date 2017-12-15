@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import com.cdkj.baselibrary.base.BaseActivity;
 import com.cdkj.baselibrary.nets.BaseResponseModelCallBack;
 import com.cdkj.baselibrary.nets.RetrofitUtils;
+import com.cdkj.baselibrary.utils.LogUtil;
 import com.cdkj.baselibrary.utils.StringUtils;
 import com.cdkj.borrowingmenber.model.CertListModel;
 import com.cdkj.borrowingmenber.model.ReportModel;
@@ -72,7 +73,6 @@ public class CertificationStepHelper {
             return;
         }
 
-
         if (isNeedCertUserInfo(certListModel) || isNeedCertUserInfo(reportModel, certListModel)) {
             //打开基本信息认证
             openStepPage(context, BasicInfoCertActivity.class, certListModel, reportModel);
@@ -86,30 +86,37 @@ public class CertificationStepHelper {
         }
 
         //位置定位
-//        if (isNeedCertLocatin(certListModel) || isNeedCertLocatin(reportModel, certListModel)) {
-//            openStepPage(context, LocationCertActivity.class, certListModel, reportModel);
-//            return;
-//        }
+        if (isNeedCertLocatin(certListModel) || isNeedCertLocatin(reportModel, certListModel)) {
+            openStepPage(context, LocationCertActivity.class, certListModel, reportModel);
+            return;
+
+        }
+
         //打开通讯录认证
         if (isNeedCertAddressBook(certListModel) || isNeedCertAddressBook(reportModel, certListModel)) {
             openStepPage(context, AddressBookCertActivity.class, certListModel, reportModel);
             return;
         }
+
         //打开运营商认证
         if (isNeedCertIEMI(certListModel) || isNeedCertIEMI(reportModel, certListModel)) {
             openStepPage(context, TdOperatorCertActivity.class, certListModel, reportModel);
             return;
         }
+
         //打开芝麻分认证
         if (isNeedCertZmNum(certListModel) || isNeedCertZmNum(reportModel, certListModel)) {
             openStepPage(context, ZMScoreGetActivity.class, certListModel, reportModel);
             return;
         }
+
+
         //打开行业清单认证
         if (isNeedCertHyqd(certListModel) || isNeedCertHyqd(reportModel, certListModel)) {
             openStepPage(context, IndustryFocusOnActivity.class, certListModel, reportModel);
             return;
         }
+
         //打开欺诈认证
         if (isNeedCertQz(certListModel) || isNeedCertQz(reportModel, certListModel)) {
             openStepPage(context, ThreeDataCertActivity.class, certListModel, reportModel);
@@ -136,7 +143,7 @@ public class CertificationStepHelper {
         Map map = RetrofitUtils.getRequestMap();
         map.put("reportCode", certListModel.getReportCode());
 
-        Call call = RetrofitUtils.createApi(MyApiServer.class).getReportData("805332", StringUtils.getJsonToString(map));
+        Call call = RetrofitUtils.createApi(MyApiServer.class).getReportData("805334", StringUtils.getJsonToString(map));
 
         if (context instanceof BaseActivity) {
             ((BaseActivity) context).showLoadingDialog();
@@ -146,7 +153,8 @@ public class CertificationStepHelper {
             @Override
             protected void onSuccess(ReportModel data, String SucMessage) {
 //                CertificationStepHelper.openStepPage(context, AddressBookCertActivity.class, certListModel, data);
-//                CertificationStepHelper.checkStartStep(context, certListModel, data);
+
+                CertificationStepHelper.checkStartStep(context, certListModel, data);
             }
 
             @Override
@@ -363,15 +371,6 @@ public class CertificationStepHelper {
         return TextUtils.equals(certListModel.getPTD8(), "Y");
     }
 
-    /**
-     * 是否需要同盾认证
-     *
-     * @param
-     * @return
-     */
-    public static boolean isNeedCertTd(ReportModel reportModel) {
-        return TextUtils.isEmpty(reportModel.getPTD8());
-    }
 
     /**
      * 是否需要同盾认证

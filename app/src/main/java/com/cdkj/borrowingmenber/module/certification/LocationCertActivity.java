@@ -26,9 +26,9 @@ import static com.cdkj.baselibrary.appmanager.EventTags.LOCATIONSUCC;
 
 /**
  * 定位认证
- * Created by 李先俊 on 2017/12/12.
+ * Created by cdkj on 2017/12/12.
  */
-//TODO 定位key获取
+//TODO 定位key替换
 public class LocationCertActivity extends BaseCertStepActivity {
 
     LocationHelper locationHelper;
@@ -77,6 +77,7 @@ public class LocationCertActivity extends BaseCertStepActivity {
                 });
             }
         });
+
         showDoubleWarnListen("是否进行定位认证？需要您授予定位权限", view -> {
             EventBus.getDefault().post(LOCATIONSUCC);//定位失败结束上一个界面
             finish();

@@ -208,6 +208,7 @@
                         android:textSize="15sp" />
 
                     <EditText
+                        android:inputType="number"
                         android:id="@+id/edit_qq"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -411,6 +412,7 @@
                         android:textSize="14sp" />
 
                     <EditText
+                        android:inputType="phone"
                         android:id="@+id/edit_family_phone"
                         android:layout_width="0dp"
                         android:layout_height="35dp"
@@ -425,7 +427,6 @@
                         android:paddingTop="10dp"
                         android:textColorHint="@color/text_hint_color"
                         android:textSize="14sp" />
-
 
                 </LinearLayout>
 
@@ -475,6 +476,7 @@
                         android:textSize="14sp" />
 
                     <EditText
+                        android:inputType="phone"
                         android:id="@+id/edit_societys_phone"
                         android:layout_width="0dp"
                         android:layout_height="35dp"

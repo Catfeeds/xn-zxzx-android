@@ -103,7 +103,7 @@
             android:id="@+id/but_sure"
             style="@style/common_button"
             android:layout_marginTop="40dp"
-            android:text="@string/check_id_info" />
+            android:text="@string/next_step" />
 
     </LinearLayout>
 </layout>

@@ -355,6 +355,11 @@ public class BasicInfoCertActivity extends BaseCertStepActivity {
             return false;
         }
 
+        if (!TextUtils.isEmpty(mBinding.editEmail.getText().toString()) && !StringUtils.isEmail(mBinding.editEmail.getText().toString())) {
+            UITipDialog.showInfo(this, "请输入正确的邮箱格式");
+            return false;
+        }
+
         return true;
 
     }

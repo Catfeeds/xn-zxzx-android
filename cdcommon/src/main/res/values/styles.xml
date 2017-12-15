@@ -146,6 +146,7 @@
         <!-- 模糊 -->
         <item name="colorPrimaryDark">@android:color/transparent</item>
     </style>
+
         <declare-styleable name="ExpandableTextLayout">
             <attr name="maxCollapsedLines" format="integer"/>
             <attr name="animDuration" format="integer"/>

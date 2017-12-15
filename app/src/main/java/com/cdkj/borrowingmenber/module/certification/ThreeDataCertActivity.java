@@ -44,7 +44,6 @@ public class ThreeDataCertActivity extends BaseCertStepActivity {
         mBaseBinding.titleView.setVisibility(View.GONE);
         mHelper = new PermissionHelper(this);
 
-
         showDoubleWarnListen("是否进行欺诈信息认证？", view -> {
             finish();
         }, view -> {

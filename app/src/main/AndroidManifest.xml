@@ -10,9 +10,18 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/app_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <!--高德定位-->
+        <service android:name="com.amap.api.location.APSService"></service>
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="f281aa04fe0785caf11fbbe273b4f6da">//开发者申请的key
+
+        </meta-data>
+
         <activity
             android:name=".WelcomeAcitivity"
             android:screenOrientation="portrait"
@@ -64,20 +73,17 @@
         <activity
             android:name=".module.certification.LocationCertActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/transparenStyle"
             android:windowSoftInputMode="adjustPan" />
 
         <!--同盾认证-->
         <activity
             android:name=".module.certification.TdAllCertActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/transparenStyle"
             android:windowSoftInputMode="adjustPan" />
         <!--3要素认证-->
         <activity
             android:name=".module.certification.ThreeDataCertActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/transparenStyle"
             android:windowSoftInputMode="adjustPan" />
         <!--同盾运营商认证-->
         <activity

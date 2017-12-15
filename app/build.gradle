@@ -22,6 +22,11 @@ android {
             buildConfigField "boolean", "LOG_DEBUG", "false"
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            android.applicationVariants.all { variant ->
+                variant.outputs.all {
+                    outputFileName = "zxzxb_${defaultConfig.versionName}_${releaseTime()}.apk"
+                }
+            }
         }
         debug{
             buildConfigField "boolean", "LOG_DEBUG", "true"
@@ -50,6 +55,29 @@ android {
         }
     }
 
+    signingConfigs {
+        release {
+            storeFile file(RELEASE_STORE_FILE)//签名文件路径，
+            storePassword RELEASE_KEY_PASSWORD //密码
+            keyAlias RELEASE_KEY_ALIAS
+            keyPassword RELEASE_STORE_PASSWORD  //密码
+        }
+        debug {
+            storeFile file(RELEASE_STORE_FILE)//签名文件路径，
+            storePassword RELEASE_KEY_PASSWORD //密码
+            keyAlias RELEASE_KEY_ALIAS
+            keyPassword RELEASE_STORE_PASSWORD  //密码
+        }
+        buildTypes {
+            debug {
+                signingConfig signingConfigs.release
+            }
+            release {
+                signingConfig signingConfigs.release
+            }
+        }
+    }
+
 }
 
 dependencies {
@@ -64,4 +92,9 @@ dependencies {
 //    api(name: 'ZMCert_SDK', ext: 'aar')
     api files('libs/zmxySDKALCmini_V1.01450366738902_release.jar')
     api files('libs/ZMCert_SDK.aar')
+}
+
+///格式化打完完成后APK名称中的时间
+def releaseTime() {
+    return new Date().format("yyyyMMdd", TimeZone.getTimeZone("UTC+8"))
 }

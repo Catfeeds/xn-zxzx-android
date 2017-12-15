@@ -151,13 +151,12 @@ public class CertificationListFragment extends BaseLazyFragment {
         map.put("orderDir", "desc");
         map.put("statusList", getStatusList());
         map.put("loanUser", SPUtilHelpr.getUserId());
-//        map.put("status", "0,1");
 
         if (isShowDialog) {
             showLoadingDialog();
         }
 
-        Call call = RetrofitUtils.createApi(MyApiServer.class).getWaiteCertList("805280", StringUtils.getJsonToString(map));
+        Call call = RetrofitUtils.createApi(MyApiServer.class).getWaiteCertList("805282", StringUtils.getJsonToString(map));
 
         addCall(call);
 
