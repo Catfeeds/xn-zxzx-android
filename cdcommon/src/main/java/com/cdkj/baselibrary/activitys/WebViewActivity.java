@@ -7,11 +7,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.LinearLayout;
 
 import com.cdkj.baselibrary.R;
 import com.cdkj.baselibrary.appmanager.MyCdConfig;
@@ -82,7 +84,6 @@ public class WebViewActivity extends AbsBaseLoadActivity {
     public void afterCreate(Bundle savedInstanceState) {
         initLayout();
         initData();
-
     }
 
     private void initLayout() {
@@ -90,7 +91,9 @@ public class WebViewActivity extends AbsBaseLoadActivity {
         if (getWindow() != null) {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE | WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         }
-        webView = new WebView(this);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        webView = new WebView(getApplicationContext());
+        webView.setLayoutParams(params);
 
         WebSettings webSettings = webView.getSettings();
         if (webSettings != null) {

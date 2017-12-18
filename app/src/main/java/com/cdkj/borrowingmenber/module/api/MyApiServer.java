@@ -8,6 +8,7 @@ import com.cdkj.borrowingmenber.model.FraudCertModel;
 import com.cdkj.borrowingmenber.model.IndustryFocusOnModel;
 import com.cdkj.borrowingmenber.model.KeyDataModel;
 import com.cdkj.borrowingmenber.model.ReportModel;
+import com.cdkj.borrowingmenber.model.UserInfoModel;
 import com.cdkj.borrowingmenber.model.ZMCertFirstStepModel;
 import com.cdkj.borrowingmenber.model.ZmScoreGetModel;
 
@@ -95,5 +96,15 @@ public interface MyApiServer {
     @POST("api")
     Call<BaseResponseModel<FraudCertModel>> fraudCertRequest(@Field("code") String code, @Field("json") String json);
 
+
+    /**
+     *获取用户信息详情
+     * @param code
+     * @param json
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api")
+    Call<BaseResponseModel<UserInfoModel>> getUserInfoDetails(@Field("code") String code, @Field("json") String json);
 
 }

@@ -26,7 +26,7 @@ import com.cdkj.baselibrary.utils.LogUtil;
 import com.cdkj.baselibrary.utils.StringUtils;
 import com.cdkj.borrowingmenber.BaseCertStepActivity;
 import com.cdkj.borrowingmenber.model.IdAndNameModel;
-import com.cdkj.borrowingmenber.weiget.CertificationStepHelper;
+import com.cdkj.borrowingmenber.weiget.CertificationHelper;
 
 import java.util.Map;
 
@@ -184,7 +184,7 @@ public class TdOperatorCertActivity extends BaseCertStepActivity {
             protected void onSuccess(IsSuccessModes data, String SucMessage) {
                 if (data.isSuccess()) {
                     mCertListModel.setPYYS4("N");
-                    CertificationStepHelper.checkRequest(TdOperatorCertActivity.this, mCertListModel);
+                    CertificationHelper.checkRequest(TdOperatorCertActivity.this, mCertListModel);
                     finish();
                 } else {
                     UITipDialog.showFall(TdOperatorCertActivity.this, "认证失败，请重试");

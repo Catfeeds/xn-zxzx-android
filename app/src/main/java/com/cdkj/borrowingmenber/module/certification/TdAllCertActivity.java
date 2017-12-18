@@ -1,6 +1,5 @@
 package com.cdkj.borrowingmenber.module.certification;
 
-import android.os.Bundle;
 import android.view.View;
 
 import com.cdkj.baselibrary.dialog.UITipDialog;
@@ -9,15 +8,11 @@ import com.cdkj.baselibrary.nets.BaseResponseModelCallBack;
 import com.cdkj.baselibrary.nets.RetrofitUtils;
 import com.cdkj.baselibrary.utils.StringUtils;
 import com.cdkj.borrowingmenber.BaseCertStepActivity;
-import com.cdkj.borrowingmenber.weiget.CertificationStepHelper;
-
-import org.greenrobot.eventbus.EventBus;
+import com.cdkj.borrowingmenber.weiget.CertificationHelper;
 
 import java.util.Map;
 
 import retrofit2.Call;
-
-import static com.cdkj.baselibrary.appmanager.EventTags.LOCATIONSUCC;
 
 /**
  * 同盾认证
@@ -63,7 +58,7 @@ public class TdAllCertActivity extends BaseCertStepActivity {
             protected void onSuccess(IsSuccessModes data, String SucMessage) {
                 if (data.isSuccess()) {
                     mCertListModel.setPTD8("N");
-                    CertificationStepHelper.checkRequest(TdAllCertActivity.this, mCertListModel);
+                    CertificationHelper.checkRequest(TdAllCertActivity.this, mCertListModel);
                     finish();
                 } else {
                     UITipDialog.showFall(TdAllCertActivity.this, "认证失败，请重试");

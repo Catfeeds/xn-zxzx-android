@@ -37,7 +37,7 @@ public class BitmapUtils {
     public static byte[] compressImage(String filePath) {
 
         if (TextUtils.isEmpty(filePath)) {
-            return null;
+            return new byte[0];
         }
 
         final BitmapFactory.Options boptions = new BitmapFactory.Options();
@@ -57,7 +57,7 @@ public class BitmapUtils {
             int quality = 100;
             image.compress(Bitmap.CompressFormat.JPEG, quality, baos);//质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
             int options = 90;
-            while ((baos.toByteArray().length / 1024) > 150) {  //循环判断如果压缩后图片是否大于150kb,大于继续压缩
+            while ((baos.toByteArray().length / 1024) > 120) {  //循环判断如果压缩后图片是否大于150kb,大于继续压缩
                 baos.reset();//重置baos即清空baos
                 image.compress(Bitmap.CompressFormat.JPEG, options, baos);//这里压缩options%，把压缩后的数据存放到baos中
                 options -= 10;//每次都减少10

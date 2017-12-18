@@ -1,9 +1,7 @@
 package com.cdkj.borrowingmenber.module.certification;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 
-import com.alibaba.fastjson.JSON;
 import com.cdkj.baselibrary.nets.BaseResponseModelCallBack;
 import com.cdkj.baselibrary.nets.RetrofitUtils;
 import com.cdkj.baselibrary.utils.StringUtils;
@@ -12,7 +10,7 @@ import com.cdkj.borrowingmenber.R;
 import com.cdkj.borrowingmenber.model.IdAndNameModel;
 import com.cdkj.borrowingmenber.model.ZmScoreGetModel;
 import com.cdkj.borrowingmenber.module.api.MyApiServer;
-import com.cdkj.borrowingmenber.weiget.CertificationStepHelper;
+import com.cdkj.borrowingmenber.weiget.CertificationHelper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -72,7 +70,7 @@ public class ZMScoreGetActivity extends BaseZmPermissionsCheckActivity {
 
                     mCertListModel.setPZM5("N");
 
-                    CertificationStepHelper.checkRequest(ZMScoreGetActivity.this, mCertListModel);
+                    CertificationHelper.checkRequest(ZMScoreGetActivity.this, mCertListModel);
 
                     finish();
 

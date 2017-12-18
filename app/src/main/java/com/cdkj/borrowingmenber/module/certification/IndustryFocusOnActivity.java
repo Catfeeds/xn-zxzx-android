@@ -13,8 +13,7 @@ import com.cdkj.borrowingmenber.R;
 import com.cdkj.borrowingmenber.model.IdAndNameModel;
 import com.cdkj.borrowingmenber.model.IndustryFocusOnModel;
 import com.cdkj.borrowingmenber.module.api.MyApiServer;
-import com.cdkj.borrowingmenber.module.report.MyReportActivity;
-import com.cdkj.borrowingmenber.weiget.CertificationStepHelper;
+import com.cdkj.borrowingmenber.weiget.CertificationHelper;
 
 import org.greenrobot.eventbus.Subscribe;
 
@@ -74,7 +73,7 @@ public class IndustryFocusOnActivity extends BaseZmPermissionsCheckActivity {
                 if (data.isAuthorized()) {
                     UITipDialog.showSuccess(IndustryFocusOnActivity.this, "成功", dialog -> {
                         mCertListModel.setPZM6("N");
-                        CertificationStepHelper.checkRequest(IndustryFocusOnActivity.this, mCertListModel);
+                        CertificationHelper.checkRequest(IndustryFocusOnActivity.this, mCertListModel);
                         finish();
                     });
                 } else {

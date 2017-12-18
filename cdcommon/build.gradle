@@ -76,7 +76,9 @@ android {
         //支付宝
         api files('libs/alipaySingle-20170510.jar')
         api 'com.contrarywind:Android-PickerView:3.2.6'
-
+        compile 'com.github.chrisbanes:PhotoView:2.0.0'
         // citypicker
         api 'liji.library.dev:citypickerview:2.0.2'
+        //图片裁剪
+        api 'com.github.yalantis:ucrop:2.2.1'
     }

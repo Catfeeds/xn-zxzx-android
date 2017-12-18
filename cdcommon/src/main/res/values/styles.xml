@@ -81,8 +81,8 @@
         <item name="android:layout_height">0.5dp</item>
         <item name="android:background">@color/bg_gray</item>
     </style>
-    <!--activity_share dialog style-->
-    <style name="ActivityDialogStyleBottom" parent="android:Theme.Dialog">
+    <!--activity_share dialog style--><!--android:Theme.Dialog-->
+    <style name="ActivityDialogStyleBottom" parent="@style/Theme.AppCompat.NoActionBar">
         <item name="android:windowAnimationStyle">@style/AnimBottomA</item>
         <item name="android:windowFrame">@null</item>
         <!-- 边框 -->
@@ -98,6 +98,7 @@
 
         <!--设置状态栏颜色-->
         <item name="colorPrimaryDark">@android:color/transparent</item>
+
         <!-- 模糊 -->
     </style>
 
@@ -131,7 +132,7 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
-    <style name="transparenStyle" parent="@style/Theme.AppCompat.Light.NoActionBar">
+    <style name="transparenStyle" parent="@style/Theme.AppCompat.NoActionBar">
         <item name="android:windowFrame">@null</item>
         <!-- 边框 -->
         <item name="android:windowIsFloating">false</item>
@@ -145,6 +146,7 @@
         <item name="android:backgroundDimEnabled">false</item>
         <!-- 模糊 -->
         <item name="colorPrimaryDark">@android:color/transparent</item>
+
     </style>
 
         <declare-styleable name="ExpandableTextLayout">

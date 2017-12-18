@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
 
-import com.cdkj.baselibrary.model.IsSuccessModes;
 import com.cdkj.baselibrary.nets.BaseResponseModelCallBack;
 import com.cdkj.baselibrary.nets.RetrofitUtils;
 import com.cdkj.baselibrary.utils.PermissionHelper;
@@ -14,7 +13,7 @@ import com.cdkj.baselibrary.utils.SystemUtils;
 import com.cdkj.borrowingmenber.BaseCertStepActivity;
 import com.cdkj.borrowingmenber.model.FraudCertModel;
 import com.cdkj.borrowingmenber.module.api.MyApiServer;
-import com.cdkj.borrowingmenber.weiget.CertificationStepHelper;
+import com.cdkj.borrowingmenber.weiget.CertificationHelper;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -95,7 +94,7 @@ public class ThreeDataCertActivity extends BaseCertStepActivity {
             protected void onSuccess(FraudCertModel data, String SucMessage) {
                 if (data.isAuthorized()) { //是否授权
                     mCertListModel.setPZM7("N");
-                    CertificationStepHelper.checkRequest(ThreeDataCertActivity.this, mCertListModel);
+                    CertificationHelper.checkRequest(ThreeDataCertActivity.this, mCertListModel);
                     finish();
 
                 } else {

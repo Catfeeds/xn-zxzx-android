@@ -20,7 +20,7 @@ import com.cdkj.borrowingmenber.R;
 import com.cdkj.borrowingmenber.databinding.ActivityBasicInfoBinding;
 import com.cdkj.borrowingmenber.model.KeyDataModel;
 import com.cdkj.borrowingmenber.module.api.MyApiServer;
-import com.cdkj.borrowingmenber.weiget.CertificationStepHelper;
+import com.cdkj.borrowingmenber.weiget.CertificationHelper;
 import com.lljjcoder.citypickerview.widget.CityPicker;
 
 import java.util.ArrayList;
@@ -226,7 +226,7 @@ public class BasicInfoCertActivity extends BaseCertStepActivity {
 //                                CertificationStepHelper.checkStartStep(BasicInfoCertActivity.this, mCertListModel, mReportModel);//检测并打开下一步
                                 //通过验证后检测下一步 重新进行检测  这个步骤不在进行验证
                                 mCertListModel.setF3("N");
-                                CertificationStepHelper.checkRequest(BasicInfoCertActivity.this, mCertListModel);
+                                CertificationHelper.checkRequest(BasicInfoCertActivity.this, mCertListModel);
                                 finish();
                             } else {
                                 UITipDialog.showFall(BasicInfoCertActivity.this, "基本信息认证失败，请重新认证");

@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
+import com.cdkj.baselibrary.activitys.ShowBigPhotoActivity;
 import com.cdkj.baselibrary.appmanager.MyCdConfig;
 import com.cdkj.baselibrary.appmanager.SPUtilHelpr;
 import com.cdkj.baselibrary.base.AbsBaseLoadActivity;
@@ -63,6 +64,7 @@ import com.cdkj.borrowingmenber.model.TdCertMode;
 import com.cdkj.borrowingmenber.model.TdOperatorModel;
 import com.cdkj.borrowingmenber.model.ZMScoreReportModel;
 import com.cdkj.borrowingmenber.module.api.MyApiServer;
+import com.cdkj.borrowingmenber.weiget.CertificationHelper;
 import com.cdkj.borrowingmenber.weiget.LocalFocusOnDataParseHelper;
 import com.cdkj.borrowingmenber.weiget.TdDataParseHelper;
 
@@ -130,6 +132,8 @@ public class MyReportActivity extends AbsBaseLoadActivity {
     private LayoutReportTdCertBinding tdCertLayout;
 
 
+    private IdCardUrlReportModel idCardUrlReportModel;//包含了身份证url
+
     public static void open(Context context) {
         if (context == null) {
             return;
@@ -149,9 +153,26 @@ public class MyReportActivity extends AbsBaseLoadActivity {
     public void afterCreate(Bundle savedInstanceState) {
         mBaseBinding.titleView.setMidTitle(getString(R.string.my_report_page));
         initViews();
+        initListeners();
         initAddressBookAdapter();
         initFocusOnAdapter(mFocusOnList);
         getReportRequest();
+    }
+
+    private void initListeners() {
+        idCardLayout.imgIdcardPositive.setOnClickListener(v -> { //正面
+            if (idCardUrlReportModel == null) return;
+            ShowBigPhotoActivity.open(this, MyCdConfig.QINIUURL + idCardUrlReportModel.getIdentifyPic());
+        });
+        idCardLayout.imgIdcardReverse.setOnClickListener(v -> {
+            if (idCardUrlReportModel == null) return;
+            ShowBigPhotoActivity.open(this, MyCdConfig.QINIUURL + idCardUrlReportModel.getIdentifyPicReverse());
+        });
+        idCardLayout.imgIdcardPeople.setOnClickListener(v -> {
+            if (idCardUrlReportModel == null) return;
+            ShowBigPhotoActivity.open(this, MyCdConfig.QINIUURL + idCardUrlReportModel.getIdentifyPicHand());
+        });
+
     }
 
 
@@ -250,6 +271,7 @@ public class MyReportActivity extends AbsBaseLoadActivity {
 
             @Override
             protected void onSuccess(ReportModel data, String SucMessage) {
+                setShowLayoutState(data.getPortList());
                 parseReportDataRx(data);
             }
 
@@ -262,6 +284,74 @@ public class MyReportActivity extends AbsBaseLoadActivity {
     }
 
     /**
+     * F1,F2,F3,PID1,PDW2,PTXL3,PYYS4,PZM5,PZM6,PZM7,PTD8
+     * 根据portListString判断要显示的布局 没有认证的无需展示
+     *
+     * @param portListString
+     */
+    private void setShowLayoutState(String portListString) {
+        List<String> portList = StringUtils.splitAsList(portListString, ",");
+        if (portList != null && !portList.isEmpty()) {
+            hindAllLayout();
+            for (String s : portList) {
+                switch (s) {
+                    case CertificationHelper.F1:
+                        mBinding.showViewPhone.setVisibility(View.VISIBLE);
+                        break;
+                    case CertificationHelper.F2:
+                        mBinding.showViewZmCert.setVisibility(View.VISIBLE);
+                        break;
+                    case CertificationHelper.F3:
+                        mBinding.showViewBasicinfo.setVisibility(View.VISIBLE);
+                        break;
+                    case CertificationHelper.PID1:
+                        mBinding.showViewIdcard.setVisibility(View.VISIBLE);
+                        break;
+                    case CertificationHelper.PDW2:
+                        mBinding.showViewLocation.setVisibility(View.VISIBLE);
+                        break;
+                    case CertificationHelper.PTXL3:
+                        mBinding.showViewAddressbook.setVisibility(View.VISIBLE);
+                        break;
+                    case CertificationHelper.PYYS4:
+                        mBinding.showViewTdOperator.setVisibility(View.VISIBLE);
+                        break;
+                    case CertificationHelper.PZM5:
+                        mBinding.showViewZmScore.setVisibility(View.VISIBLE);
+                        break;
+                    case CertificationHelper.PZM6:
+                        mBinding.showViewFocusOn.setVisibility(View.VISIBLE);
+                        break;
+                    case CertificationHelper.PZM7:
+                        mBinding.showViewFraud.setVisibility(View.VISIBLE);
+                        break;
+                    case CertificationHelper.PTD8:
+                        mBinding.showViewTd.setVisibility(View.VISIBLE);
+                        break;
+                }
+            }
+
+        }
+    }
+
+    /**
+     * 先隐藏所有布局
+     */
+    private void hindAllLayout() {
+        mBinding.showViewPhone.setVisibility(View.GONE);
+        mBinding.showViewZmCert.setVisibility(View.GONE);
+        mBinding.showViewBasicinfo.setVisibility(View.GONE);
+        mBinding.showViewIdcard.setVisibility(View.GONE);
+        mBinding.showViewLocation.setVisibility(View.GONE);
+        mBinding.showViewAddressbook.setVisibility(View.GONE);
+        mBinding.showViewTdOperator.setVisibility(View.GONE);
+        mBinding.showViewZmScore.setVisibility(View.GONE);
+        mBinding.showViewFocusOn.setVisibility(View.GONE);
+        mBinding.showViewFraud.setVisibility(View.GONE);
+        mBinding.showViewTd.setVisibility(View.GONE);
+    }
+
+    /**
      * Rxjava 开启线程 解析报告数据
      *
      * @param
@@ -270,7 +360,6 @@ public class MyReportActivity extends AbsBaseLoadActivity {
 
         showLoadingDialog();
         try {                                                //捕获parseReportData 异常
-
             mSubscription.add(Observable.just(parseReportData(reportModel))
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -280,11 +369,11 @@ public class MyReportActivity extends AbsBaseLoadActivity {
                     .subscribe(reportParseData -> {
                         setShowData(reportParseData);
                     }, throwable -> {
-                        LogUtil.E("数据异常"+throwable.toString());
+                        LogUtil.E("数据异常" + throwable.toString());
                         UITipDialog.showFall(MyReportActivity.this, "数据异常");
                     }));
         } catch (Exception e) {
-            LogUtil.E("数据异常"+e.toString());
+            LogUtil.E("数据异常" + e.toString());
             UITipDialog.showFall(MyReportActivity.this, "数据异常");
             disMissLoading();
         }
@@ -349,6 +438,7 @@ public class MyReportActivity extends AbsBaseLoadActivity {
         if (data == null) {
             return;
         }
+
 
         setShowUserBasicData(data);//基本信息 包含芝麻认证 身份证 姓名 电话
 
@@ -499,9 +589,10 @@ public class MyReportActivity extends AbsBaseLoadActivity {
         if (idCardUrlReportModel == null) {
             return;
         }
+        this.idCardUrlReportModel = idCardUrlReportModel;
         ImgUtils.loadImg(MyReportActivity.this, MyCdConfig.QINIUURL + idCardUrlReportModel.getIdentifyPic(), idCardLayout.imgIdcardPositive);  //正面
         ImgUtils.loadImg(MyReportActivity.this, MyCdConfig.QINIUURL + idCardUrlReportModel.getIdentifyPicReverse(), idCardLayout.imgIdcardReverse);  //反面
-        ImgUtils.loadImg(MyReportActivity.this, MyCdConfig.QINIUURL + idCardUrlReportModel.getIdentifyPicHand(), idCardLayout.imgIdcardPeople); //正面
+        ImgUtils.loadImg(MyReportActivity.this, MyCdConfig.QINIUURL + idCardUrlReportModel.getIdentifyPicHand(), idCardLayout.imgIdcardPeople); //手持
     }
 
 
@@ -641,7 +732,6 @@ public class MyReportActivity extends AbsBaseLoadActivity {
         mFocusonListAdapter.setEmptyView(getEmptyTextView("暂无行业关注"));
 
         focusOnLayout.recyclerFocus.setAdapter(mFocusonListAdapter);
-
 
     }
 

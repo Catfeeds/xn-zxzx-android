@@ -17,6 +17,7 @@ import android.text.TextUtils;
 
 import com.cdkj.baselibrary.activitys.CropActivity;
 import com.cdkj.baselibrary.interfaces.CameraPhotoListener;
+import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -199,6 +200,11 @@ public class CameraHelper {
         } else {
             mCameraPhotoListener.onPhotoFailure(CAPTURE_PHOTO_CODE, "内存卡不存在");
         }
+    }
+
+
+    public Uri getImageUrl() {
+        return imageUrl;
     }
 
     /**
@@ -536,7 +542,14 @@ public class CameraHelper {
             Intent intent = new Intent(getContextActivity(context), CropActivity.class);
             intent.putExtra(cropPath, path);
             intent.putExtra("code", requestCode);
-            startActivity(intent, CAPTURE_ZOOM_CODE);
+//            startActivity(intent, CAPTURE_ZOOM_CODE);
+
+//            final Uri selectedUri = intent.getData();
+//            UCrop uCrop = UCrop.of(selectedUri, Uri.fromFile(new File(getCacheDir(), "SampleCropImage")));
+//
+//            uCrop.withAspectRatio(16, 9)
+//                    .start(this);
+
         }
     }
 

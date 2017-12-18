@@ -10,8 +10,8 @@ import com.cdkj.borrowingmenber.model.CertListModel;
 import com.cdkj.borrowingmenber.model.IdAndNameModel;
 import com.cdkj.borrowingmenber.model.ReportModel;
 
-import static com.cdkj.borrowingmenber.weiget.CertificationStepHelper.INTENTGETCERTMODEL;
-import static com.cdkj.borrowingmenber.weiget.CertificationStepHelper.INTENTGETREPORTMODEL;
+import static com.cdkj.borrowingmenber.weiget.CertificationHelper.INTENTGETCERTMODEL;
+import static com.cdkj.borrowingmenber.weiget.CertificationHelper.INTENTGETREPORTMODEL;
 
 /**
  * Created by 李先俊 on 2017/12/10.

@@ -1,8 +1,10 @@
-package com.cdkj.baselibrary.activitys;
+package com.cdkj.borrowingmenber.module.user;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.View;
@@ -11,12 +13,20 @@ import android.widget.TextView;
 import com.cdkj.baselibrary.R;
 import com.cdkj.baselibrary.interfaces.CameraPhotoListener;
 import com.cdkj.baselibrary.utils.CameraHelper;
+import com.cdkj.baselibrary.utils.FileProviderHelper;
 import com.cdkj.baselibrary.utils.ToastUtil;
+import com.yalantis.ucrop.UCrop;
+
+import java.io.File;
+
+import static com.cdkj.baselibrary.utils.CameraHelper.CAPTURE_PHOTO_CODE;
+import static com.cdkj.baselibrary.utils.CameraHelper.CAPTURE_WALBUM_CODE;
+import static com.cdkj.baselibrary.utils.CameraHelper.CAPTURE_ZOOM_CODE;
 
 /**
  * 打开相机 相册 图片裁剪 功能
  */
-public class ImageSelectActivity2 extends Activity implements View.OnClickListener, CameraPhotoListener {
+public class ImageSelectuCropActivity extends Activity implements View.OnClickListener, CameraPhotoListener {
 
     private TextView tv_take_capture;// 拍照
     private TextView tv_alumb;// 相册选取
@@ -30,38 +40,12 @@ public class ImageSelectActivity2 extends Activity implements View.OnClickListen
 
     private CameraHelper cameraHelper;
 
-    /**
-     * @param activity
-     * @param photoid
-     * @param showType 显示的按钮
-     * @param isSplit  是否裁剪
-     */
-    public static void launch(Activity activity, int photoid, int showType, boolean isSplit) {
+    public static void launch(Activity activity, int requestCode) {
         if (activity == null) {
             return;
         }
-        Intent intent = new Intent(activity, ImageSelectActivity2.class);
-        intent.putExtra("showType", showType);
-        intent.putExtra("isSplit", isSplit);
-        activity.startActivityForResult(intent, photoid);
-    }
-
-    public static void launch(Activity activity, int requestCode, boolean isSplit) {
-        if (activity == null) {
-            return;
-        }
-        Intent intent = new Intent(activity, ImageSelectActivity2.class);
-
-
+        Intent intent = new Intent(activity, ImageSelectuCropActivity.class);
         activity.startActivityForResult(intent, requestCode);
-    }
-
-    public static void launchFragment(Fragment fragment, int photoid) {
-        if (fragment == null || fragment.getActivity() == null) {
-            return;
-        }
-        Intent intent = new Intent(fragment.getActivity(), ImageSelectActivity2.class);
-        fragment.startActivityForResult(intent, photoid);
     }
 
 
@@ -127,7 +111,29 @@ public class ImageSelectActivity2 extends Activity implements View.OnClickListen
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //拍照回调
-        cameraHelper.onActivityResult(requestCode, resultCode, data);
+//        cameraHelper.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+        switch (requestCode) {
+            case CAPTURE_PHOTO_CODE:// 相机
+                UCrop uCrop2 = UCrop.of(cameraHelper.getImageUrl(), Uri.fromFile(new File(getCacheDir(), "CAPTURE_PHOTO.jpg")));
+                uCrop2.withAspectRatio(16, 9)
+                        .start(this);
+                break;
+            case CAPTURE_WALBUM_CODE:// 相册
+                UCrop uCrop = UCrop.of(data.getData(), Uri.fromFile(new File(getCacheDir(), "CAPTURE_WALBUM.jpg")));
+                uCrop.withAspectRatio(16, 9)
+                        .start(this);
+
+                break;
+            case CAPTURE_ZOOM_CODE:  //图片裁剪
+                break;
+            default:
+                break;
+        }
+
     }
 
 
@@ -153,7 +159,7 @@ public class ImageSelectActivity2 extends Activity implements View.OnClickListen
 
     @Override
     public void onPhotoFailure(int code, String msg) {
-        if(!TextUtils.isEmpty(msg)){
+        if (!TextUtils.isEmpty(msg)) {
             ToastUtil.show(this, msg);
         }
         finish();

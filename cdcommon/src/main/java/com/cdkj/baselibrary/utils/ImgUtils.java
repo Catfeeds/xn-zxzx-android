@@ -97,7 +97,6 @@ public class ImgUtils {
 
     public static void loadLogo(Object obj, Object imgid, ImageView img) {
 
-
         if (imgid instanceof Integer || imgid instanceof String) {
 
             if (obj instanceof Context) {

@@ -95,6 +95,21 @@
             android:name=".module.certification.ZMScoreGetActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
+        <!--调查声明-->
+        <activity
+            android:name=".module.certification.SurveyStatementActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <!--图片裁剪-->
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+    <!--图片裁剪-->
+        <activity
+            android:name=".module.user.ImageSelectuCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
         <!--我的报告-->
         <activity

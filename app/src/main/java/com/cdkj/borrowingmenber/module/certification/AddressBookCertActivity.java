@@ -1,17 +1,12 @@
 package com.cdkj.borrowingmenber.module.certification;
 
 import android.Manifest;
-import android.content.Context;
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
 
-import com.cdkj.baselibrary.activitys.AddBankCardActivity;
 import com.cdkj.baselibrary.activitys.WebViewActivity;
-import com.cdkj.baselibrary.appmanager.SPUtilHelpr;
-import com.cdkj.baselibrary.base.AbsBaseLoadActivity;
 import com.cdkj.baselibrary.dialog.CommonDialog;
 import com.cdkj.baselibrary.dialog.UITipDialog;
 import com.cdkj.baselibrary.model.IsSuccessModes;
@@ -24,7 +19,7 @@ import com.cdkj.baselibrary.utils.StringUtils;
 import com.cdkj.borrowingmenber.BaseCertStepActivity;
 import com.cdkj.borrowingmenber.R;
 import com.cdkj.borrowingmenber.databinding.ActivityAddressbookBinding;
-import com.cdkj.borrowingmenber.weiget.CertificationStepHelper;
+import com.cdkj.borrowingmenber.weiget.CertificationHelper;
 
 import java.util.HashMap;
 import java.util.List;
@@ -159,7 +154,7 @@ public class AddressBookCertActivity extends BaseCertStepActivity {
                 if (data.isSuccess()) {
                     if (hashMaps != null && hashMaps.size() > 0) {
                         mCertListModel.setPTXL3("N");
-                        CertificationStepHelper.checkRequest(AddressBookCertActivity.this, mCertListModel);
+                        CertificationHelper.checkRequest(AddressBookCertActivity.this, mCertListModel);
                         finish();
                     }
                 }

@@ -1,6 +1,5 @@
 package com.cdkj.borrowingmenber.module.certification;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -22,14 +21,9 @@ import com.cdkj.baselibrary.utils.StringUtils;
 import com.cdkj.borrowingmenber.BaseCertStepActivity;
 import com.cdkj.borrowingmenber.R;
 import com.cdkj.borrowingmenber.databinding.ActivityCardandnameCheckBinding;
-import com.cdkj.borrowingmenber.model.CertListModel;
-import com.cdkj.borrowingmenber.model.ReportModel;
 import com.cdkj.borrowingmenber.model.ZMCertFirstStepModel;
 import com.cdkj.borrowingmenber.module.api.MyApiServer;
-import com.cdkj.borrowingmenber.weiget.CertificationStepHelper;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
+import com.cdkj.borrowingmenber.weiget.CertificationHelper;
 
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -218,7 +212,7 @@ public class ZMCertificationActivity extends BaseCertStepActivity {
 
                     //通过验证后检测下一步 重新进行检测  这个步骤不在进行验证
                     mCertListModel.setF2("N");
-                    CertificationStepHelper.checkRequest(ZMCertificationActivity.this, mCertListModel);
+                    CertificationHelper.checkRequest(ZMCertificationActivity.this, mCertListModel);
                     finish();
                 } else {
                     UITipDialog.showInfo(ZMCertificationActivity.this, "芝麻认证失败，请重试");

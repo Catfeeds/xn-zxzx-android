@@ -3,63 +3,91 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/bg_gray"
-        android:orientation="vertical">
+        android:background="@color/bg_gray">
+
 
         <LinearLayout
-            android:id="@+id/lin_user_info"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/title_bg_app"
-            android:paddingBottom="20dp"
-            android:paddingLeft="20dp"
-            android:paddingTop="20dp">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/img_user_logo"
-                android:layout_width="75dp"
-                android:layout_height="75dp"
-                android:src="@drawable/photo_default" />
+            <LinearLayout
+                android:id="@+id/lin_user_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/title_bg_app"
+                android:paddingBottom="20dp"
+                android:paddingLeft="20dp"
+                android:paddingTop="20dp">
+
+                <ImageView
+                    android:id="@+id/img_user_logo"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:src="@drawable/photo_default" />
+
+                <TextView
+                    android:id="@+id/tv_user_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="15dp"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    tools:text="13000202020" />
+
+            </LinearLayout>
+
+            <com.cdkj.baselibrary.views.RowMoreInfoLayout
+                android:id="@+id/row_report"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:txt_title="我的资信报告" />
+
+
+            <com.cdkj.baselibrary.views.RowMoreInfoLayout
+                android:id="@+id/row_setting"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                app:txt_title="个人设置" />
+
+
+            <com.cdkj.baselibrary.views.RowMoreInfoLayout
+                android:id="@+id/row_about_us"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                app:txt_title="关于我们" />
+
 
             <TextView
-                android:id="@+id/tv_user_name"
-                android:layout_width="wrap_content"
+                android:id="@+id/tv_service_phone"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="15dp"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                tools:text="13000202020" />
+                android:layout_marginTop="30dp"
+                android:background="@color/bg_gray"
+                android:gravity="center|top"
+                android:paddingTop="10dp"
+                android:textColor="@color/text_color"
+                tools:text="服务电话:9:30-18:00" />
+
+            <TextView
+                android:id="@+id/tv_service_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/bg_gray"
+                android:gravity="center|top"
+                android:paddingTop="10dp"
+                android:textColor="@color/text_color"
+                tools:text="服务时间:9:30-18:00" />
 
         </LinearLayout>
-
-        <com.cdkj.baselibrary.views.RowMoreInfoLayout
-            android:id="@+id/row_report"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:txt_title="我的资信报告" />
-
-
-        <com.cdkj.baselibrary.views.RowMoreInfoLayout
-            android:id="@+id/row_setting"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
-            app:txt_title="个人设置" />
-
-
-        <com.cdkj.baselibrary.views.RowMoreInfoLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
-            app:txt_title="关于我们" />
-
-
-    </LinearLayout>
+    </ScrollView>
 </layout>
 

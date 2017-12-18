@@ -8,7 +8,6 @@ import android.text.TextUtils;
 import com.cdkj.baselibrary.base.BaseActivity;
 import com.cdkj.baselibrary.nets.BaseResponseModelCallBack;
 import com.cdkj.baselibrary.nets.RetrofitUtils;
-import com.cdkj.baselibrary.utils.LogUtil;
 import com.cdkj.baselibrary.utils.StringUtils;
 import com.cdkj.borrowingmenber.model.CertListModel;
 import com.cdkj.borrowingmenber.model.ReportModel;
@@ -18,10 +17,10 @@ import com.cdkj.borrowingmenber.module.certification.BasicInfoCertActivity;
 import com.cdkj.borrowingmenber.module.certification.IdcardUploadActivity;
 import com.cdkj.borrowingmenber.module.certification.IndustryFocusOnActivity;
 import com.cdkj.borrowingmenber.module.certification.LocationCertActivity;
+import com.cdkj.borrowingmenber.module.certification.SurveyStatementActivity;
 import com.cdkj.borrowingmenber.module.certification.TdAllCertActivity;
 import com.cdkj.borrowingmenber.module.certification.TdOperatorCertActivity;
 import com.cdkj.borrowingmenber.module.certification.ThreeDataCertActivity;
-import com.cdkj.borrowingmenber.module.certification.ZMCertificationActivity;
 import com.cdkj.borrowingmenber.module.certification.ZMScoreGetActivity;
 import com.cdkj.borrowingmenber.module.report.MyReportActivity;
 
@@ -35,7 +34,19 @@ import retrofit2.Call;
  * Created by 李先俊 on 2017/12/10.
  */
 
-public class CertificationStepHelper {
+public class CertificationHelper {
+
+    public static final String F1 = "F1"; //手机认证
+    public static final String F2 = "F2";//芝麻认证
+    public static final String F3 = "F3";//基本信息认证
+    public static final String PID1 = "PID1";//身份证正反面
+    public static final String PDW2 = "PDW2";//定位认证
+    public static final String PTXL3 = "PTXL3";//通讯录认证
+    public static final String PYYS4 = "PYYS4";//运营商认证
+    public static final String PZM5 = "PZM5";//芝麻分
+    public static final String PZM6 = "PZM6";//行业关注清单
+    public static final String PZM7 = "PZM7";//欺诈3接口
+    public static final String PTD8 = "PTD8";//同盾认证
 
 
     /**
@@ -68,8 +79,9 @@ public class CertificationStepHelper {
         }
 
         if (isNeedCertZm(certListModel) || isNeedCertZm(reportModel, certListModel)) {
-            //打开芝麻认证
-            openStepPage(context, ZMCertificationActivity.class, certListModel, reportModel);
+            //打开调查声明 然后打开芝麻认证
+            openStepPage(context, SurveyStatementActivity.class, certListModel, reportModel);
+//            openStepPage(context, ZMCertificationActivity.class, certListModel, reportModel);
             return;
         }
 
@@ -154,7 +166,7 @@ public class CertificationStepHelper {
             protected void onSuccess(ReportModel data, String SucMessage) {
 //                CertificationStepHelper.openStepPage(context, AddressBookCertActivity.class, certListModel, data);
 
-                CertificationStepHelper.checkStartStep(context, certListModel, data);
+                CertificationHelper.checkStartStep(context, certListModel, data);
             }
 
             @Override

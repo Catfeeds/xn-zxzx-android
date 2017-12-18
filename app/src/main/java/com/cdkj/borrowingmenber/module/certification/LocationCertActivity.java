@@ -14,7 +14,7 @@ import com.cdkj.baselibrary.nets.BaseResponseModelCallBack;
 import com.cdkj.baselibrary.nets.RetrofitUtils;
 import com.cdkj.baselibrary.utils.StringUtils;
 import com.cdkj.borrowingmenber.BaseCertStepActivity;
-import com.cdkj.borrowingmenber.weiget.CertificationStepHelper;
+import com.cdkj.borrowingmenber.weiget.CertificationHelper;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -129,7 +129,7 @@ public class LocationCertActivity extends BaseCertStepActivity {
             protected void onSuccess(IsSuccessModes data, String SucMessage) {
                 if (data.isSuccess()) {
                     mCertListModel.setPDW2("N");
-                    CertificationStepHelper.checkRequest(LocationCertActivity.this, mCertListModel);
+                    CertificationHelper.checkRequest(LocationCertActivity.this, mCertListModel);
                     EventBus.getDefault().post(LOCATIONSUCC);//定位成功结束上一个界面
                     finish();
                 } else {

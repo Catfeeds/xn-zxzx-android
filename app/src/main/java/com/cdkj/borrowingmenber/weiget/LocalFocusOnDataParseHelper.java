@@ -50,7 +50,6 @@ public class LocalFocusOnDataParseHelper {
                 continue;
             }
 
-
             MyLocalFocusOnListModel localFocusOnList = getBizDataByBizCode(detailBean.getBizCode(), myLocalFocusOnList);
 
             if (localFocusOnList == null) {
@@ -77,9 +76,6 @@ public class LocalFocusOnDataParseHelper {
 
             }
 
-
-            list.add(parseShowModel);
-
             for (MyLocalFocusOnListModel.TypeBean.TypeCodeInfoBean typeCodeListBean : localFocusOnList.getType().getTypeCodeInfo()) {
                 if (typeCodeListBean == null) {
                     continue;
@@ -95,7 +91,6 @@ public class LocalFocusOnDataParseHelper {
                             continue;
                         }
                         if (TextUtils.equals(codeListBean.getCode(), detailBean.getCode())) {
-
                             parseShowModel.setTypeDescribeTitle(typeCodeListBean.getCodeList().getName());
                             parseShowModel.setTypeDescribeDetail(codeListBean.getValue());
                             break;
@@ -106,6 +101,8 @@ public class LocalFocusOnDataParseHelper {
 
                 }
             }
+
+            list.add(parseShowModel);
         }
 
         return list;

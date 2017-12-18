@@ -6,6 +6,7 @@ import android.widget.ImageView;
 
 import com.cdkj.baselibrary.appmanager.SPUtilHelpr;
 import com.cdkj.baselibrary.base.BaseActivity;
+import com.cdkj.borrowingmenber.module.certification.IdcardUploadActivity;
 import com.cdkj.borrowingmenber.module.user.LoginActivity;
 
 import java.util.concurrent.TimeUnit;
@@ -46,7 +47,9 @@ public class WelcomeAcitivity extends BaseActivity {
                         finish();
                         return;
                     }
-                    MainActivity.open(this);
+//                    MainActivity.open(this);
+                    Intent intent=new Intent(this, IdcardUploadActivity.class);
+                    startActivity(intent);
                     finish();
                 }, Throwable::printStackTrace));
     }

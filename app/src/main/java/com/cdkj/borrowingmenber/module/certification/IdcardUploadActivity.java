@@ -9,7 +9,6 @@ import android.view.View;
 import com.cdkj.baselibrary.activitys.ImageSelectActivity2;
 import com.cdkj.baselibrary.api.BaseApiServer;
 import com.cdkj.baselibrary.appmanager.EventTags;
-import com.cdkj.baselibrary.appmanager.MyCdConfig;
 import com.cdkj.baselibrary.dialog.UITipDialog;
 import com.cdkj.baselibrary.model.IsSuccessModes;
 import com.cdkj.baselibrary.model.QiniuGetTokenModel;
@@ -23,7 +22,8 @@ import com.cdkj.baselibrary.utils.StringUtils;
 import com.cdkj.borrowingmenber.BaseCertStepActivity;
 import com.cdkj.borrowingmenber.R;
 import com.cdkj.borrowingmenber.databinding.ActivityIdcardConfirmBinding;
-import com.cdkj.borrowingmenber.weiget.CertificationStepHelper;
+import com.cdkj.borrowingmenber.module.user.ImageSelectuCropActivity;
+import com.cdkj.borrowingmenber.weiget.CertificationHelper;
 
 import org.greenrobot.eventbus.Subscribe;
 
@@ -76,15 +76,16 @@ public class IdcardUploadActivity extends BaseCertStepActivity {
     private void initListener() {
         //正面照片上传
         mBinding.layoutIdcardPositive.setOnClickListener(v -> {
-            ImageSelectActivity2.launch(this, PHOTOFLAG1);
+//            ImageSelectActivity2.launch(this, PHOTOFLAG1, true);
+            ImageSelectuCropActivity.launch(this, PHOTOFLAG1);
         });
         //反面照片上传
         mBinding.layoutIdcardReverse.setOnClickListener(v -> {
-            ImageSelectActivity2.launch(this, PHOTOFLAG2);
+            ImageSelectActivity2.launch(this, PHOTOFLAG2, true);
         });
         //手持照片上传
         mBinding.layoutIdcardPeople.setOnClickListener(v -> {
-            ImageSelectActivity2.launch(this, PHOTOFLAG3);
+            ImageSelectActivity2.launch(this, PHOTOFLAG3, true);
         });
 
         mBinding.btnNext.setOnClickListener(v -> {
@@ -116,7 +117,7 @@ public class IdcardUploadActivity extends BaseCertStepActivity {
             protected void onSuccess(IsSuccessModes data, String SucMessage) {
                 if (data.isSuccess()) {
                     mCertListModel.setPID1("N");
-                    CertificationStepHelper.checkRequest(IdcardUploadActivity.this, mCertListModel);
+                    CertificationHelper.checkRequest(IdcardUploadActivity.this, mCertListModel);
                     finish();
                 } else {
                     UITipDialog.showInfo(IdcardUploadActivity.this, "上传失败,请退出重试");
@@ -174,7 +175,19 @@ public class IdcardUploadActivity extends BaseCertStepActivity {
             }
             return;
         }
-        getQiniuToken(requestCode, path);
+
+        switch (requestCode) {
+            case PHOTOFLAG1:
+                ImgUtils.loadImg(IdcardUploadActivity.this, path, mBinding.imgIdcardPositive);
+                break;
+            case PHOTOFLAG2:
+                ImgUtils.loadImg(IdcardUploadActivity.this, path, mBinding.imgIdcardReverse);
+                break;
+            case PHOTOFLAG3:
+                ImgUtils.loadImg(IdcardUploadActivity.this, path, mBinding.imgIdcardPeople);
+                break;
+        }
+//        getQiniuToken(requestCode, path);
     }
 
     /**
