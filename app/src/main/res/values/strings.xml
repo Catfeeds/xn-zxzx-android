@@ -16,4 +16,19 @@
     <string name="no_cert_list">暂无调查</string>
     <string name="start_certification">  向你发起调查</string>
     <string name="my_report_page">我的资信报告</string>
+    <string name="certification_done">(已认证)</string>
+    <string name="certification_not">未认证</string>
+    <string name="no_addressbooks">暂无通讯录数据</string>
+    <string name="all_match">完全匹配</string>
+    <string name="all_match_2">模糊匹配</string>
+    <string name="op_match">和运营商数据</string>
+    <string name="op_match_no">和运营商数据不匹配</string>
+    <string name="yes">是</string>
+    <string name="address_is_use">和常用通话地址一致</string>
+    <string name="address_no_use">和常用通话地址不一致</string>
+    <string name="name_true">已实名认证</string>
+    <string name="name_false">未实名认证</string>
+    <string name="no_contacd">暂无紧急联系人</string>
+    <string name="no_focus_on">暂无行业关注</string>
+    <string name="report_prase">报告解析中...</string>
 </resources>

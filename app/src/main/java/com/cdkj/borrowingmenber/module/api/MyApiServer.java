@@ -12,6 +12,7 @@ import com.cdkj.borrowingmenber.model.UserInfoModel;
 import com.cdkj.borrowingmenber.model.ZMCertFirstStepModel;
 import com.cdkj.borrowingmenber.model.ZmScoreGetModel;
 
+import io.reactivex.Observable;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -55,6 +56,7 @@ public interface MyApiServer {
     @FormUrlEncoded
     @POST("api")
     Call<BaseResponseListModel<KeyDataModel>> getKeyData(@Field("code") String code, @Field("json") String json);
+
 
 
     /**

@@ -2,6 +2,7 @@ package com.cdkj.borrowingmenber.module.certification;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.cdkj.baselibrary.dialog.UITipDialog;
@@ -84,7 +85,6 @@ public class LocationCertActivity extends BaseCertStepActivity {
         }, view -> {
             showLocationDialog();
             locationHelper.startLocation();
-
         });
     }
 
@@ -98,7 +98,24 @@ public class LocationCertActivity extends BaseCertStepActivity {
     protected void onDestroy() {
         locationHelper.destroyLocation();
         locationHelper = null;
+        tipDialog.dismiss();
+        tipDialog = null;
         super.onDestroy();
+    }
+
+    /**
+     * 获取到的定位信息为空时 上传.
+     *
+     * @param str
+     * @return
+     */
+    public String getNotEmptyInfo(String str) {
+        if (TextUtils.isEmpty(str)) {
+            return ".";
+        }
+
+        return str;
+
     }
 
     /**
@@ -108,14 +125,19 @@ public class LocationCertActivity extends BaseCertStepActivity {
      */
     private void locationCert(LocationModel locationModel) {
 
+        if (mCertListModel == null) {
+            showToast("认证失败,请重试");
+            finish();
+        }
+
         Map map = RetrofitUtils.getRequestMap();
 
-        map.put("address", locationModel.getAddress() + ".");
-        map.put("city", locationModel.getCity() + ".");
-        map.put("latitude", locationModel.getLatitude() + ".");
-        map.put("longitude", locationModel.getLongitude() + ".");
-        map.put("province", locationModel.getDistrict() + ".");
-        map.put("area", locationModel.getProvince() + ".");
+        map.put("address", getNotEmptyInfo(locationModel.getAddress()));
+        map.put("city", getNotEmptyInfo(locationModel.getCity()));
+        map.put("latitude", getNotEmptyInfo(locationModel.getLatitude()));
+        map.put("longitude", getNotEmptyInfo(locationModel.getLongitude()));
+        map.put("province", getNotEmptyInfo(locationModel.getProvince()));
+        map.put("area", getNotEmptyInfo(locationModel.getDistrict()));
         map.put("searchCode", mCertListModel.getCode());
 
         showLoadingDialog();
@@ -168,11 +190,9 @@ public class LocationCertActivity extends BaseCertStepActivity {
                     .setTipWord("定位中...")
                     .create();
         }
-        if (tipDialog.isShowing()) {
+        if (!tipDialog.isShowing()) {
             tipDialog.dismiss();
         }
-
-        tipDialog.show();
     }
 
     public void dismissLocationDialog() {
@@ -180,5 +200,6 @@ public class LocationCertActivity extends BaseCertStepActivity {
             tipDialog.dismiss();
         }
     }
+
 
 }

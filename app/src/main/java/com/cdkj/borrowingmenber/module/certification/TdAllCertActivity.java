@@ -1,5 +1,6 @@
 package com.cdkj.borrowingmenber.module.certification;
 
+import android.os.Bundle;
 import android.view.View;
 
 import com.cdkj.baselibrary.dialog.UITipDialog;
@@ -30,14 +31,20 @@ public class TdAllCertActivity extends BaseCertStepActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    public void afterCreate(Bundle savedInstanceState) {
+        super.afterCreate(savedInstanceState);
         showDoubleWarnListen("是否进行同盾认证", view -> {
             finish();
         }, view -> {
             tdCertRequest();
         });
+    }
 
+    @Override
+    protected void onDestroy() {
+        tipDialog.dismiss();
+        tipDialog = null;
+        super.onDestroy();
     }
 
     /**
@@ -85,11 +92,9 @@ public class TdAllCertActivity extends BaseCertStepActivity {
                     .setTipWord("数据上传中...")
                     .create();
         }
-        if (tipDialog.isShowing()) {
-            tipDialog.dismiss();
+        if (!tipDialog.isShowing()) {
+            tipDialog.show();
         }
-
-        tipDialog.show();
     }
 
     public void dismissWaiteDialog() {

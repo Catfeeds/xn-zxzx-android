@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.cdkj.baselibrary.activitys.ShowBigPhotoActivity;
+import com.cdkj.baselibrary.api.BaseResponseListModel;
 import com.cdkj.baselibrary.appmanager.MyCdConfig;
 import com.cdkj.baselibrary.appmanager.SPUtilHelpr;
 import com.cdkj.baselibrary.base.AbsBaseLoadActivity;
@@ -40,11 +41,9 @@ import com.cdkj.borrowingmenber.databinding.LayoutReportFocusOnBinding;
 import com.cdkj.borrowingmenber.databinding.LayoutReportFraudBinding;
 import com.cdkj.borrowingmenber.databinding.LayoutReportIdcardBinding;
 import com.cdkj.borrowingmenber.databinding.LayoutReportLocationBinding;
-import com.cdkj.borrowingmenber.databinding.LayoutReportPhoneBinding;
 import com.cdkj.borrowingmenber.databinding.LayoutReportTdCertBinding;
 import com.cdkj.borrowingmenber.databinding.LayoutReportTdOperatorBinding;
 import com.cdkj.borrowingmenber.databinding.LayoutReportZmBinding;
-import com.cdkj.borrowingmenber.databinding.LayoutReportZmCertBinding;
 import com.cdkj.borrowingmenber.model.AddressBookReportModel;
 import com.cdkj.borrowingmenber.model.FocusOnParseShowModel;
 import com.cdkj.borrowingmenber.model.FraudReportModel;
@@ -87,52 +86,45 @@ public class MyReportActivity extends AbsBaseLoadActivity {
 
     private ActivityMyReportBinding mBinding;
 
-    private List<KeyDataModel> mEducations = new ArrayList<>();//学历数据
     private String mEducationCode;//学历code
-
-
-    private List<KeyDataModel> mMarriages = new ArrayList<>();//婚姻数据
     private String mMarriagesCode;//婚姻code
-
-
-    private List<KeyDataModel> mLiveDays = new ArrayList<>();//居住时长数据
     private String mLiveDaysCode;
-
-    private List<KeyDataModel> mJobs = new ArrayList<>();//职业数据
     private String mJobCode;//职业code
-
-
-    private List<KeyDataModel> mInMoneys = new ArrayList<>();//收入数据
     private String mInMoneyCode;//收入code
-
-    private List<KeyDataModel> mFamilys = new ArrayList<>();//亲属关系数据
     private String mFamilyCode;//亲属关系
-
-    private List<KeyDataModel> mSocietys = new ArrayList<>();//社会关系数据
     private String mSocietysCode;//社会关系code
 
+    private AddressBookReportAdapter mAddressBookReportAdapter;
+    List<AddressBookReportModel.AddressBookListBean> mAddressBookReportAList = new ArrayList<>(); //通讯录
 
     private FocusonListAdapter mFocusonListAdapter;
-    private AddressBookReportAdapter mAddressBookReportAdapter;
-
-    List<AddressBookReportModel.AddressBookListBean> mAddressBookReportAList = new ArrayList<>();
-    List<FocusOnParseShowModel> mFocusOnList = new ArrayList<>();
+    List<FocusOnParseShowModel> mFocusOnList = new ArrayList<>();//关注清单
 
     //认证数据展示布局
-    private LayoutReportPhoneBinding phoneLayout;
-    private LayoutReportZmCertBinding zmCertLayout;
-    private LayoutBasicUserInfoBinding basicinfoLayout;
-    private LayoutReportIdcardBinding idCardLayout;
-    private LayoutReportLocationBinding locationLayout;
-    private LayoutReportAddressbokBinding addressBookLayout;
-    private LayoutReportZmBinding zmScoreLayout;
-    private LayoutReportFocusOnBinding focusOnLayout;
-    private LayoutReportFraudBinding fraudLayout;
-    private LayoutReportTdOperatorBinding tdOperatorLayout;
-    private LayoutReportTdCertBinding tdCertLayout;
+//    private LayoutReportPhoneBinding phoneLayout;
+//    private LayoutReportZmCertBinding zmCertLayout;
+    private LayoutBasicUserInfoBinding basicinfoLayout; //基本信息
+    private LayoutReportIdcardBinding idCardLayout;     //身份证图片
+    private LayoutReportLocationBinding locationLayout;  //定位信息
+    private LayoutReportAddressbokBinding addressBookLayout; //通讯录
+    private LayoutReportZmBinding zmScoreLayout; //芝麻分
+    private LayoutReportFocusOnBinding focusOnLayout;//关注列表
+    private LayoutReportFraudBinding fraudLayout;//欺诈
+    private LayoutReportTdOperatorBinding tdOperatorLayout;//运营商
+    private LayoutReportTdCertBinding tdCertLayout;//同盾
 
+
+    private UITipDialog tipDialog;
 
     private IdCardUrlReportModel idCardUrlReportModel;//包含了身份证url
+
+    private static final String education = "education";
+    private static final String live_time = "live_time";
+    private static final String occupation = "occupation";
+    private static final String marriage = "marriage";
+    private static final String income = "income";
+    private static final String family_relation = "family_relation";
+    private static final String society_relation = "society_relation";
 
     public static void open(Context context) {
         if (context == null) {
@@ -153,13 +145,21 @@ public class MyReportActivity extends AbsBaseLoadActivity {
     public void afterCreate(Bundle savedInstanceState) {
         mBaseBinding.titleView.setMidTitle(getString(R.string.my_report_page));
         initViews();
-        initListeners();
+        hindAllLayout();
+        initIdCardClick();
         initAddressBookAdapter();
         initFocusOnAdapter(mFocusOnList);
         getReportRequest();
     }
 
-    private void initListeners() {
+
+    /**
+     * 身份证点击
+     */
+    private void initIdCardClick() {
+        if (idCardLayout == null) {
+            return;
+        }
         idCardLayout.imgIdcardPositive.setOnClickListener(v -> { //正面
             if (idCardUrlReportModel == null) return;
             ShowBigPhotoActivity.open(this, MyCdConfig.QINIUURL + idCardUrlReportModel.getIdentifyPic());
@@ -181,12 +181,12 @@ public class MyReportActivity extends AbsBaseLoadActivity {
      */
     private void initViews() {
         //电话
-        phoneLayout = DataBindingUtil.inflate(getLayoutInflater(), R.layout.layout_report_phone, null, false);
-        mBinding.showViewPhone.addShowView(phoneLayout.getRoot());
-
-        //芝麻认证
-        zmCertLayout = DataBindingUtil.inflate(getLayoutInflater(), R.layout.layout_report_zm_cert, null, false);
-        mBinding.showViewZmCert.addShowView(zmCertLayout.getRoot());
+//        phoneLayout = DataBindingUtil.inflate(getLayoutInflater(), R.layout.layout_report_phone, null, false);
+//        mBinding.showViewPhone.addShowView(phoneLayout.getRoot());
+//
+//        //芝麻认证
+//        zmCertLayout = DataBindingUtil.inflate(getLayoutInflater(), R.layout.layout_report_zm_cert, null, false);
+//        mBinding.showViewZmCert.addShowView(zmCertLayout.getRoot());
 
         //基本信息
         basicinfoLayout = DataBindingUtil.inflate(getLayoutInflater(), R.layout.layout_basic_user_info, null, false);
@@ -232,9 +232,10 @@ public class MyReportActivity extends AbsBaseLoadActivity {
      */
     private void initAddressBookAdapter() {
         mAddressBookReportAdapter = new AddressBookReportAdapter(mAddressBookReportAList);
-        TextView textView = getEmptyTextView("暂无通讯录数据");
+        TextView textView = getEmptyTextView(getString(R.string.no_addressbooks));
         mAddressBookReportAdapter.setEmptyView(textView);
 
+        if (addressBookLayout == null) return;
         addressBookLayout.recyclerAddressbook.setLayoutManager(getLinearLayoutManager());
         addressBookLayout.recyclerAddressbook.setAdapter(mAddressBookReportAdapter);
     }
@@ -243,9 +244,9 @@ public class MyReportActivity extends AbsBaseLoadActivity {
     private TextView getEmptyTextView(String str) {
         TextView textView = new TextView(this);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.leftMargin = 30;
-        params.topMargin = 15;
-        params.bottomMargin = 15;
+        params.leftMargin = 45;
+        params.topMargin = 30;
+        params.bottomMargin = 30;
         textView.setLayoutParams(params);
         textView.setText(str);
         textView.setTextColor(ContextCompat.getColor(this, R.color.text_black_cd));
@@ -292,14 +293,14 @@ public class MyReportActivity extends AbsBaseLoadActivity {
     private void setShowLayoutState(String portListString) {
         List<String> portList = StringUtils.splitAsList(portListString, ",");
         if (portList != null && !portList.isEmpty()) {
-            hindAllLayout();
+
             for (String s : portList) {
                 switch (s) {
                     case CertificationHelper.F1:
-                        mBinding.showViewPhone.setVisibility(View.VISIBLE);
+//                        mBinding.showViewPhone.setVisibility(View.VISIBLE);
                         break;
                     case CertificationHelper.F2:
-                        mBinding.showViewZmCert.setVisibility(View.VISIBLE);
+//                        mBinding.showViewZmCert.setVisibility(View.VISIBLE);
                         break;
                     case CertificationHelper.F3:
                         mBinding.showViewBasicinfo.setVisibility(View.VISIBLE);
@@ -338,8 +339,8 @@ public class MyReportActivity extends AbsBaseLoadActivity {
      * 先隐藏所有布局
      */
     private void hindAllLayout() {
-        mBinding.showViewPhone.setVisibility(View.GONE);
-        mBinding.showViewZmCert.setVisibility(View.GONE);
+//        mBinding.showViewPhone.setVisibility(View.GONE);
+//        mBinding.showViewZmCert.setVisibility(View.GONE);
         mBinding.showViewBasicinfo.setVisibility(View.GONE);
         mBinding.showViewIdcard.setVisibility(View.GONE);
         mBinding.showViewLocation.setVisibility(View.GONE);
@@ -357,14 +358,14 @@ public class MyReportActivity extends AbsBaseLoadActivity {
      * @param
      */
     public void parseReportDataRx(ReportModel reportModel) {
-
-        showLoadingDialog();
+        showPraseDialog();
         try {                                                //捕获parseReportData 异常
-            mSubscription.add(Observable.just(parseReportData(reportModel))
-                    .subscribeOn(Schedulers.io())
+            mSubscription.add(Observable.just("")
+                    .observeOn(Schedulers.newThread())
+                    .map(s -> parseReportData(reportModel))
                     .observeOn(AndroidSchedulers.mainThread())
                     .doFinally(() -> {
-                        disMissLoading();
+                        dismissPraseDialog();
                     })
                     .subscribe(reportParseData -> {
                         setShowData(reportParseData);
@@ -375,7 +376,7 @@ public class MyReportActivity extends AbsBaseLoadActivity {
         } catch (Exception e) {
             LogUtil.E("数据异常" + e.toString());
             UITipDialog.showFall(MyReportActivity.this, "数据异常");
-            disMissLoading();
+            dismissPraseDialog();
         }
     }
 
@@ -439,7 +440,6 @@ public class MyReportActivity extends AbsBaseLoadActivity {
             return;
         }
 
-
         setShowUserBasicData(data);//基本信息 包含芝麻认证 身份证 姓名 电话
 
         setShowFocusOnData(data.getFocusOnList());//行业关注清单
@@ -482,23 +482,35 @@ public class MyReportActivity extends AbsBaseLoadActivity {
 
         showUserInfo(data.getUseInfo()); //基本信息
 
-        if (phoneLayout != null && data.getMobile() != null) {  //电话
-            phoneLayout.tvPhoneNum.setText(data.getMobile().getMobile());
-            basicinfoLayout.tvPhoneNum.setText(data.getMobile().getMobile());
+        if (data.getMobile() != null && basicinfoLayout != null) {  //电话
+//            phoneLayout.tvPhoneNum.setText(data.getMobile().getMobile());
+            if (TextUtils.isEmpty(data.getMobile().getMobile())) {
+                basicinfoLayout.tvPhoneNum.setText(R.string.certification_not);
+            } else {
+                basicinfoLayout.tvPhoneNum.setText(data.getMobile().getMobile() + " " + getString(R.string.certification_done));
+            }
         }
-
 
         IdAndNameModel idAndNameModel = data.getIdAndName();
         if (idAndNameModel != null) {
             if (basicinfoLayout != null) {          //基本信息
-                basicinfoLayout.tvIdcard.setText(idAndNameModel.getIdNo());
-                basicinfoLayout.tvName.setText(idAndNameModel.getRealName());
+                if (TextUtils.isEmpty(idAndNameModel.getIdNo())) {
+                    basicinfoLayout.tvIdcard.setText(R.string.certification_not);
+                } else {
+                    basicinfoLayout.tvIdcard.setText(idAndNameModel.getIdNo() + " " + getString(R.string.certification_done));
+                }
+                if (TextUtils.isEmpty(idAndNameModel.getRealName())) {
+                    basicinfoLayout.tvName.setText(R.string.certification_not);
+                } else {
+                    basicinfoLayout.tvName.setText(idAndNameModel.getRealName() + " " + getString(R.string.certification_done));
+                }
+
             }
 
-            if (zmCertLayout != null) {            //芝麻认证
-                zmCertLayout.tvIdNum.setText(idAndNameModel.getIdNo());
-                zmCertLayout.tvName.setText(idAndNameModel.getRealName());
-            }
+//            if (zmCertLayout != null) {            //芝麻认证
+//                zmCertLayout.tvIdNum.setText(idAndNameModel.getIdNo());
+//                zmCertLayout.tvName.setText(idAndNameModel.getRealName());
+//            }
         }
 
 
@@ -511,7 +523,7 @@ public class MyReportActivity extends AbsBaseLoadActivity {
      */
     private void setShowTdData(TdCertDetailModel tdCertDetailModel) {
 
-        if (tdCertDetailModel != null) {
+        if (tdCertDetailModel != null && tdCertLayout != null) {
             tdCertLayout.tvTdScore.setText(tdCertDetailModel.getFinal_score());
             tdCertLayout.tvTdState.setText(TdDataParseHelper.getTdFinalDecision(tdCertDetailModel.getFinal_decision()));
             if (tdCertDetailModel.getRisk_items() != null) {
@@ -547,7 +559,7 @@ public class MyReportActivity extends AbsBaseLoadActivity {
      * @param threeDataReportModel
      */
     private void setShowFraudData(FraudReportModel threeDataReportModel) {
-        if (threeDataReportModel != null) {
+        if (threeDataReportModel != null && fraudLayout != null) {
             fraudLayout.tvFraudScore.setText(threeDataReportModel.getScore());
 
             FraudReportListAdapter reportListAdapter = new FraudReportListAdapter(threeDataReportModel.getVerifyInfoList());
@@ -562,11 +574,11 @@ public class MyReportActivity extends AbsBaseLoadActivity {
      * @param locationReportModel
      */
     private void setShowLocationData(LocationReportModel locationReportModel) {
-        if (locationReportModel != null) {
+        if (locationReportModel != null && locationLayout != null) {
             locationLayout.tvAddress.setText(locationReportModel.getAddress());
             locationLayout.tvLatitude.setText(locationReportModel.getLatitude());
             locationLayout.tvLongitude.setText(locationReportModel.getLongitude());
-            locationLayout.tvCity.setText(locationReportModel.getProvince() + " " + locationReportModel.getCity() + " " + locationReportModel.getProvince());
+            locationLayout.tvCity.setText(locationReportModel.getProvince() + " " + locationReportModel.getCity() + " " + locationReportModel.getArea());
         }
     }
 
@@ -576,7 +588,7 @@ public class MyReportActivity extends AbsBaseLoadActivity {
      * @param zmScore
      */
     private void setShowZmScoreData(ZMScoreReportModel zmScore) {
-        if (zmScore == null) return;
+        if (zmScore == null || zmScoreLayout == null) return;
         zmScoreLayout.tvScore.setText(zmScore.getZmScore());
     }
 
@@ -590,6 +602,10 @@ public class MyReportActivity extends AbsBaseLoadActivity {
             return;
         }
         this.idCardUrlReportModel = idCardUrlReportModel;
+
+        if (idCardLayout == null) {
+            return;
+        }
         ImgUtils.loadImg(MyReportActivity.this, MyCdConfig.QINIUURL + idCardUrlReportModel.getIdentifyPic(), idCardLayout.imgIdcardPositive);  //正面
         ImgUtils.loadImg(MyReportActivity.this, MyCdConfig.QINIUURL + idCardUrlReportModel.getIdentifyPicReverse(), idCardLayout.imgIdcardReverse);  //反面
         ImgUtils.loadImg(MyReportActivity.this, MyCdConfig.QINIUURL + idCardUrlReportModel.getIdentifyPicHand(), idCardLayout.imgIdcardPeople); //手持
@@ -619,27 +635,27 @@ public class MyReportActivity extends AbsBaseLoadActivity {
      * @param tdOperatorModel
      */
     private void sheShowTdInfoCheck(TdOperatorModel tdOperatorModel) {
-        if (tdOperatorModel != null && tdOperatorModel.getInfo_match() != null) {         //运营商数据检测
-            if (TextUtils.equals(tdOperatorModel.getInfo_match().getReal_name_check_yys(), "完全匹配") ||
-                    TextUtils.equals(tdOperatorModel.getInfo_match().getReal_name_check_yys(), "模糊匹配")
+        if (tdOperatorModel != null && tdOperatorModel.getInfo_match() != null && tdOperatorLayout != null) {         //运营商数据检测
+            if (TextUtils.equals(tdOperatorModel.getInfo_match().getReal_name_check_yys(), getString(R.string.all_match)) ||
+                    TextUtils.equals(tdOperatorModel.getInfo_match().getReal_name_check_yys(), getString(R.string.all_match_2))
                     ) {
-                tdOperatorLayout.tvNameMatch.setText("和运营商数据匹配");
+                tdOperatorLayout.tvNameMatch.setText(getString(R.string.op_match) + tdOperatorModel.getInfo_match().getReal_name_check_yys());
             } else {
-                tdOperatorLayout.tvNameMatch.setText("和运营商数据不匹配");
+                tdOperatorLayout.tvNameMatch.setText(R.string.op_match_no);
             }
 
         }
 
-        if (tdOperatorModel != null && tdOperatorModel.getInfo_check() != null) { //是否实名    检测
-            if (TextUtils.equals(tdOperatorModel.getInfo_check().getIs_identity_code_reliable(), "是")) {
-                tdOperatorLayout.tvNameReal.setText("已实名认证");//姓名和运营商是否匹配
+        if (tdOperatorModel != null && tdOperatorModel.getInfo_check() != null && tdOperatorLayout != null) { //是否实名    检测
+            if (TextUtils.equals(tdOperatorModel.getInfo_check().getIs_identity_code_reliable(), getString(R.string.yes))) {
+                tdOperatorLayout.tvNameReal.setText(R.string.name_true);//姓名和运营商是否匹配
             } else {
-                tdOperatorLayout.tvNameReal.setText("未实名认证");//姓名和运营商是否匹配
+                tdOperatorLayout.tvNameReal.setText(R.string.name_false);//姓名和运营商是否匹配
             }
-            if (TextUtils.equals(tdOperatorModel.getInfo_check().getIs_net_addr_call_addr_1month(), "是")) {
-                tdOperatorLayout.tvPhoneAddrState.setText("和常用通话地址一致");//姓名和运营商是否匹配
+            if (TextUtils.equals(tdOperatorModel.getInfo_check().getIs_net_addr_call_addr_1month(), getString(R.string.yes))) {
+                tdOperatorLayout.tvPhoneAddrState.setText(R.string.address_is_use);//姓名和运营商是否匹配
             } else {
-                tdOperatorLayout.tvPhoneAddrState.setText("和常用通话地址不一致");//姓名和运营商是否匹配
+                tdOperatorLayout.tvPhoneAddrState.setText(R.string.address_no_use);//姓名和运营商是否匹配
             }
         }
     }
@@ -650,7 +666,7 @@ public class MyReportActivity extends AbsBaseLoadActivity {
      * @param tdOperatorModel
      */
     private void setShowTdOperatorMobilData(TdOperatorModel tdOperatorModel) {
-        if (tdOperatorModel != null && tdOperatorModel.getMobile_info() != null) {         //运营商手机信息
+        if (tdOperatorModel != null && tdOperatorModel.getMobile_info() != null && tdOperatorLayout != null) {         //运营商手机信息
             tdOperatorLayout.tvTdName2.setText("运营商登记姓名： " + tdOperatorModel.getMobile_info().getReal_name());
             tdOperatorLayout.tvTdPhone.setText(tdOperatorModel.getMobile_info().getUser_mobile());
             tdOperatorLayout.tvOperator.setText(tdOperatorModel.getMobile_info().getMobile_carrier());
@@ -667,7 +683,7 @@ public class MyReportActivity extends AbsBaseLoadActivity {
      * @param tdOperatorModel
      */
     private void setShowTdOperatorUserData(TdOperatorModel tdOperatorModel) {
-        if (tdOperatorModel != null && tdOperatorModel.getUser_info() != null) {   //运营商 用户信息
+        if (tdOperatorModel != null && tdOperatorModel.getUser_info() != null && tdOperatorLayout != null) {   //运营商 用户信息
             tdOperatorLayout.tvTdName.setText(tdOperatorModel.getUser_info().getReal_name());
             tdOperatorLayout.tvIdCard.setText(tdOperatorModel.getUser_info().getIdentity_code());
             tdOperatorLayout.tvGender.setText(tdOperatorModel.getUser_info().getGender());
@@ -687,7 +703,7 @@ public class MyReportActivity extends AbsBaseLoadActivity {
      * @param tdOperatorModel
      */
     private void setShowTdContactData(TdOperatorModel tdOperatorModel) {
-        if (tdOperatorModel == null) {
+        if (tdOperatorModel == null || tdOperatorLayout == null) {
             return;
         }
         List<ReportContactModel> reportContactModelList = new ArrayList<>();
@@ -712,7 +728,7 @@ public class MyReportActivity extends AbsBaseLoadActivity {
         ReportContactPhoneNumAdapter contactPhoneNumAdapter = new ReportContactPhoneNumAdapter(reportContactModelList);
 
 
-        contactPhoneNumAdapter.setEmptyView(getEmptyTextView("暂无紧急联系人"));
+        contactPhoneNumAdapter.setEmptyView(getEmptyTextView(getString(R.string.no_contacd)));
         tdOperatorLayout.recyclerContact.setLayoutManager(getLinearLayoutManager());
         tdOperatorLayout.recyclerContact.setAdapter(contactPhoneNumAdapter);
     }
@@ -725,11 +741,13 @@ public class MyReportActivity extends AbsBaseLoadActivity {
      */
     private void initFocusOnAdapter(List<FocusOnParseShowModel> data) {
 
+        if (focusOnLayout == null) return;
+
         mFocusonListAdapter = new FocusonListAdapter(data);
 
         focusOnLayout.recyclerFocus.setLayoutManager(getLinearLayoutManager());
 
-        mFocusonListAdapter.setEmptyView(getEmptyTextView("暂无行业关注"));
+        mFocusonListAdapter.setEmptyView(getEmptyTextView(getString(R.string.no_focus_on)));
 
         focusOnLayout.recyclerFocus.setAdapter(mFocusonListAdapter);
 
@@ -741,9 +759,10 @@ public class MyReportActivity extends AbsBaseLoadActivity {
      */
     public void getLocaFocusOnData(List<IndustryFocusOnListModel.DetailBean> data) {
 
-        showLoadingDialog();
-        mSubscription.add(Observable.just(AppUtils.readAssetsTxt(MyReportActivity.this, "local_focus_on.txt"))
-                .subscribeOn(Schedulers.io())
+        showPraseDialog();
+        mSubscription.add(Observable.just("")
+                .observeOn(Schedulers.newThread())
+                .map(s -> AppUtils.readAssetsTxt(MyReportActivity.this, "local_focus_on.txt"))
                 .map(s -> {
                     return JSON.parseArray(s, MyLocalFocusOnListModel.class);
                 })
@@ -755,7 +774,7 @@ public class MyReportActivity extends AbsBaseLoadActivity {
                 })
                 .filter(focusOnParseShowModels -> focusOnParseShowModels != null)
                 .observeOn(AndroidSchedulers.mainThread())
-                .doFinally(() -> disMissLoading())
+                .doFinally(() -> dismissPraseDialog())
                 .subscribe(s -> {
                     mFocusOnList.clear();
                     mFocusOnList.addAll(s);
@@ -778,22 +797,24 @@ public class MyReportActivity extends AbsBaseLoadActivity {
             return;
         }
 
-        basicinfoLayout.tvChildNum.setText(reportUserInfoModel.getChildrenNum());
-        basicinfoLayout.tvLiveCity.setText(reportUserInfoModel.getProvinceCity());
-        basicinfoLayout.tvAddress.setText(reportUserInfoModel.getAddress());
-        basicinfoLayout.tvQq.setText(reportUserInfoModel.getQq());
-        basicinfoLayout.tvEmail.setText(reportUserInfoModel.getEmail());
+        if (basicinfoLayout != null) {
+            basicinfoLayout.tvChildNum.setText(reportUserInfoModel.getChildrenNum());
+            basicinfoLayout.tvLiveCity.setText(reportUserInfoModel.getProvinceCity());
+            basicinfoLayout.tvAddress.setText(reportUserInfoModel.getAddress());
+            basicinfoLayout.tvQq.setText(reportUserInfoModel.getQq());
+            basicinfoLayout.tvEmail.setText(reportUserInfoModel.getEmail());
 
-        basicinfoLayout.jobLayout.tvJobCity.setText(reportUserInfoModel.getCompanyProvinceCity());
-        basicinfoLayout.jobLayout.tvJobAddress.setText(reportUserInfoModel.getCompanyAddress());
-        basicinfoLayout.jobLayout.tvJobCompanyName.setText(reportUserInfoModel.getCompany());
-        basicinfoLayout.jobLayout.tvJobPhone.setText(reportUserInfoModel.getPhone());
+            basicinfoLayout.jobLayout.tvJobCity.setText(reportUserInfoModel.getCompanyProvinceCity());
+            basicinfoLayout.jobLayout.tvJobAddress.setText(reportUserInfoModel.getCompanyAddress());
+            basicinfoLayout.jobLayout.tvJobCompanyName.setText(reportUserInfoModel.getCompany());
+            basicinfoLayout.jobLayout.tvJobPhone.setText(reportUserInfoModel.getPhone());
 
-        basicinfoLayout.contactLayout.tvFamilyName.setText(reportUserInfoModel.getFamilyName());
-        basicinfoLayout.contactLayout.tvFamilyPhone.setText(reportUserInfoModel.getFamilyMobile());
+            basicinfoLayout.contactLayout.tvFamilyName.setText(reportUserInfoModel.getFamilyName());
+            basicinfoLayout.contactLayout.tvFamilyPhone.setText(reportUserInfoModel.getFamilyMobile());
 
-        basicinfoLayout.contactLayout.tvSocietyName.setText(reportUserInfoModel.getSocietyName());
-        basicinfoLayout.contactLayout.tvSocietyPhone.setText(reportUserInfoModel.getSocietyMobile());
+            basicinfoLayout.contactLayout.tvSocietyName.setText(reportUserInfoModel.getSocietyName());
+            basicinfoLayout.contactLayout.tvSocietyPhone.setText(reportUserInfoModel.getSocietyMobile());
+        }
 
         mEducationCode = reportUserInfoModel.getEducation();
         mMarriagesCode = reportUserInfoModel.getMarriage();
@@ -805,46 +826,16 @@ public class MyReportActivity extends AbsBaseLoadActivity {
         mFamilyCode = reportUserInfoModel.getFamilyRelation();
         mSocietysCode = reportUserInfoModel.getSocietyRelation();
 
-        getEducationData();
-        getMarriagesData();
-        getLivesData();
-        getJobData();
-        getInMoneyData();
-        getFamilyData();
-        getSocietysData();
+        getAllKeyData();
     }
 
-    /**
-     * 获取婚姻数据
-     */
-    public void getMarriagesData() {
-        Map<String, String> map = new HashMap<>();
-        map.put("companyCode", MyCdConfig.COMPANYCODE);
-        map.put("systemCode", MyCdConfig.SYSTEMCODE);
-        map.put("parentKey", "marriage");
-        Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("805906", StringUtils.getJsonToString(map));
-        addCall(call);
-        call.enqueue(new BaseResponseListCallBack<KeyDataModel>(this) {
 
-            @Override
-            protected void onSuccess(List<KeyDataModel> data, String SucMessage) {
-                mMarriages = data;
-                checkMarriage();
-            }
-
-            @Override
-            protected void onFinish() {
-
-            }
-        });
-    }
-
-    public void checkMarriage() {
+    public void checkMarriage(List<KeyDataModel> mMarriages) {
         if (mMarriages == null) return;
         for (KeyDataModel kmodel : mMarriages) {
             if (kmodel == null) continue;
 
-            if (TextUtils.equals(kmodel.getDkey(), mMarriagesCode)) {
+            if (TextUtils.equals(kmodel.getDkey(), mMarriagesCode) && basicinfoLayout != null) {
                 basicinfoLayout.tvMarg.setText(kmodel.getDvalue());
                 break;
             }
@@ -853,37 +844,123 @@ public class MyReportActivity extends AbsBaseLoadActivity {
     }
 
     /**
-     * 获取学历数据
+     * 开启新线程 同步获取所有数据字典
      */
-    public void getEducationData() {
-        Map<String, String> map = new HashMap<>();
-        map.put("companyCode", MyCdConfig.COMPANYCODE);
-        map.put("systemCode", MyCdConfig.SYSTEMCODE);
-        map.put("parentKey", "education");
-        Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("805906", StringUtils.getJsonToString(map));
-        addCall(call);
-        call.enqueue(new BaseResponseListCallBack<KeyDataModel>(this) {
+    public void getAllKeyData() {
+        showLoadingDialog();
+        mSubscription.add(Observable.just("")
+                .observeOn(Schedulers.newThread())
+                .map(s -> getAllKeyDataReruest())
+                .doFinally(() -> disMissLoading())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(maps -> {
+                    checkEducation(maps.get(education));
+                    checkLives(maps.get(live_time));
+                    checkJobs(maps.get(occupation));
+                    checkMarriage(maps.get(marriage));
+                    checkInmoneys(maps.get(income));
+                    checkFamilys(maps.get(family_relation));
+                    checkSocietys(maps.get(society_relation));
+                }));
+    }
 
-            @Override
-            protected void onSuccess(List<KeyDataModel> data, String SucMessage) {
-                mEducations = data;
-                checkEducation();
-            }
+    /**
+     * 同步请求所有数据字典数据
+     *
+     * @return
+     */
+    private Map<String, List<KeyDataModel>> getAllKeyDataReruest() {
 
-            @Override
-            protected void onFinish() {
+        Map<String, List<KeyDataModel>> data = new HashMap<>();
 
-            }
-        });
+        Map<String, String> educationMap = getKeyDataMap(education);
+        Map<String, String> liveTimeMap = getKeyDataMap(live_time);
+        Map<String, String> occupationMap = getKeyDataMap(occupation);
+        Map<String, String> marriageMap = getKeyDataMap(marriage);
+        Map<String, String> incomeMap = getKeyDataMap(income);
+        Map<String, String> family_relationMap = getKeyDataMap(family_relation);
+        Map<String, String> society_relationMap = getKeyDataMap(society_relation);
+
+        try {
+            Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("805906", StringUtils.getJsonToString(educationMap));
+            BaseResponseListModel<KeyDataModel> de = (BaseResponseListModel<KeyDataModel>) call.execute().body();
+            data.put(education, de.getData());
+        } catch (Exception e) {
+            LogUtil.E(e.toString() + "错误");
+        }
+
+        try {
+            Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("805906", StringUtils.getJsonToString(liveTimeMap));
+            BaseResponseListModel<KeyDataModel> de = (BaseResponseListModel<KeyDataModel>) call.execute().body();
+            data.put(live_time, de.getData());
+        } catch (Exception e) {
+            LogUtil.E(e.toString() + "错误");
+        }
+
+        try {
+            Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("805906", StringUtils.getJsonToString(occupationMap));
+            BaseResponseListModel<KeyDataModel> de = (BaseResponseListModel<KeyDataModel>) call.execute().body();
+            data.put(occupation, de.getData());
+        } catch (Exception e) {
+            LogUtil.E(e.toString() + "错误");
+        }
+
+        try {
+            Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("805906", StringUtils.getJsonToString(marriageMap));
+            BaseResponseListModel<KeyDataModel> de = (BaseResponseListModel<KeyDataModel>) call.execute().body();
+            data.put(marriage, de.getData());
+        } catch (Exception e) {
+            LogUtil.E(e.toString() + "错误");
+        }
+
+        try {
+            Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("805906", StringUtils.getJsonToString(incomeMap));
+            BaseResponseListModel<KeyDataModel> de = (BaseResponseListModel<KeyDataModel>) call.execute().body();
+            data.put(income, de.getData());
+        } catch (Exception e) {
+            LogUtil.E(e.toString() + "错误");
+        }
+
+        try {
+            Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("805906", StringUtils.getJsonToString(family_relationMap));
+            BaseResponseListModel<KeyDataModel> de = (BaseResponseListModel<KeyDataModel>) call.execute().body();
+            data.put(family_relation, de.getData());
+        } catch (Exception e) {
+            LogUtil.E(e.toString() + "错误");
+        }
+
+        try {
+            Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("805906", StringUtils.getJsonToString(society_relationMap));
+            BaseResponseListModel<KeyDataModel> de = (BaseResponseListModel<KeyDataModel>) call.execute().body();
+            data.put(society_relation, de.getData());
+        } catch (Exception e) {
+            LogUtil.E(e.toString() + "错误");
+        }
+
+
+        return data;
+
+    }
+
+    /**
+     * 数据字典请求参数
+     *
+     * @param key
+     * @return
+     */
+    @NonNull
+    private Map<String, String> getKeyDataMap(String key) {
+        Map<String, String> map = RetrofitUtils.getRequestMap();
+        map.put("parentKey", key);
+        return map;
     }
 
     //获取
-    public void checkEducation() {
+    public void checkEducation(List<KeyDataModel> mEducations) {
         if (mEducations == null) return;
         for (KeyDataModel kmodel : mEducations) {
             if (kmodel == null) continue;
 
-            if (TextUtils.equals(kmodel.getDkey(), mEducationCode)) {
+            if (TextUtils.equals(kmodel.getDkey(), mEducationCode) && basicinfoLayout != null) {
                 basicinfoLayout.tvStudySing.setText(kmodel.getDvalue());
                 break;
             }
@@ -891,37 +968,12 @@ public class MyReportActivity extends AbsBaseLoadActivity {
         }
     }
 
-    /**
-     * 居住时长数据
-     */
-    public void getLivesData() {
-        Map<String, String> map = new HashMap<>();
-        map.put("companyCode", MyCdConfig.COMPANYCODE);
-        map.put("systemCode", MyCdConfig.SYSTEMCODE);
-        map.put("parentKey", "live_time");
-        Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("805906", StringUtils.getJsonToString(map));
-        addCall(call);
-        call.enqueue(new BaseResponseListCallBack<KeyDataModel>(this) {
-
-            @Override
-            protected void onSuccess(List<KeyDataModel> data, String SucMessage) {
-                mLiveDays = data;
-                checkLives();
-            }
-
-            @Override
-            protected void onFinish() {
-
-            }
-        });
-    }
-
-    public void checkLives() {
+    public void checkLives(List<KeyDataModel> mLiveDays) {
         if (mLiveDays == null) return;
         for (KeyDataModel kmodel : mLiveDays) {
             if (kmodel == null) continue;
 
-            if (TextUtils.equals(kmodel.getDkey(), mLiveDaysCode)) {
+            if (TextUtils.equals(kmodel.getDkey(), mLiveDaysCode) && basicinfoLayout != null) {
                 basicinfoLayout.tvLiveDays.setText(kmodel.getDvalue());
                 break;
             }
@@ -929,37 +981,13 @@ public class MyReportActivity extends AbsBaseLoadActivity {
         }
     }
 
-    /**
-     * 获取工作数据
-     */
-    public void getJobData() {
-        Map<String, String> map = new HashMap<>();
-        map.put("companyCode", MyCdConfig.COMPANYCODE);
-        map.put("systemCode", MyCdConfig.SYSTEMCODE);
-        map.put("parentKey", "occupation");
-        Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("805906", StringUtils.getJsonToString(map));
-        addCall(call);
-        call.enqueue(new BaseResponseListCallBack<KeyDataModel>(this) {
 
-            @Override
-            protected void onSuccess(List<KeyDataModel> data, String SucMessage) {
-                mJobs = data;
-                checkJobs();
-            }
-
-            @Override
-            protected void onFinish() {
-
-            }
-        });
-    }
-
-    public void checkJobs() {
+    public void checkJobs(List<KeyDataModel> mJobs) {
         if (mJobs == null) return;
         for (KeyDataModel kmodel : mJobs) {
             if (kmodel == null) continue;
 
-            if (TextUtils.equals(kmodel.getDkey(), mJobCode)) {
+            if (TextUtils.equals(kmodel.getDkey(), mJobCode) && basicinfoLayout != null) {
                 basicinfoLayout.jobLayout.tvJob.setText(kmodel.getDvalue());
                 break;
             }
@@ -968,37 +996,12 @@ public class MyReportActivity extends AbsBaseLoadActivity {
     }
 
 
-    /**
-     * 获取工作数据
-     */
-    public void getInMoneyData() {
-        Map<String, String> map = new HashMap<>();
-        map.put("companyCode", MyCdConfig.COMPANYCODE);
-        map.put("systemCode", MyCdConfig.SYSTEMCODE);
-        map.put("parentKey", "income");
-        Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("805906", StringUtils.getJsonToString(map));
-        addCall(call);
-        call.enqueue(new BaseResponseListCallBack<KeyDataModel>(this) {
-
-            @Override
-            protected void onSuccess(List<KeyDataModel> data, String SucMessage) {
-                mInMoneys = data;
-                checkInmoneys();
-            }
-
-            @Override
-            protected void onFinish() {
-
-            }
-        });
-    }
-
-    public void checkInmoneys() {
+    public void checkInmoneys(List<KeyDataModel> mInMoneys) {
         if (mInMoneys == null) return;
         for (KeyDataModel kmodel : mInMoneys) {
             if (kmodel == null) continue;
 
-            if (TextUtils.equals(kmodel.getDkey(), mInMoneyCode)) {
+            if (TextUtils.equals(kmodel.getDkey(), mInMoneyCode) && basicinfoLayout != null) {
                 basicinfoLayout.jobLayout.tvInMoney.setText(kmodel.getDvalue());
                 break;
             }
@@ -1006,37 +1009,13 @@ public class MyReportActivity extends AbsBaseLoadActivity {
         }
     }
 
-    /**
-     * 亲属关系数据
-     */
-    public void getFamilyData() {
-        Map<String, String> map = new HashMap<>();
-        map.put("companyCode", MyCdConfig.COMPANYCODE);
-        map.put("systemCode", MyCdConfig.SYSTEMCODE);
-        map.put("parentKey", "family_relation");
-        Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("805906", StringUtils.getJsonToString(map));
-        addCall(call);
-        call.enqueue(new BaseResponseListCallBack<KeyDataModel>(this) {
 
-            @Override
-            protected void onSuccess(List<KeyDataModel> data, String SucMessage) {
-                mFamilys = data;
-                checkFamilys();
-            }
-
-            @Override
-            protected void onFinish() {
-
-            }
-        });
-    }
-
-    public void checkFamilys() {
+    public void checkFamilys(List<KeyDataModel> mFamilys) {
         if (mFamilys == null) return;
         for (KeyDataModel kmodel : mFamilys) {
             if (kmodel == null) continue;
 
-            if (TextUtils.equals(kmodel.getDkey(), mFamilyCode)) {
+            if (TextUtils.equals(kmodel.getDkey(), mFamilyCode) && basicinfoLayout != null) {
                 basicinfoLayout.contactLayout.tvFamily.setText(kmodel.getDvalue());
                 break;
             }
@@ -1044,37 +1023,13 @@ public class MyReportActivity extends AbsBaseLoadActivity {
         }
     }
 
-    /**
-     * 亲属关系数据
-     */
-    public void getSocietysData() {
-        Map<String, String> map = new HashMap<>();
-        map.put("companyCode", MyCdConfig.COMPANYCODE);
-        map.put("systemCode", MyCdConfig.SYSTEMCODE);
-        map.put("parentKey", "society_relation");
-        Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("805906", StringUtils.getJsonToString(map));
-        addCall(call);
-        call.enqueue(new BaseResponseListCallBack<KeyDataModel>(this) {
 
-            @Override
-            protected void onSuccess(List<KeyDataModel> data, String SucMessage) {
-                mSocietys = data;
-                checkSocietys();
-            }
-
-            @Override
-            protected void onFinish() {
-
-            }
-        });
-    }
-
-    public void checkSocietys() {
+    public void checkSocietys(List<KeyDataModel> mSocietys) {
         if (mSocietys == null) return;
         for (KeyDataModel kmodel : mSocietys) {
             if (kmodel == null) continue;
 
-            if (TextUtils.equals(kmodel.getDkey(), mSocietysCode)) {
+            if (TextUtils.equals(kmodel.getDkey(), mSocietysCode) && basicinfoLayout != null) {
                 basicinfoLayout.contactLayout.tvSociety.setText(kmodel.getDvalue());
                 break;
             }
@@ -1091,6 +1046,31 @@ public class MyReportActivity extends AbsBaseLoadActivity {
         };
 
         return linearLayoutManager;
+    }
+
+    @Override
+    protected void onDestroy() {
+        tipDialog.dismiss();
+        tipDialog = null;
+        super.onDestroy();
+    }
+
+    public void showPraseDialog() {
+        if (tipDialog == null) {
+            tipDialog = new UITipDialog.Builder(this)
+                    .setIconType(UITipDialog.Builder.ICON_TYPE_LOADING)
+                    .setTipWord(getString(R.string.report_prase))
+                    .create();
+        }
+        if (!tipDialog.isShowing()) {
+            tipDialog.show();
+        }
+    }
+
+    public void dismissPraseDialog() {
+        if (tipDialog != null && tipDialog.isShowing()) {
+            tipDialog.dismiss();
+        }
     }
 
 }

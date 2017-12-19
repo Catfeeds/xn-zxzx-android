@@ -88,6 +88,7 @@ public class NetHelper {
      * @param context
      */
     public static void onNull(Context context) {
+        if(context==null)return;
         ToastUtil.show(context, "请求失败,数据返回错误");
     }
 
@@ -98,6 +99,7 @@ public class NetHelper {
      * @param msg
      */
     public static void onNoNet(Context context, String msg) {
+        if(context==null)return;
         ToastUtil.show(context, msg);
     }
 
@@ -109,6 +111,7 @@ public class NetHelper {
      * @param msg
      */
     public static void onReqFailure(Context context, String errorCode, String msg) {
+        if(context==null)return;
         ToastUtil.show(context, msg);
         LogUtil.E("网络请求错误————————：" + msg);
 
@@ -122,7 +125,9 @@ public class NetHelper {
      */
     public static void onLoginFailure(Context context, String errorMessage) {
         SPUtilHelpr.logOutClear();
-        ToastUtil.show(context, errorMessage);
+        if(context!=null){
+            ToastUtil.show(context, errorMessage);
+        }
         // 路由跳转登录页面
         RouteHelper.openLogin(false);
     }

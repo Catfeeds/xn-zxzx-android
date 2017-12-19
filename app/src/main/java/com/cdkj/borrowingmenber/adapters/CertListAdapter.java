@@ -26,7 +26,24 @@ public class CertListAdapter extends BaseQuickAdapter<CertListModel, BaseViewHol
         if (item == null) {
             return;
         }
-        helper.setText(R.id.tv_cert_name, item.getSalesUserMobile() + mContext.getString(R.string.start_certification));
+        helper.setText(R.id.tv_cert_name, item.getSalesUserMobile() + mContext.getString(R.string.start_certification) +getState(item.getStatus()));
+    }
+
+    //0:待填写,1:填写中,2:以完成
+    public String getState(String state) {
+
+        switch (state) {
+            case "0":
+                return "  （待填写）";
+            case "1":
+                return "   (填写中)";
+            case "2":
+                return "   (已完成)";
+            default:
+                return "";
+
+        }
+
     }
 
 

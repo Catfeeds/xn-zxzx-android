@@ -47,9 +47,9 @@ public class WelcomeAcitivity extends BaseActivity {
                         finish();
                         return;
                     }
-//                    MainActivity.open(this);
-                    Intent intent=new Intent(this, IdcardUploadActivity.class);
-                    startActivity(intent);
+                    MainActivity.open(this);
+//                    Intent intent=new Intent(this, IdcardUploadActivity.class);
+//                    startActivity(intent);
                     finish();
                 }, Throwable::printStackTrace));
     }

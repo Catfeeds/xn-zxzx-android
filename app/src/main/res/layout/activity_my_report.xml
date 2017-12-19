@@ -16,19 +16,19 @@
             android:focusableInTouchMode="true"
             android:orientation="vertical">
 
-            <com.cdkj.borrowingmenber.weiget.views.ReportShowAndHideLayout
-                android:id="@+id/show_view_phone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
-                app:txt_report_title="手机认证" />
+            <!--<com.cdkj.borrowingmenber.weiget.views.ReportShowAndHideLayout-->
+                <!--android:id="@+id/show_view_phone"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginTop="1dp"-->
+                <!--app:txt_report_title="手机认证" />-->
 
-            <com.cdkj.borrowingmenber.weiget.views.ReportShowAndHideLayout
-                android:id="@+id/show_view_zm_cert"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
-                app:txt_report_title="芝麻认证" />
+            <!--<com.cdkj.borrowingmenber.weiget.views.ReportShowAndHideLayout-->
+                <!--android:id="@+id/show_view_zm_cert"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginTop="1dp"-->
+                <!--app:txt_report_title="芝麻认证" />-->
 
             <com.cdkj.borrowingmenber.weiget.views.ReportShowAndHideLayout
                 android:id="@+id/show_view_basicinfo"

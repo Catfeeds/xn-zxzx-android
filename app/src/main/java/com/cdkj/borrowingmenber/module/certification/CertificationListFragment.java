@@ -148,8 +148,8 @@ public class CertificationListFragment extends BaseLazyFragment {
         map.put("limit", limit + "");
         map.put("start", pageindex + "");
         map.put("orderColumn", "create_datetime");
-        map.put("orderDir", "desc");
-        map.put("statusList", getStatusList());
+        map.put("orderDir", "asc");
+//        map.put("statusList", getStatusList());
         map.put("loanUser", SPUtilHelpr.getUserId());
 
         if (isShowDialog) {
