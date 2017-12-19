@@ -177,19 +177,7 @@ public class IdcardUploadActivity extends BaseCertStepActivity {
             }
             return;
         }
-
-        switch (requestCode) {
-            case PHOTOFLAG1:
-                ImgUtils.loadImg(IdcardUploadActivity.this, path, mBinding.imgIdcardPositive);
-                break;
-            case PHOTOFLAG2:
-                ImgUtils.loadImg(IdcardUploadActivity.this, path, mBinding.imgIdcardReverse);
-                break;
-            case PHOTOFLAG3:
-                ImgUtils.loadImg(IdcardUploadActivity.this, path, mBinding.imgIdcardPeople);
-                break;
-        }
-//        getQiniuToken(requestCode, path);
+        getQiniuToken(requestCode, path);
     }
 
     /**
