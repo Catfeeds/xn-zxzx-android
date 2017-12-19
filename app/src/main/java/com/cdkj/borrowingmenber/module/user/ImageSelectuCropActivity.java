@@ -2,6 +2,7 @@ package com.cdkj.borrowingmenber.module.user;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -14,6 +15,7 @@ import com.cdkj.baselibrary.R;
 import com.cdkj.baselibrary.interfaces.CameraPhotoListener;
 import com.cdkj.baselibrary.utils.CameraHelper;
 import com.cdkj.baselibrary.utils.FileProviderHelper;
+import com.cdkj.baselibrary.utils.LogUtil;
 import com.cdkj.baselibrary.utils.ToastUtil;
 import com.yalantis.ucrop.UCrop;
 
@@ -24,7 +26,7 @@ import static com.cdkj.baselibrary.utils.CameraHelper.CAPTURE_WALBUM_CODE;
 import static com.cdkj.baselibrary.utils.CameraHelper.CAPTURE_ZOOM_CODE;
 
 /**
- * 打开相机 相册 图片裁剪 功能
+ * 打开相机 相册 使用uCrop库进行裁剪
  */
 public class ImageSelectuCropActivity extends Activity implements View.OnClickListener, CameraPhotoListener {
 
@@ -118,22 +120,61 @@ public class ImageSelectuCropActivity extends Activity implements View.OnClickLi
         }
         switch (requestCode) {
             case CAPTURE_PHOTO_CODE:// 相机
-                UCrop uCrop2 = UCrop.of(cameraHelper.getImageUrl(), Uri.fromFile(new File(getCacheDir(), "CAPTURE_PHOTO.jpg")));
-                uCrop2.withAspectRatio(16, 9)
-                        .start(this);
+                cropRawPhoto(cameraHelper.getImageUrl());
                 break;
             case CAPTURE_WALBUM_CODE:// 相册
-                UCrop uCrop = UCrop.of(data.getData(), Uri.fromFile(new File(getCacheDir(), "CAPTURE_WALBUM.jpg")));
-                uCrop.withAspectRatio(16, 9)
-                        .start(this);
+                cropRawPhoto(data.getData());
+                break;
+            case UCrop.REQUEST_CROP:
+                // 成功（返回的是文件地址）
+                Uri uri = UCrop.getOutput(data);
+                if (uri != null) {
+                    setResultFinish(uri.getPath());
+                } else {
+                    ToastUtil.show(this, "操作失败，请重试");
+                    finish();
+                }
+                break;
+            case UCrop.RESULT_ERROR:
+                // 失败
+                ToastUtil.show(this, "操作失败，请重试");
+                finish();
+//                mCameraTv.setText(UCrop.getError(data) + "");
+                break;
 
-                break;
-            case CAPTURE_ZOOM_CODE:  //图片裁剪
-                break;
             default:
                 break;
         }
 
+    }
+
+    public void cropRawPhoto(Uri uri) {
+
+        // 修改配置参数
+        UCrop.Options options = new UCrop.Options();
+        // 修改标题栏颜色
+        options.setToolbarTitle("图片裁剪");
+        options.setToolbarColor(getResources().getColor(R.color.colorPrimary));
+        // 修改状态栏颜色
+        options.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
+        // 隐藏底部工具
+        options.setHideBottomControls(true);
+        options.setShowCropGrid(false);
+        // 图片格式
+        options.setCompressionFormat(Bitmap.CompressFormat.JPEG);
+        // 设置图片压缩质量
+        options.setCompressionQuality(100);
+        // 是否让用户调整范围(默认false)，如果开启，可能会造成剪切的图片的长宽比不是设定的
+        // 如果不开启，用户不能拖动选框，只能缩放图片
+        options.setFreeStyleCropEnabled(true);
+
+        // 设置源uri及目标uri
+        UCrop.of(uri, Uri.fromFile(new File(getCacheDir(), System.currentTimeMillis() + ".jpg")))
+                // 长宽比
+                .withAspectRatio(3, 2)
+                // 配置参数
+                .withOptions(options)
+                .start(this);
     }
 
 
@@ -153,6 +194,10 @@ public class ImageSelectuCropActivity extends Activity implements View.OnClickLi
 
     @Override
     public void onPhotoSuccessful(int code, String path) {
+        setResultFinish(path);
+    }
+
+    private void setResultFinish(String path) {
         setResult(Activity.RESULT_OK, new Intent().putExtra(CameraHelper.staticPath, path));
         finish();
     }

@@ -81,11 +81,13 @@ public class IdcardUploadActivity extends BaseCertStepActivity {
         });
         //反面照片上传
         mBinding.layoutIdcardReverse.setOnClickListener(v -> {
-            ImageSelectActivity2.launch(this, PHOTOFLAG2, true);
+//            ImageSelectActivity2.launch(this, PHOTOFLAG2, true);
+            ImageSelectuCropActivity.launch(this, PHOTOFLAG2);
         });
         //手持照片上传
         mBinding.layoutIdcardPeople.setOnClickListener(v -> {
-            ImageSelectActivity2.launch(this, PHOTOFLAG3, true);
+//            ImageSelectActivity2.launch(this, PHOTOFLAG3, true);
+            ImageSelectuCropActivity.launch(this, PHOTOFLAG3);
         });
 
         mBinding.btnNext.setOnClickListener(v -> {

@@ -109,7 +109,7 @@
         <activity
             android:name=".module.user.ImageSelectuCropActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/ActivityDialogStyleBottom" />
 
         <!--我的报告-->
         <activity
