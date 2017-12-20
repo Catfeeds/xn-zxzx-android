@@ -116,8 +116,8 @@ public class RxTransformerHelper {
      */
     private static <T> ObservableTransformer<T, T> applySchedulers() {
         return observable -> observable
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+                .subscribeOn(Schedulers.io())  //创建
+                .observeOn(AndroidSchedulers.mainThread());//使用
 
     }
 

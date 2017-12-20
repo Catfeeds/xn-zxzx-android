@@ -20,7 +20,6 @@ import com.cdkj.baselibrary.appmanager.MyCdConfig;
 import com.cdkj.baselibrary.appmanager.SPUtilHelpr;
 import com.cdkj.baselibrary.base.AbsBaseLoadActivity;
 import com.cdkj.baselibrary.dialog.UITipDialog;
-import com.cdkj.baselibrary.nets.BaseResponseListCallBack;
 import com.cdkj.baselibrary.nets.BaseResponseModelCallBack;
 import com.cdkj.baselibrary.nets.RetrofitUtils;
 import com.cdkj.baselibrary.utils.AppUtils;
@@ -86,14 +85,6 @@ public class MyReportActivity extends AbsBaseLoadActivity {
 
     private ActivityMyReportBinding mBinding;
 
-    private String mEducationCode;//学历code
-    private String mMarriagesCode;//婚姻code
-    private String mLiveDaysCode;
-    private String mJobCode;//职业code
-    private String mInMoneyCode;//收入code
-    private String mFamilyCode;//亲属关系
-    private String mSocietysCode;//社会关系code
-
     private AddressBookReportAdapter mAddressBookReportAdapter;
     List<AddressBookReportModel.AddressBookListBean> mAddressBookReportAList = new ArrayList<>(); //通讯录
 
@@ -118,6 +109,17 @@ public class MyReportActivity extends AbsBaseLoadActivity {
 
     private IdCardUrlReportModel idCardUrlReportModel;//包含了身份证url
 
+
+    //获取数据字典key 和code对应
+
+    private String mEducationCode;//学历code
+    private String mMarriagesCode;//婚姻code
+    private String mLiveDaysCode;//居住市场code
+    private String mJobCode;//职业code
+    private String mInMoneyCode;//收入code
+    private String mFamilyCode;//亲属关系
+    private String mSocietysCode;//社会关系code
+
     private static final String education = "education";
     private static final String live_time = "live_time";
     private static final String occupation = "occupation";
@@ -125,6 +127,7 @@ public class MyReportActivity extends AbsBaseLoadActivity {
     private static final String income = "income";
     private static final String family_relation = "family_relation";
     private static final String society_relation = "society_relation";
+
 
     public static void open(Context context) {
         if (context == null) {
@@ -358,6 +361,9 @@ public class MyReportActivity extends AbsBaseLoadActivity {
      * @param
      */
     public void parseReportDataRx(ReportModel reportModel) {
+
+        if (reportModel == null) return;
+
         showPraseDialog();
         try {                                                //捕获parseReportData 异常
             mSubscription.add(Observable.just("")
@@ -370,8 +376,8 @@ public class MyReportActivity extends AbsBaseLoadActivity {
                     .subscribe(reportParseData -> {
                         setShowData(reportParseData);
                     }, throwable -> {
-                        LogUtil.E("数据异常" + throwable.toString());
-                        UITipDialog.showFall(MyReportActivity.this, "数据异常");
+                        LogUtil.E("数据异常2" + throwable.toString());
+                        UITipDialog.showFall(MyReportActivity.this, "数据异常2");
                     }));
         } catch (Exception e) {
             LogUtil.E("数据异常" + e.toString());
@@ -439,7 +445,6 @@ public class MyReportActivity extends AbsBaseLoadActivity {
         if (data == null) {
             return;
         }
-
         setShowUserBasicData(data);//基本信息 包含芝麻认证 身份证 姓名 电话
 
         setShowFocusOnData(data.getFocusOnList());//行业关注清单
@@ -761,7 +766,7 @@ public class MyReportActivity extends AbsBaseLoadActivity {
 
         showPraseDialog();
         mSubscription.add(Observable.just("")
-                .observeOn(Schedulers.newThread())
+                .observeOn(Schedulers.io())
                 .map(s -> AppUtils.readAssetsTxt(MyReportActivity.this, "local_focus_on.txt"))
                 .map(s -> {
                     return JSON.parseArray(s, MyLocalFocusOnListModel.class);
@@ -820,9 +825,7 @@ public class MyReportActivity extends AbsBaseLoadActivity {
         mMarriagesCode = reportUserInfoModel.getMarriage();
         mLiveDaysCode = reportUserInfoModel.getLiveTime();
         mJobCode = reportUserInfoModel.getOccupation();
-
         mInMoneyCode = reportUserInfoModel.getIncome();
-
         mFamilyCode = reportUserInfoModel.getFamilyRelation();
         mSocietysCode = reportUserInfoModel.getSocietyRelation();
 
@@ -847,12 +850,13 @@ public class MyReportActivity extends AbsBaseLoadActivity {
      * 开启新线程 同步获取所有数据字典
      */
     public void getAllKeyData() {
-        showLoadingDialog();
+        showPraseDialog();
         mSubscription.add(Observable.just("")
                 .observeOn(Schedulers.newThread())
                 .map(s -> getAllKeyDataReruest())
-                .doFinally(() -> disMissLoading())
-                .observeOn(AndroidSchedulers.mainThread()).subscribe(maps -> {
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> dismissPraseDialog())
+                .subscribe(maps -> {
                     checkEducation(maps.get(education));
                     checkLives(maps.get(live_time));
                     checkJobs(maps.get(occupation));
@@ -860,7 +864,8 @@ public class MyReportActivity extends AbsBaseLoadActivity {
                     checkInmoneys(maps.get(income));
                     checkFamilys(maps.get(family_relation));
                     checkSocietys(maps.get(society_relation));
-                }));
+
+                }, Throwable::printStackTrace));
     }
 
     /**
@@ -872,109 +877,81 @@ public class MyReportActivity extends AbsBaseLoadActivity {
 
         Map<String, List<KeyDataModel>> data = new HashMap<>();
 
-        Map<String, String> educationMap = getKeyDataMap(education);
-        Map<String, String> liveTimeMap = getKeyDataMap(live_time);
-        Map<String, String> occupationMap = getKeyDataMap(occupation);
-        Map<String, String> marriageMap = getKeyDataMap(marriage);
-        Map<String, String> incomeMap = getKeyDataMap(income);
-        Map<String, String> family_relationMap = getKeyDataMap(family_relation);
-        Map<String, String> society_relationMap = getKeyDataMap(society_relation);
-
-        try {
-            Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("805906", StringUtils.getJsonToString(educationMap));
-            BaseResponseListModel<KeyDataModel> de = (BaseResponseListModel<KeyDataModel>) call.execute().body();
-            data.put(education, de.getData());
-        } catch (Exception e) {
-            LogUtil.E(e.toString() + "错误");
-        }
-
-        try {
-            Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("805906", StringUtils.getJsonToString(liveTimeMap));
-            BaseResponseListModel<KeyDataModel> de = (BaseResponseListModel<KeyDataModel>) call.execute().body();
-            data.put(live_time, de.getData());
-        } catch (Exception e) {
-            LogUtil.E(e.toString() + "错误");
-        }
-
-        try {
-            Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("805906", StringUtils.getJsonToString(occupationMap));
-            BaseResponseListModel<KeyDataModel> de = (BaseResponseListModel<KeyDataModel>) call.execute().body();
-            data.put(occupation, de.getData());
-        } catch (Exception e) {
-            LogUtil.E(e.toString() + "错误");
-        }
-
-        try {
-            Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("805906", StringUtils.getJsonToString(marriageMap));
-            BaseResponseListModel<KeyDataModel> de = (BaseResponseListModel<KeyDataModel>) call.execute().body();
-            data.put(marriage, de.getData());
-        } catch (Exception e) {
-            LogUtil.E(e.toString() + "错误");
-        }
-
-        try {
-            Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("805906", StringUtils.getJsonToString(incomeMap));
-            BaseResponseListModel<KeyDataModel> de = (BaseResponseListModel<KeyDataModel>) call.execute().body();
-            data.put(income, de.getData());
-        } catch (Exception e) {
-            LogUtil.E(e.toString() + "错误");
-        }
-
-        try {
-            Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("805906", StringUtils.getJsonToString(family_relationMap));
-            BaseResponseListModel<KeyDataModel> de = (BaseResponseListModel<KeyDataModel>) call.execute().body();
-            data.put(family_relation, de.getData());
-        } catch (Exception e) {
-            LogUtil.E(e.toString() + "错误");
-        }
-
-        try {
-            Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("805906", StringUtils.getJsonToString(society_relationMap));
-            BaseResponseListModel<KeyDataModel> de = (BaseResponseListModel<KeyDataModel>) call.execute().body();
-            data.put(society_relation, de.getData());
-        } catch (Exception e) {
-            LogUtil.E(e.toString() + "错误");
-        }
-
+        data.put(education, getKeyDataRequest(education));
+        data.put(live_time, getKeyDataRequest(live_time));
+        data.put(occupation, getKeyDataRequest(occupation));
+        data.put(marriage, getKeyDataRequest(marriage));
+        data.put(income, getKeyDataRequest(income));
+        data.put(family_relation, getKeyDataRequest(family_relation));
+        data.put(society_relation, getKeyDataRequest(society_relation));
 
         return data;
 
     }
 
     /**
-     * 数据字典请求参数
+     * 获取数据字典请求
      *
      * @param key
-     * @return
+     * @param key
      */
-    @NonNull
-    private Map<String, String> getKeyDataMap(String key) {
+    private List<KeyDataModel> getKeyDataRequest(String key) {
+
+        List<KeyDataModel> dataModels = new ArrayList<>();
+
         Map<String, String> map = RetrofitUtils.getRequestMap();
         map.put("parentKey", key);
-        return map;
+
+        try {
+            Call call = RetrofitUtils.createApi(MyApiServer.class).getKeyData("805906", StringUtils.getJsonToString(map));
+
+            addCall(call);
+
+            BaseResponseListModel<KeyDataModel> de = (BaseResponseListModel<KeyDataModel>) call.execute().body();
+
+            dataModels.addAll(de.getData());
+        } catch (Exception e) {
+            LogUtil.E("key data error key =" + key + e);
+        }
+
+        return dataModels;
     }
 
-    //获取
+
+    /**
+     * 获取学历数据
+     *
+     * @param mEducations
+     */
     public void checkEducation(List<KeyDataModel> mEducations) {
         if (mEducations == null) return;
         for (KeyDataModel kmodel : mEducations) {
             if (kmodel == null) continue;
 
-            if (TextUtils.equals(kmodel.getDkey(), mEducationCode) && basicinfoLayout != null) {
-                basicinfoLayout.tvStudySing.setText(kmodel.getDvalue());
+            if (TextUtils.equals(kmodel.getDkey(), mEducationCode)) {
+                if (basicinfoLayout != null) {
+                    basicinfoLayout.tvStudySing.setText(kmodel.getDvalue());
+                }
                 break;
             }
 
         }
     }
 
+    /**
+     * 获取学历时长数据
+     *
+     * @param mLiveDays
+     */
     public void checkLives(List<KeyDataModel> mLiveDays) {
         if (mLiveDays == null) return;
         for (KeyDataModel kmodel : mLiveDays) {
             if (kmodel == null) continue;
 
-            if (TextUtils.equals(kmodel.getDkey(), mLiveDaysCode) && basicinfoLayout != null) {
-                basicinfoLayout.tvLiveDays.setText(kmodel.getDvalue());
+            if (TextUtils.equals(kmodel.getDkey(), mLiveDaysCode)) {
+                if (basicinfoLayout != null) {
+                    basicinfoLayout.tvLiveDays.setText(kmodel.getDvalue());
+                }
                 break;
             }
 
@@ -982,13 +959,20 @@ public class MyReportActivity extends AbsBaseLoadActivity {
     }
 
 
+    /**
+     * 获取职业数据
+     *
+     * @param mJobs
+     */
     public void checkJobs(List<KeyDataModel> mJobs) {
         if (mJobs == null) return;
         for (KeyDataModel kmodel : mJobs) {
             if (kmodel == null) continue;
 
-            if (TextUtils.equals(kmodel.getDkey(), mJobCode) && basicinfoLayout != null) {
-                basicinfoLayout.jobLayout.tvJob.setText(kmodel.getDvalue());
+            if (TextUtils.equals(kmodel.getDkey(), mJobCode)) {
+                if (basicinfoLayout != null) {
+                    basicinfoLayout.jobLayout.tvJob.setText(kmodel.getDvalue());
+                }
                 break;
             }
 
@@ -996,13 +980,20 @@ public class MyReportActivity extends AbsBaseLoadActivity {
     }
 
 
+    /**
+     * 获取月收入数据
+     *
+     * @param mInMoneys
+     */
     public void checkInmoneys(List<KeyDataModel> mInMoneys) {
         if (mInMoneys == null) return;
         for (KeyDataModel kmodel : mInMoneys) {
             if (kmodel == null) continue;
 
-            if (TextUtils.equals(kmodel.getDkey(), mInMoneyCode) && basicinfoLayout != null) {
-                basicinfoLayout.jobLayout.tvInMoney.setText(kmodel.getDvalue());
+            if (TextUtils.equals(kmodel.getDkey(), mInMoneyCode)) {
+                if (basicinfoLayout != null) {
+                    basicinfoLayout.jobLayout.tvInMoney.setText(kmodel.getDvalue());
+                }
                 break;
             }
 
@@ -1010,13 +1001,20 @@ public class MyReportActivity extends AbsBaseLoadActivity {
     }
 
 
+    /**
+     * 紧急联系人 亲属关系
+     *
+     * @param mFamilys
+     */
     public void checkFamilys(List<KeyDataModel> mFamilys) {
         if (mFamilys == null) return;
         for (KeyDataModel kmodel : mFamilys) {
             if (kmodel == null) continue;
 
-            if (TextUtils.equals(kmodel.getDkey(), mFamilyCode) && basicinfoLayout != null) {
-                basicinfoLayout.contactLayout.tvFamily.setText(kmodel.getDvalue());
+            if (TextUtils.equals(kmodel.getDkey(), mFamilyCode)) {
+                if (basicinfoLayout != null) {
+                    basicinfoLayout.contactLayout.tvFamily.setText(kmodel.getDvalue());
+                }
                 break;
             }
 
@@ -1024,19 +1022,31 @@ public class MyReportActivity extends AbsBaseLoadActivity {
     }
 
 
+    /**
+     * 紧急联系人 社会关系
+     *
+     * @param mSocietys
+     */
     public void checkSocietys(List<KeyDataModel> mSocietys) {
         if (mSocietys == null) return;
         for (KeyDataModel kmodel : mSocietys) {
             if (kmodel == null) continue;
 
-            if (TextUtils.equals(kmodel.getDkey(), mSocietysCode) && basicinfoLayout != null) {
-                basicinfoLayout.contactLayout.tvSociety.setText(kmodel.getDvalue());
+            if (TextUtils.equals(kmodel.getDkey(), mSocietysCode)) {
+                if (basicinfoLayout != null) {
+                    basicinfoLayout.contactLayout.tvSociety.setText(kmodel.getDvalue());
+                }
                 break;
             }
 
         }
     }
 
+    /**
+     * 用于RecclerView 线性布局
+     *
+     * @return
+     */
     public LinearLayoutManager getLinearLayoutManager() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false) {
             @Override
@@ -1055,6 +1065,9 @@ public class MyReportActivity extends AbsBaseLoadActivity {
         super.onDestroy();
     }
 
+    /**
+     * 显示正在解析中的dialog
+     */
     public void showPraseDialog() {
         if (tipDialog == null) {
             tipDialog = new UITipDialog.Builder(this)
@@ -1067,6 +1080,9 @@ public class MyReportActivity extends AbsBaseLoadActivity {
         }
     }
 
+    /**
+     * 隐藏解析dialog
+     */
     public void dismissPraseDialog() {
         if (tipDialog != null && tipDialog.isShowing()) {
             tipDialog.dismiss();

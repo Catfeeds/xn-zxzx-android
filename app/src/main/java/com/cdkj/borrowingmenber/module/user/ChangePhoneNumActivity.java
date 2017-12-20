@@ -1,4 +1,4 @@
-package com.cdkj.baselibrary.activitys;
+package com.cdkj.borrowingmenber.module.user;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,12 +7,11 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 
-import com.cdkj.baselibrary.R;
+import com.cdkj.baselibrary.activitys.UpdatePhoneActivity;
 import com.cdkj.baselibrary.appmanager.EventTags;
 import com.cdkj.baselibrary.appmanager.MyCdConfig;
 import com.cdkj.baselibrary.appmanager.SPUtilHelpr;
 import com.cdkj.baselibrary.base.AbsBaseLoadActivity;
-import com.cdkj.baselibrary.databinding.ActivityModifyPhoneBinding;
 import com.cdkj.baselibrary.dialog.UITipDialog;
 import com.cdkj.baselibrary.interfaces.SendCodeInterface;
 import com.cdkj.baselibrary.interfaces.SendPhoneCoodePresenter;
@@ -22,6 +21,8 @@ import com.cdkj.baselibrary.nets.BaseResponseModelCallBack;
 import com.cdkj.baselibrary.nets.RetrofitUtils;
 import com.cdkj.baselibrary.utils.AppUtils;
 import com.cdkj.baselibrary.utils.StringUtils;
+import com.cdkj.borrowingmenber.R;
+import com.cdkj.borrowingmenber.databinding.ActivityChangePhoneBinding;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -31,44 +32,34 @@ import java.util.Map;
 import retrofit2.Call;
 
 /**
- * 更换手机号码
- * Created by 李先俊 on 2017/6/16.
+ * 更改手机号码
+ * Created by cdkj on 2017/12/20.
  */
 
-public class UpdatePhoneActivity extends AbsBaseLoadActivity implements SendCodeInterface {
+public class ChangePhoneNumActivity extends AbsBaseLoadActivity implements SendCodeInterface {
 
-    private ActivityModifyPhoneBinding mBinding;
-
+    private ActivityChangePhoneBinding mBinding;
     private SendPhoneCoodePresenter mSendCodePresenter;
 
-    /**
-     * 打开当前页面
-     *
-     * @param context
-     */
     public static void open(Context context) {
         if (context == null) {
             return;
         }
-        Intent intent = new Intent(context, UpdatePhoneActivity.class);
-
+        Intent intent = new Intent(context, ChangePhoneNumActivity.class);
         context.startActivity(intent);
     }
 
 
     @Override
     public View addMainView() {
-        mBinding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.activity_modify_phone, null, false);
+        mBinding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.activity_change_phone, null, false);
         return mBinding.getRoot();
     }
 
     @Override
     public void afterCreate(Bundle savedInstanceState) {
-
         mBaseBinding.titleView.setMidTitle("修改手机号");
-
         mSendCodePresenter = new SendPhoneCoodePresenter(this);
-
         initListener();
     }
 
@@ -77,43 +68,44 @@ public class UpdatePhoneActivity extends AbsBaseLoadActivity implements SendCode
         mBinding.btnSendNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mSendCodePresenter.sendCodeRequest(mBinding.edtPhoneNew.getText().toString(), "805061", MyCdConfig.USERTYPE, UpdatePhoneActivity.this);
+                mSendCodePresenter.sendCodeRequest(mBinding.edtPhoneNew.getText().toString(), "804082", MyCdConfig.USERTYPE, ChangePhoneNumActivity.this);
             }
         });
 
-        mBinding.btnConfirm.setOnClickListener(new View.OnClickListener() {
+        mBinding.btnSureChange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (TextUtils.isEmpty(mBinding.edtPhoneNew.getText().toString())) {
-                    UITipDialog.showFall(UpdatePhoneActivity.this, "请输入新手机号");
+                    UITipDialog.showFall(ChangePhoneNumActivity.this, "请输入旧手机号");
                     return;
                 }
 
                 if (TextUtils.isEmpty(mBinding.edtCodeNew.getText().toString())) {
-                    UITipDialog.showFall(UpdatePhoneActivity.this, "请输入验证码");
+                    UITipDialog.showFall(ChangePhoneNumActivity.this, "请输入验证码");
                     return;
                 }
 
-                updatePhone();
+                checkOldPhone();
 
             }
         });
 
     }
 
-
     /**
-     * 更换手机号
+     * 验证旧手机号码
      */
-    private void updatePhone() {
+    private void checkOldPhone() {
 
         Map<String, String> map = new HashMap<>();
         map.put("userId", SPUtilHelpr.getUserId());
-        map.put("newMobile", mBinding.edtPhoneNew.getText().toString());
-        map.put("smsCaptcha", mBinding.edtCodeNew.getText().toString());
-        map.put("token", SPUtilHelpr.getUserToken());
+        map.put("systemCode", MyCdConfig.SYSTEMCODE);
+        map.put("companyCode", MyCdConfig.COMPANYCODE);
+        map.put("mobile", mBinding.edtPhoneNew.getText().toString());
+        map.put("captcha", mBinding.edtCodeNew.getText().toString());
+        map.put("bizType", "804082");
 
-        Call call = RetrofitUtils.getBaseAPiService().successRequest("805061", StringUtils.getJsonToString(map));
+        Call call = RetrofitUtils.getBaseAPiService().successRequest("804082", StringUtils.getJsonToString(map));
 
         addCall(call);
 
@@ -122,22 +114,14 @@ public class UpdatePhoneActivity extends AbsBaseLoadActivity implements SendCode
             @Override
             protected void onSuccess(IsSuccessModes data, String SucMessage) {
                 if (data.isSuccess()) {
-
-                    showToast("修改成功");
-
-                    EventBusModel eventBusModel = new EventBusModel();      //刷新上一页数据
-                    eventBusModel.setTag(EventTags.CHANGEPHONENUMBER_REFRESH);
-                    eventBusModel.setEvInfo(mBinding.edtPhoneNew.getText().toString());
-                    EventBus.getDefault().post(eventBusModel);
-
-                    SPUtilHelpr.saveUserPhoneNum(mBinding.edtPhoneNew.getText().toString());
+                    UpdatePhoneActivity.open(ChangePhoneNumActivity.this);
                     finish();
                 }
             }
 
             @Override
             protected void onReqFailure(String errorCode, String errorMessage) {
-                UITipDialog.showFall(UpdatePhoneActivity.this, errorMessage);
+                UITipDialog.showFall(ChangePhoneNumActivity.this, errorMessage);
             }
 
             @Override
@@ -154,7 +138,7 @@ public class UpdatePhoneActivity extends AbsBaseLoadActivity implements SendCode
 
     @Override
     public void CodeFailed(String code, String msg) {
-        UITipDialog.showFall(UpdatePhoneActivity.this, msg);
+        UITipDialog.showFall(ChangePhoneNumActivity.this, msg);
     }
 
     @Override
@@ -165,14 +149,5 @@ public class UpdatePhoneActivity extends AbsBaseLoadActivity implements SendCode
     @Override
     public void EndSend() {
         disMissLoading();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (mSendCodePresenter != null) {
-            mSendCodePresenter.clear();
-            mSendCodePresenter = null;
-        }
     }
 }

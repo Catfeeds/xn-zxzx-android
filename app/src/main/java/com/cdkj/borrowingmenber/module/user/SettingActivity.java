@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.cdkj.baselibrary.activitys.FindPwdActivity;
-import com.cdkj.baselibrary.activitys.UpdatePhoneActivity;
 import com.cdkj.baselibrary.appmanager.EventTags;
 import com.cdkj.baselibrary.appmanager.SPUtilHelpr;
 import com.cdkj.baselibrary.base.AbsBaseLoadActivity;
@@ -45,17 +44,19 @@ public class SettingActivity extends AbsBaseLoadActivity {
         mBaseBinding.titleView.setMidTitle(getString(R.string.setting));
 
         mBinding.updatePhone.setOnClickListener(v -> {
-            UpdatePhoneActivity.open(this);
+            ChangePhoneNumActivity.open(this);
         });
         mBinding.updatePassword.setOnClickListener(v -> {
             FindPwdActivity.open(this, "");
         });
 
         mBinding.tvLogout.setOnClickListener(v -> {
-            SPUtilHelpr.logOutClear();
-            EventBus.getDefault().post(EventTags.AllFINISH);
-            EventBus.getDefault().post(EventTags.MAINFINISH);
-            LoginActivity.open(this,true);
+            showDoubleWarnListen("确认退出登录？", view -> {
+                SPUtilHelpr.logOutClear();
+                EventBus.getDefault().post(EventTags.AllFINISH);
+                EventBus.getDefault().post(EventTags.MAINFINISH);
+                LoginActivity.open(this, true);
+            });
         });
 
     }

@@ -105,7 +105,7 @@
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-    <!--图片裁剪-->
+        <!--图片裁剪-->
         <activity
             android:name=".module.user.ImageSelectuCropActivity"
             android:screenOrientation="portrait"
@@ -114,6 +114,12 @@
         <!--我的报告-->
         <activity
             android:name=".module.report.MyReportActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+
+        <!--修改手机号-->
+        <activity
+            android:name=".module.user.ChangePhoneNumActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <!--芝麻认证-->
