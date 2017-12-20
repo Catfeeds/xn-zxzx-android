@@ -35,6 +35,15 @@ public interface MyApiServer {
     Call<BaseResponseModel<ResponseInListModel<CertListModel>>> getWaiteCertList(@Field("code") String code, @Field("json") String json);
 
     /**
+     * 获取调查单详情
+     *
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api")
+    Call<BaseResponseModel<CertListModel>> getCertDetails(@Field("code") String code, @Field("json") String json);
+
+    /**
      * zm one
      *
      * @param code

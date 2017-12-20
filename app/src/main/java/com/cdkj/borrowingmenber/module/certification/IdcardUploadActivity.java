@@ -69,6 +69,7 @@ public class IdcardUploadActivity extends BaseCertStepActivity {
 
     }
 
+
     private void initVar() {
         qiNiuHelper = new QiNiuHelper(this);
     }
@@ -101,7 +102,7 @@ public class IdcardUploadActivity extends BaseCertStepActivity {
      */
     private void upLoadPicUrl() {
 
-        if (mCertListModel == null) {
+        if (isCertCodeEmpty()) {
             showToast("图片上传失败，请退出重试。");
             return;
         }
@@ -111,7 +112,7 @@ public class IdcardUploadActivity extends BaseCertStepActivity {
         map.put("identifyPicHand", mPicQiURL3);//手持
         map.put("identifyPicReverse", mPicQiURL1);//反面
         map.put("identifyPic", mPicQiURL2);//正面
-        map.put("searchCode", mCertListModel.getCode());
+        map.put("searchCode", mCertCode);
 
         Call call = RetrofitUtils.createApi(BaseApiServer.class).successRequest("805254", StringUtils.getJsonToString(map));
 
@@ -123,9 +124,7 @@ public class IdcardUploadActivity extends BaseCertStepActivity {
             @Override
             protected void onSuccess(IsSuccessModes data, String SucMessage) {
                 if (data.isSuccess()) {
-                    mCertListModel.setPID1("N");
-                    CertificationHelper.checkRequest(IdcardUploadActivity.this, mCertListModel);
-                    finish();
+                    getCheckData(NEXTSTEP);
                 } else {
                     UITipDialog.showInfo(IdcardUploadActivity.this, "上传失败,请退出重试");
                 }
@@ -150,10 +149,6 @@ public class IdcardUploadActivity extends BaseCertStepActivity {
         }
         if (TextUtils.isEmpty(mPicQiURL3)) {
             UITipDialog.showInfo(this, "请上传手持身份证照");
-            return false;
-        }
-        if (mCertListModel == null) {
-            UITipDialog.showInfo(this, "上传失败,请退出重试");
             return false;
         }
         return true;

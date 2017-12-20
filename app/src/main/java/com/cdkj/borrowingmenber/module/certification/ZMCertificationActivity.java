@@ -23,7 +23,6 @@ import com.cdkj.borrowingmenber.R;
 import com.cdkj.borrowingmenber.databinding.ActivityCardandnameCheckBinding;
 import com.cdkj.borrowingmenber.model.ZMCertFirstStepModel;
 import com.cdkj.borrowingmenber.module.api.MyApiServer;
-import com.cdkj.borrowingmenber.weiget.CertificationHelper;
 
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -83,13 +82,15 @@ public class ZMCertificationActivity extends BaseCertStepActivity {
      * 认证信息请求
      */
     private void certRequest() {
-        if (mCertListModel == null) return;
+        if (isCertCodeEmpty()) {
+            return;
+        }
         Map<String, String> map = new HashMap<String, String>();
         map.put("idNo", mBinding.editCardNumber.getText().toString());
         map.put("realName", mBinding.editName.getText().toString());
         map.put("userId", SPUtilHelpr.getUserId());
         map.put("returnUrl", "borrowing://certi.back");
-        map.put("searchCode", mCertListModel.getCode());//调查单编号
+        map.put("searchCode", mCertCode);//调查单编号
 
         Call call = RetrofitUtils.createApi(MyApiServer.class).ZmCertFirstStep("805251", StringUtils.getJsonToString(map));
 
@@ -190,11 +191,13 @@ public class ZMCertificationActivity extends BaseCertStepActivity {
 
     private void check(String mBizNum) {
 
-        if (mCertListModel == null) return;
+        if (isCertCodeEmpty()) {
+            return;
+        }
 
         Map<String, String> map = new HashMap<>();
         map.put("bizNo", mBizNum);
-        map.put("searchCode", mCertListModel.getCode());
+        map.put("searchCode", mCertCode);
 
         Call call = RetrofitUtils.createApi(BaseApiServer.class).booleanRequest("805252", StringUtils.getJsonToString(map));
 
@@ -205,15 +208,7 @@ public class ZMCertificationActivity extends BaseCertStepActivity {
             @Override
             protected void onSuccess(Boolean data, String SucMessage) {
                 if (data) {
-                    //通过验证后检测下一步 重新进行检测  这个步骤不在进行验证
-//                    mCertListModel.setF2("N");
-//                    mReportModel.setF2("N");
-//                    CertificationStepHelper.checkStartStep(ZMCertificationActivity.this, mCertListModel, mReportModel);//检测并打开下一步
-
-                    //通过验证后检测下一步 重新进行检测  这个步骤不在进行验证
-                    mCertListModel.setF2("N");
-                    CertificationHelper.checkRequest(ZMCertificationActivity.this, mCertListModel);
-                    finish();
+                    getCheckData(NEXTSTEP);
                 } else {
                     UITipDialog.showInfo(ZMCertificationActivity.this, "芝麻认证失败，请重试");
                 }

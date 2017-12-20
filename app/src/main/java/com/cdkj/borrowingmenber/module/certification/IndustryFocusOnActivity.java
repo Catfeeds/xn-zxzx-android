@@ -43,7 +43,17 @@ public class IndustryFocusOnActivity extends BaseZmPermissionsCheckActivity {
 
         mBinding.butSure.setText(getString(R.string.next_step));
 
-        setShowData();
+        getCheckData(1);
+    }
+
+    @Override
+    protected void getAllCheckDataState(int requestCode, boolean isGetALl) {
+
+        if (requestCode == 1) {
+            setShowData();
+        } else {
+            super.getAllCheckDataState(requestCode, isGetALl);
+        }
     }
 
     @Override
@@ -53,14 +63,14 @@ public class IndustryFocusOnActivity extends BaseZmPermissionsCheckActivity {
 
     private void checkIndustryFocusOn() {
 
-        if (mCertListModel == null) {
+        if (isCertCodeEmpty()) {
             showToast("行业关注清单认证失败，请退出重试。");
             return;
         }
         Map map = RetrofitUtils.getRequestMap();
 
         map.put("isH5", "0");
-        map.put("searchCode", mCertListModel.getCode());
+        map.put("searchCode", mCertCode);
 
         Call call = RetrofitUtils.createApi(MyApiServer.class).IndustryFocusOnInfoQuery("805259", StringUtils.getJsonToString(map));
 
@@ -73,9 +83,7 @@ public class IndustryFocusOnActivity extends BaseZmPermissionsCheckActivity {
             protected void onSuccess(IndustryFocusOnModel data, String SucMessage) {
                 if (data.isAuthorized()) {
                     UITipDialog.showSuccess(IndustryFocusOnActivity.this, "成功", dialog -> {
-                        mCertListModel.setPZM6("N");
-                        CertificationHelper.checkRequest(IndustryFocusOnActivity.this, mCertListModel);
-                        finish();
+                        getCheckData(NEXTSTEP);
                     });
                 } else {
                     creditApp.authenticate(IndustryFocusOnActivity.this, data.getAppId(), null, data.getParam(), data.getSignature(), null, IndustryFocusOnActivity.this);

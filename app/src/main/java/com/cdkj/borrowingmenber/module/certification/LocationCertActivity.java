@@ -50,7 +50,7 @@ public class LocationCertActivity extends BaseCertStepActivity {
             @Override
             public void locationSuccessful(LocationModel locationModel) {
                 dismissLocationDialog();
-                if (mCertListModel == null || locationModel == null) {
+                if (isCertCodeEmpty() || locationModel == null) {
                     showToast("定位失败，请重试");
                     return;
                 }
@@ -98,8 +98,10 @@ public class LocationCertActivity extends BaseCertStepActivity {
     protected void onDestroy() {
         locationHelper.destroyLocation();
         locationHelper = null;
-        tipDialog.dismiss();
-        tipDialog = null;
+        if (tipDialog != null) {
+            tipDialog.dismiss();
+            tipDialog = null;
+        }
         super.onDestroy();
     }
 
@@ -125,7 +127,7 @@ public class LocationCertActivity extends BaseCertStepActivity {
      */
     private void locationCert(LocationModel locationModel) {
 
-        if (mCertListModel == null) {
+        if (isCertCodeEmpty()) {
             showToast("认证失败,请重试");
             finish();
         }
@@ -138,7 +140,7 @@ public class LocationCertActivity extends BaseCertStepActivity {
         map.put("longitude", getNotEmptyInfo(locationModel.getLongitude()));
         map.put("province", getNotEmptyInfo(locationModel.getProvince()));
         map.put("area", getNotEmptyInfo(locationModel.getDistrict()));
-        map.put("searchCode", mCertListModel.getCode());
+        map.put("searchCode", mCertCode);
 
         showLoadingDialog();
 
@@ -150,10 +152,8 @@ public class LocationCertActivity extends BaseCertStepActivity {
             @Override
             protected void onSuccess(IsSuccessModes data, String SucMessage) {
                 if (data.isSuccess()) {
-                    mCertListModel.setPDW2("N");
-                    CertificationHelper.checkRequest(LocationCertActivity.this, mCertListModel);
+                    getCheckData(NEXTSTEP);
                     EventBus.getDefault().post(LOCATIONSUCC);//定位成功结束上一个界面
-                    finish();
                 } else {
                     showDoubleWarnListen("定位失败，无法进行下一步认证，请重试", view -> {
                         EventBus.getDefault().post(LOCATIONSUCC);//定位失败结束上一个界面

@@ -62,7 +62,8 @@ public class TdOperatorCertActivity extends BaseCertStepActivity {
         initLayout();
         mBaseBinding.titleView.setMidTitle("运营商认证");
 
-        webView.loadUrl(getLoadUrl());
+        getCheckData(1);
+
 
 //        TdParseProgressDialog dialog = new TdParseProgressDialog(this, "数据认证中", false);
 //
@@ -75,6 +76,16 @@ public class TdOperatorCertActivity extends BaseCertStepActivity {
 //                    dialog.setProgress(aLong);
 //                });
     }
+
+    @Override
+    protected void getAllCheckDataState(int requestCode, boolean isGetALl) {
+        if (requestCode == 1) {
+            webView.loadUrl(getLoadUrl());
+        } else {
+            super.getAllCheckDataState(requestCode, isGetALl);
+        }
+    }
+
 
     /*https://open.shujumohe.com/box/yys?box_token=yys?box_token=5613A6F334DC4E12944AF748EE11FDEA&real_name=%E6%9D%8E%E5%85%88%E4%BF%8A&identity_code=dfdfdfddfdd&user_mobile=55656565&real_name=%E6%9D%8E%E5%85%88%E4%BF%8A*/
     @NonNull
@@ -160,7 +171,7 @@ public class TdOperatorCertActivity extends BaseCertStepActivity {
      */
     private void taskIdCheck(String url) {
 
-        if (mCertListModel == null){
+        if (isCertCodeEmpty()){
             showToast("运营商认证失败，请退出重试。");
             return;
 
@@ -174,7 +185,7 @@ public class TdOperatorCertActivity extends BaseCertStepActivity {
 
         Map map = RetrofitUtils.getRequestMap();
 
-        map.put("searchCode", mCertListModel.getCode());
+        map.put("searchCode", mCertCode);
         map.put("taskId", taskId);
 
         showLoadingDialog();
@@ -186,9 +197,7 @@ public class TdOperatorCertActivity extends BaseCertStepActivity {
             @Override
             protected void onSuccess(IsSuccessModes data, String SucMessage) {
                 if (data.isSuccess()) {
-                    mCertListModel.setPYYS4("N");
-                    CertificationHelper.checkRequest(TdOperatorCertActivity.this, mCertListModel);
-                    finish();
+                  getCheckData(NEXTSTEP);
                 } else {
                     UITipDialog.showFall(TdOperatorCertActivity.this, "认证失败，请重试");
                 }

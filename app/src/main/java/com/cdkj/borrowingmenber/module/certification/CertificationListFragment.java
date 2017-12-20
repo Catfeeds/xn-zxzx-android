@@ -126,7 +126,6 @@ public class CertificationListFragment extends BaseLazyFragment {
             if (certListModel == null) {
                 return;
             }
-//            CertificationStepHelper.openStepPage(mActivity, TdOperatorCertActivity.class, certListModel, null);
             CertificationHelper.checkRequest(mActivity, certListModel);
         });
 
@@ -148,7 +147,7 @@ public class CertificationListFragment extends BaseLazyFragment {
         map.put("limit", limit + "");
         map.put("start", pageindex + "");
         map.put("orderColumn", "create_datetime");
-        map.put("orderDir", "asc");
+        map.put("orderDir", "desc");
 //        map.put("statusList", getStatusList());
         map.put("loanUser", SPUtilHelpr.getUserId());
 

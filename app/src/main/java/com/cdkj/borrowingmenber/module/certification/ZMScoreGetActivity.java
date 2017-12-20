@@ -32,10 +32,21 @@ public class ZMScoreGetActivity extends BaseZmPermissionsCheckActivity {
         mBinding.editCardNumber.setEnabled(false);
         mBinding.editName.setEnabled(false);
 
-        setShowData();
+       getCheckData(1);
 
         mBinding.butSure.setText(getString(R.string.next_step));
     }
+
+    @Override
+    protected void getAllCheckDataState(int requestCode, boolean isGetALl) {
+
+        if (requestCode == 1) {
+            setShowData();
+        } else {
+            super.getAllCheckDataState(requestCode, isGetALl);
+        }
+    }
+
 
     /*"{"isSuccess":false,"idNo":"522321199509111655","realName":"李先俊"}"*/
     private void setShowData() {
@@ -53,13 +64,13 @@ public class ZMScoreGetActivity extends BaseZmPermissionsCheckActivity {
     @Override
     protected void checkRequest() {
 
-        if(mCertListModel==null){
+        if (isCertCodeEmpty()) {
             showToast("芝麻分认证失败，请退出重试。");
             return;
         }
 
         Map<String, String> map = new HashMap<>();
-        map.put("searchCode", mCertListModel.getCode());
+        map.put("searchCode", mCertCode);
         map.put("isH5", "0");
 
         Call call = RetrofitUtils.createApi(MyApiServer.class).getZmScore("805258", StringUtils.getJsonToString(map));
@@ -73,13 +84,7 @@ public class ZMScoreGetActivity extends BaseZmPermissionsCheckActivity {
             @Override
             protected void onSuccess(ZmScoreGetModel data, String SucMessage) {
                 if (data.isAuthorized()) {
-
-                    mCertListModel.setPZM5("N");
-
-                    CertificationHelper.checkRequest(ZMScoreGetActivity.this, mCertListModel);
-
-                    finish();
-
+                    getCheckData(NEXTSTEP);
                 } else {
                     creditApp.authenticate(ZMScoreGetActivity.this, data.getAppId(), null, data.getParam(), data.getSignature(), null, ZMScoreGetActivity.this);
                 }

@@ -19,7 +19,6 @@ import com.cdkj.baselibrary.utils.StringUtils;
 import com.cdkj.borrowingmenber.BaseCertStepActivity;
 import com.cdkj.borrowingmenber.R;
 import com.cdkj.borrowingmenber.databinding.ActivityAddressbookBinding;
-import com.cdkj.borrowingmenber.weiget.CertificationHelper;
 
 import java.util.HashMap;
 import java.util.List;
@@ -139,14 +138,14 @@ public class AddressBookCertActivity extends BaseCertStepActivity {
      */
     private void pushMobileInfo(List<HashMap<String, String>> hashMaps) {
 
-        if(mCertListModel==null){
+        if(isCertCodeEmpty()){
             showToast("通讯录认证失败，请退出重试。");
             return;
         }
 
         Map<String, Object> map = new HashMap<>();
 
-        map.put("searchCode", mCertListModel.getCode());
+        map.put("searchCode", mCertCode);
         map.put("addressBookList", hashMaps);
 
         Call call = RetrofitUtils.getBaseAPiService().successRequest("805257", StringUtils.getJsonToString(map));
@@ -158,9 +157,7 @@ public class AddressBookCertActivity extends BaseCertStepActivity {
             protected void onSuccess(IsSuccessModes data, String SucMessage) {
                 if (data.isSuccess()) {
                     if (hashMaps != null && hashMaps.size() > 0) {
-                        mCertListModel.setPTXL3("N");
-                        CertificationHelper.checkRequest(AddressBookCertActivity.this, mCertListModel);
-                        finish();
+                       getCheckData(NEXTSTEP);
                     }
                 }
             }

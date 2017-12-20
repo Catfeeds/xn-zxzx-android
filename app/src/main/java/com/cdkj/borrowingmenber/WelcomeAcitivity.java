@@ -16,7 +16,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 
 /**
  * 启动页
- * Created by 李先俊 on 2017/6/8.
+ * Created by cdkj on 2017/6/8.
  */
 
 public class WelcomeAcitivity extends BaseActivity {
@@ -36,22 +36,26 @@ public class WelcomeAcitivity extends BaseActivity {
         } catch (Exception e) {
         }
         setContentView(R.layout.activity_welcom);
-        ImageView img = (ImageView) findViewById(R.id.img_start);
-//        img.setImageResource(R.drawable.start);
+
         mSubscription.add(Observable.timer(2, TimeUnit.SECONDS)
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(aLong -> {//延迟两秒进行跳转
-                    if (!SPUtilHelpr.isLoginNoStart()) {
-                        LoginActivity.open(this, true);
-                        finish();
-                        return;
-                    }
-                    MainActivity.open(this);
-//                    Intent intent=new Intent(this, IdcardUploadActivity.class);
-//                    startActivity(intent);
-                    finish();
+                    startNext();
                 }, Throwable::printStackTrace));
+    }
+
+    /**
+     * 启动页下一步
+     */
+    private void startNext() {
+        if (!SPUtilHelpr.isLoginNoStart()) {
+            LoginActivity.open(this, true);
+            finish();
+            return;
+        }
+        MainActivity.open(this);
+        finish();
     }
 
 }

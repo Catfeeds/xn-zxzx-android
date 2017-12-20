@@ -20,7 +20,6 @@ import com.cdkj.borrowingmenber.R;
 import com.cdkj.borrowingmenber.databinding.ActivityBasicInfoBinding;
 import com.cdkj.borrowingmenber.model.KeyDataModel;
 import com.cdkj.borrowingmenber.module.api.MyApiServer;
-import com.cdkj.borrowingmenber.weiget.CertificationHelper;
 import com.lljjcoder.citypickerview.widget.CityPicker;
 
 import java.util.ArrayList;
@@ -160,7 +159,7 @@ public class BasicInfoCertActivity extends BaseCertStepActivity {
     private void initListener() {
 
         mBinding.btnNext.setOnClickListener(v -> {
-            if (!checkInput() || mCertListModel == null) {
+            if (!checkInput() || isCertCodeEmpty()) {
                 return;
             }
             dataSubmit();
@@ -208,8 +207,9 @@ public class BasicInfoCertActivity extends BaseCertStepActivity {
      */
     private void dataSubmit() {
         showLoadingDialog();
-        mSubscription.add(Observable.just(getRequestMap())
-                .subscribeOn(Schedulers.newThread())
+        mSubscription.add(Observable.just("")
+                .observeOn(Schedulers.newThread())
+                .map(s -> getRequestMap())
                 .map(map -> StringUtils.getJsonToString(map))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(str -> {
@@ -219,15 +219,7 @@ public class BasicInfoCertActivity extends BaseCertStepActivity {
                         @Override
                         protected void onSuccess(IsSuccessModes data, String SucMessage) {
                             if (data.isSuccess()) {
-                                //通过验证后检测下一步 重新进行检测  这个步骤不在进行验证
-//                                mCertListModel.setF3("N");
-//                                mReportModel.setF3("N");
-
-//                                CertificationStepHelper.checkStartStep(BasicInfoCertActivity.this, mCertListModel, mReportModel);//检测并打开下一步
-                                //通过验证后检测下一步 重新进行检测  这个步骤不在进行验证
-                                mCertListModel.setF3("N");
-                                CertificationHelper.checkRequest(BasicInfoCertActivity.this, mCertListModel);
-                                finish();
+                                getCheckData(NEXTSTEP);
                             } else {
                                 UITipDialog.showFall(BasicInfoCertActivity.this, "基本信息认证失败，请重新认证");
                             }
@@ -263,7 +255,7 @@ public class BasicInfoCertActivity extends BaseCertStepActivity {
         map.put("occupation", mJobCode);
         map.put("phone", mBinding.editJobPhone.getText().toString());
         map.put("provinceCity", mBinding.rowCity.getCenterText());
-        map.put("searchCode", mCertListModel.getCode());
+        map.put("searchCode", mCertCode);
         map.put("societyName", mBinding.editSocietysName.getText().toString());
         map.put("societyRelation", mSocietysCode);
         map.put("societyMobile", mBinding.editSocietysPhone.getText().toString());
@@ -299,7 +291,7 @@ public class BasicInfoCertActivity extends BaseCertStepActivity {
         }
 
         if (TextUtils.isEmpty(mBinding.editAddress.getText().toString())) {
-            UITipDialog.showInfo(this, "请输入详细地址地址");
+            UITipDialog.showInfo(this, "请输入详细地址");
             return false;
         }
 

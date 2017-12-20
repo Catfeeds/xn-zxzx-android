@@ -44,8 +44,8 @@ public class SurveyStatementActivity extends BaseCertStepActivity {
         super.afterCreate(savedInstanceState);
         initLayout();
         initData();
-
     }
+
 
     private void initLayout() {
         //输入法
@@ -64,12 +64,9 @@ public class SurveyStatementActivity extends BaseCertStepActivity {
         });
 
         mBinding.btnStart.setOnClickListener(v -> {
-            //打开芝麻认证
-            CertificationHelper.openStepPage(this, ZMCertificationActivity.class, mCertListModel, mReportModel);
+            CertificationHelper.openStepPage(this, ZMCertificationActivity.class, mCertCode);
             finish();
         });
-
-
     }
 
     private void initData() {

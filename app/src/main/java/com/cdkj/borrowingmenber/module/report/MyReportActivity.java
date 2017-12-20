@@ -157,8 +157,10 @@ public class MyReportActivity extends AbsBaseLoadActivity {
 
     @Override
     protected void onDestroy() {
-        tipDialog.dismiss();
-        tipDialog = null;
+        if (tipDialog != null) {
+            tipDialog.dismiss();
+            tipDialog = null;
+        }
         super.onDestroy();
     }
 

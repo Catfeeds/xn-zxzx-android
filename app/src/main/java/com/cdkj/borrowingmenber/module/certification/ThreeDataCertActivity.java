@@ -72,15 +72,16 @@ public class ThreeDataCertActivity extends BaseCertStepActivity {
 
     private void certRequest() {
 
-        if(mCertListModel==null){
-            showToast("欺诈认证失败，请退出重试。");
+        if (isCertCodeEmpty()) {
+            showToast("欺诈认证失败，请重试。");
+            finish();
             return;
         }
 
         Map map = RetrofitUtils.getRequestMap();
 
         map.put("isH5", "0");
-        map.put("searchCode", mCertListModel.getCode());
+        map.put("searchCode", mCertCode);
 
         if (mCanGetIemi) {
             map.put("imei", SystemUtils.getIMEI(this));
@@ -98,10 +99,7 @@ public class ThreeDataCertActivity extends BaseCertStepActivity {
             @Override
             protected void onSuccess(FraudCertModel data, String SucMessage) {
                 if (data.isAuthorized()) { //是否授权
-                    mCertListModel.setPZM7("N");
-                    CertificationHelper.checkRequest(ThreeDataCertActivity.this, mCertListModel);
-                    finish();
-
+                    getCheckData(NEXTSTEP);
                 } else {
                     showToast("认证失败，请重试");
                     finish();

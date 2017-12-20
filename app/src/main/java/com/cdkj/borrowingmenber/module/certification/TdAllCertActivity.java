@@ -42,8 +42,10 @@ public class TdAllCertActivity extends BaseCertStepActivity {
 
     @Override
     protected void onDestroy() {
-        tipDialog.dismiss();
-        tipDialog = null;
+        if (tipDialog != null) {
+            tipDialog.dismiss();
+            tipDialog = null;
+        }
         super.onDestroy();
     }
 
@@ -51,13 +53,13 @@ public class TdAllCertActivity extends BaseCertStepActivity {
      * 调用同盾认证
      */
     private void tdCertRequest() {
-        if (mCertListModel == null) {
+        if (isCertCodeEmpty()) {
             showToast("同盾认证失败，请退出重试。");
             return;
         }
         Map map = RetrofitUtils.getRequestMap();
 
-        map.put("searchCode", mCertListModel.getCode());
+        map.put("searchCode", mCertCode);
         showWaiteDialog();
         Call call = RetrofitUtils.getBaseAPiService().successRequest("805261", StringUtils.getJsonToString(map));
 
@@ -67,9 +69,7 @@ public class TdAllCertActivity extends BaseCertStepActivity {
             @Override
             protected void onSuccess(IsSuccessModes data, String SucMessage) {
                 if (data.isSuccess()) {
-                    mCertListModel.setPTD8("N");
-                    CertificationHelper.checkRequest(TdAllCertActivity.this, mCertListModel);
-                    finish();
+                    getCheckData(NEXTSTEP);
                 } else {
                     UITipDialog.showFall(TdAllCertActivity.this, "认证失败，请重试");
                 }

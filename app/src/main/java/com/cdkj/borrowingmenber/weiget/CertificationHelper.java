@@ -61,18 +61,12 @@ public class CertificationHelper {
      *
      */
 
-
     /**
      * 通过调查单和报告单检测要打开的步骤界面
      *
      * @param certListModel
      */
     public static void checkStartStep(Context context, CertListModel certListModel, ReportModel reportModel) {
-//        if (isNeedCertPhone(certListModel)) {
-//            //打开手机认证 （未使用）
-//
-//            return;
-//        }
 
         if (context == null || certListModel == null || reportModel == null) {
             return;
@@ -80,63 +74,62 @@ public class CertificationHelper {
 
         if (isNeedCertZm(certListModel) || isNeedCertZm(reportModel, certListModel)) {
             //打开调查声明 然后打开芝麻认证
-            openStepPage(context, SurveyStatementActivity.class, certListModel, reportModel);
+            openStepPage(context, SurveyStatementActivity.class, certListModel.getCode());
 //            openStepPage(context, ZMCertificationActivity.class, certListModel, reportModel);
             return;
         }
-
+        //打开基本信息认证
         if (isNeedCertUserInfo(certListModel) || isNeedCertUserInfo(reportModel, certListModel)) {
-            //打开基本信息认证
-            openStepPage(context, BasicInfoCertActivity.class, certListModel, reportModel);
+            openStepPage(context, BasicInfoCertActivity.class, certListModel.getCode());
             return;
         }
 
         if (isNeedCertIdCard(certListModel) || isNeedCertIdCard(reportModel, certListModel)) {
             //打开身份证认证
-            openStepPage(context, IdcardUploadActivity.class, certListModel, reportModel);
+            openStepPage(context, IdcardUploadActivity.class, certListModel.getCode());
             return;
         }
 
         //位置定位
         if (isNeedCertLocatin(certListModel) || isNeedCertLocatin(reportModel, certListModel)) {
-            openStepPage(context, LocationCertActivity.class, certListModel, reportModel);
+            openStepPage(context, LocationCertActivity.class, certListModel.getCode());
             return;
 
         }
 
         //打开通讯录认证
         if (isNeedCertAddressBook(certListModel) || isNeedCertAddressBook(reportModel, certListModel)) {
-            openStepPage(context, AddressBookCertActivity.class, certListModel, reportModel);
+            openStepPage(context, AddressBookCertActivity.class, certListModel.getCode());
             return;
         }
 
         //打开运营商认证
         if (isNeedCertIEMI(certListModel) || isNeedCertIEMI(reportModel, certListModel)) {
-            openStepPage(context, TdOperatorCertActivity.class, certListModel, reportModel);
+            openStepPage(context, TdOperatorCertActivity.class, certListModel.getCode());
             return;
         }
 
         //打开芝麻分认证
         if (isNeedCertZmNum(certListModel) || isNeedCertZmNum(reportModel, certListModel)) {
-            openStepPage(context, ZMScoreGetActivity.class, certListModel, reportModel);
+            openStepPage(context, ZMScoreGetActivity.class, certListModel.getCode());
             return;
         }
 
 
         //打开行业清单认证
         if (isNeedCertHyqd(certListModel) || isNeedCertHyqd(reportModel, certListModel)) {
-            openStepPage(context, IndustryFocusOnActivity.class, certListModel, reportModel);
+            openStepPage(context, IndustryFocusOnActivity.class, certListModel.getCode());
             return;
         }
 
         //打开欺诈认证
         if (isNeedCertQz(certListModel) || isNeedCertQz(reportModel, certListModel)) {
-            openStepPage(context, ThreeDataCertActivity.class, certListModel, reportModel);
+            openStepPage(context, ThreeDataCertActivity.class, certListModel.getCode());
             return;
         }
         //打开同盾认证
         if (isNeedCertTd(certListModel) || isNeedCertTd(reportModel, certListModel)) {
-            openStepPage(context, TdAllCertActivity.class, certListModel, reportModel);
+            openStepPage(context, TdAllCertActivity.class, certListModel.getCode());
             return;
         }
 
@@ -152,6 +145,7 @@ public class CertificationHelper {
      * @param certListModel
      */
     public static void checkRequest(Activity context, CertListModel certListModel) {
+
         Map map = RetrofitUtils.getRequestMap();
         map.put("reportCode", certListModel.getReportCode());
 
@@ -164,8 +158,6 @@ public class CertificationHelper {
         call.enqueue(new BaseResponseModelCallBack<ReportModel>(context) {
             @Override
             protected void onSuccess(ReportModel data, String SucMessage) {
-//                CertificationStepHelper.openStepPage(context, AddressBookCertActivity.class, certListModel, data);
-
                 CertificationHelper.checkStartStep(context, certListModel, data);
             }
 
@@ -400,21 +392,18 @@ public class CertificationHelper {
      *
      * @param context
      * @param clasName
-     * @param certListModel
      */
-    public static void openStepPage(Context context, Class clasName, CertListModel certListModel, ReportModel reportModel) {
+    public static void openStepPage(Context context, Class clasName, String certCode) {
         if (context == null) {
             return;
         }
         Intent intent = new Intent(context, clasName);
-        intent.putExtra(INTENTGETCERTMODEL, certListModel);
-        intent.putExtra(INTENTGETREPORTMODEL, reportModel);
+        intent.putExtra(INTENTCERTCODE, certCode);
         context.startActivity(intent);
     }
 
-    //用于获取调查单数据
-    public static final String INTENTGETCERTMODEL = "certListModel";
-    public static final String INTENTGETREPORTMODEL = "ReportModel";
+    //用于获取调查单编号
+    public static final String INTENTCERTCODE = "certCode";
 
 
 }

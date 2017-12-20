@@ -60,8 +60,8 @@ public class RetrofitUtils {
      * @return
      */
     public static String getBaseURL() {
-//        return "http://121.43.101.148:4101/forward-service/";//研发环境
-        return "http://47.96.161.183:4101/forward-service/";//测试
+        return "http://121.43.101.148:4101/forward-service/";//研发环境
+//        return "http://47.96.161.183:4101/forward-service/";//测试
     }
 
     /**
