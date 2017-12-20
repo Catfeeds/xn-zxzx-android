@@ -101,6 +101,11 @@ public class IdcardUploadActivity extends BaseCertStepActivity {
      */
     private void upLoadPicUrl() {
 
+        if (mCertListModel == null) {
+            showToast("图片上传失败，请退出重试。");
+            return;
+        }
+
         Map map = RetrofitUtils.getRequestMap();
 
         map.put("identifyPicHand", mPicQiURL3);//手持

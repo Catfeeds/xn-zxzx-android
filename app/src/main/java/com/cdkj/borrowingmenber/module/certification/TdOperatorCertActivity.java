@@ -160,8 +160,11 @@ public class TdOperatorCertActivity extends BaseCertStepActivity {
      */
     private void taskIdCheck(String url) {
 
-        if (mCertListModel == null) return;
+        if (mCertListModel == null){
+            showToast("运营商认证失败，请退出重试。");
+            return;
 
+        }
         String taskId = getTaskIdByUrl(url);
 
         if (TextUtils.isEmpty(taskId)) {

@@ -51,7 +51,10 @@ public class TdAllCertActivity extends BaseCertStepActivity {
      * 调用同盾认证
      */
     private void tdCertRequest() {
-        if (mCertListModel == null) return;
+        if (mCertListModel == null) {
+            showToast("同盾认证失败，请退出重试。");
+            return;
+        }
         Map map = RetrofitUtils.getRequestMap();
 
         map.put("searchCode", mCertListModel.getCode());

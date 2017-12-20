@@ -139,6 +139,11 @@ public class AddressBookCertActivity extends BaseCertStepActivity {
      */
     private void pushMobileInfo(List<HashMap<String, String>> hashMaps) {
 
+        if(mCertListModel==null){
+            showToast("通讯录认证失败，请退出重试。");
+            return;
+        }
+
         Map<String, Object> map = new HashMap<>();
 
         map.put("searchCode", mCertListModel.getCode());

@@ -56,6 +56,7 @@ public class ChangePhoneNumActivity extends AbsBaseLoadActivity implements SendC
     public void afterCreate(Bundle savedInstanceState) {
         mBaseBinding.titleView.setMidTitle("修改手机号");
         mSendCodePresenter = new SendPhoneCoodePresenter(this);
+        mBinding.edtPhoneNew.setText(SPUtilHelpr.getUserPhoneNum());
         initListener();
     }
 

@@ -72,6 +72,11 @@ public class ThreeDataCertActivity extends BaseCertStepActivity {
 
     private void certRequest() {
 
+        if(mCertListModel==null){
+            showToast("欺诈认证失败，请退出重试。");
+            return;
+        }
+
         Map map = RetrofitUtils.getRequestMap();
 
         map.put("isH5", "0");

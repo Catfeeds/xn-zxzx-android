@@ -155,6 +155,12 @@ public class MyReportActivity extends AbsBaseLoadActivity {
         getReportRequest();
     }
 
+    @Override
+    protected void onDestroy() {
+        tipDialog.dismiss();
+        tipDialog = null;
+        super.onDestroy();
+    }
 
     /**
      * 身份证点击
@@ -672,7 +678,7 @@ public class MyReportActivity extends AbsBaseLoadActivity {
      * @param tdOperatorModel
      */
     private void setShowTdOperatorUserData(TdOperatorModel tdOperatorModel) {
-        if (tdOperatorModel != null && tdOperatorModel.getUser_info() != null && tdOperatorLayout != null) {   //运营商 用户信息
+        if (tdOperatorModel != null && tdOperatorModel.getUser_info() != null && tdOperatorLayout != null) {
             tdOperatorLayout.tvTdName.setText(tdOperatorModel.getUser_info().getReal_name());
             tdOperatorLayout.tvIdCard.setText(tdOperatorModel.getUser_info().getIdentity_code());
             tdOperatorLayout.tvGender.setText(tdOperatorModel.getUser_info().getGender());
@@ -829,13 +835,13 @@ public class MyReportActivity extends AbsBaseLoadActivity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> dismissPraseDialog())
                 .subscribe(maps -> {
-                    basicinfoLayout.tvStudySing.setText(this.getCheckKeyDataValue(maps.get(education), mEducationCode));
-                    basicinfoLayout.tvLiveDays.setText(this.getCheckKeyDataValue(maps.get(live_time), mLiveDaysCode));
-                    basicinfoLayout.jobLayout.tvJob.setText(this.getCheckKeyDataValue(maps.get(occupation), mJobCode));
-                    basicinfoLayout.tvMarg.setText(this.getCheckKeyDataValue(maps.get(marriage), mMarriagesCode));
-                    basicinfoLayout.jobLayout.tvInMoney.setText(this.getCheckKeyDataValue(maps.get(income), mInMoneyCode));
-                    basicinfoLayout.contactLayout.tvFamily.setText(this.getCheckKeyDataValue(maps.get(family_relation), mFamilyCode));
-                    basicinfoLayout.contactLayout.tvSociety.setText(this.getCheckKeyDataValue(maps.get(society_relation), mSocietysCode));
+                    basicinfoLayout.tvStudySing.setText(getCheckKeyDataValue(maps.get(education), mEducationCode));
+                    basicinfoLayout.tvLiveDays.setText(getCheckKeyDataValue(maps.get(live_time), mLiveDaysCode));
+                    basicinfoLayout.jobLayout.tvJob.setText(getCheckKeyDataValue(maps.get(occupation), mJobCode));
+                    basicinfoLayout.tvMarg.setText(getCheckKeyDataValue(maps.get(marriage), mMarriagesCode));
+                    basicinfoLayout.jobLayout.tvInMoney.setText(getCheckKeyDataValue(maps.get(income), mInMoneyCode));
+                    basicinfoLayout.contactLayout.tvFamily.setText(getCheckKeyDataValue(maps.get(family_relation), mFamilyCode));
+                    basicinfoLayout.contactLayout.tvSociety.setText(getCheckKeyDataValue(maps.get(society_relation), mSocietysCode));
 
                 }, Throwable::printStackTrace));
     }
@@ -947,12 +953,6 @@ public class MyReportActivity extends AbsBaseLoadActivity {
         return linearLayoutManager;
     }
 
-    @Override
-    protected void onDestroy() {
-        tipDialog.dismiss();
-        tipDialog = null;
-        super.onDestroy();
-    }
 
     /**
      * 显示正在解析中的dialog

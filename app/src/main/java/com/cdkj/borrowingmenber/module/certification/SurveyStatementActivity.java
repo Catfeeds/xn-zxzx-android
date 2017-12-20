@@ -41,7 +41,7 @@ public class SurveyStatementActivity extends BaseCertStepActivity {
 
     @Override
     public void afterCreate(Bundle savedInstanceState) {
-
+        super.afterCreate(savedInstanceState);
         initLayout();
         initData();
 

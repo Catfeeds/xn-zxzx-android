@@ -52,6 +52,12 @@ public class ZMScoreGetActivity extends BaseZmPermissionsCheckActivity {
 
     @Override
     protected void checkRequest() {
+
+        if(mCertListModel==null){
+            showToast("芝麻分认证失败，请退出重试。");
+            return;
+        }
+
         Map<String, String> map = new HashMap<>();
         map.put("searchCode", mCertListModel.getCode());
         map.put("isH5", "0");

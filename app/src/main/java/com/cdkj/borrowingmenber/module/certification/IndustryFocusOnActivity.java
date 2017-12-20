@@ -54,6 +54,7 @@ public class IndustryFocusOnActivity extends BaseZmPermissionsCheckActivity {
     private void checkIndustryFocusOn() {
 
         if (mCertListModel == null) {
+            showToast("行业关注清单认证失败，请退出重试。");
             return;
         }
         Map map = RetrofitUtils.getRequestMap();
