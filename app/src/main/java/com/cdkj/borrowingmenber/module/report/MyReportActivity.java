@@ -243,19 +243,6 @@ public class MyReportActivity extends AbsBaseLoadActivity {
         addressBookLayout.recyclerAddressbook.setAdapter(mAddressBookReportAdapter);
     }
 
-    @NonNull
-    private TextView getEmptyTextView(String str) {
-        TextView textView = new TextView(this);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.leftMargin = 45;
-        params.topMargin = 30;
-        params.bottomMargin = 30;
-        textView.setLayoutParams(params);
-        textView.setText(str);
-        textView.setTextColor(ContextCompat.getColor(this, R.color.text_black_cd));
-        return textView;
-    }
-
 
     /**
      * 获取报告单数据
@@ -282,6 +269,7 @@ public class MyReportActivity extends AbsBaseLoadActivity {
             @Override
             protected void onFinish() {
                 disMissLoading();
+                dismissPraseDialog();
             }
         });
 
@@ -365,25 +353,21 @@ public class MyReportActivity extends AbsBaseLoadActivity {
         if (reportModel == null) return;
 
         showPraseDialog();
-        try {                                                //捕获parseReportData 异常
-            mSubscription.add(Observable.just("")
-                    .observeOn(Schedulers.newThread())
-                    .map(s -> parseReportData(reportModel))
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doFinally(() -> {
-                        dismissPraseDialog();
-                    })
-                    .subscribe(reportParseData -> {
-                        setShowData(reportParseData);
-                    }, throwable -> {
-                        LogUtil.E("数据异常2" + throwable.toString());
-                        UITipDialog.showFall(MyReportActivity.this, "数据异常2");
-                    }));
-        } catch (Exception e) {
-            LogUtil.E("数据异常" + e.toString());
-            UITipDialog.showFall(MyReportActivity.this, "数据异常");
-            dismissPraseDialog();
-        }
+
+        mSubscription.add(Observable.just("")
+                .observeOn(Schedulers.newThread())
+                .map(s -> parseReportData(reportModel))
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> {
+                    dismissPraseDialog();
+                })
+                .subscribe(reportParseData -> {
+                    setShowData(reportParseData);
+                }, throwable -> {
+                    LogUtil.E("数据异常" + throwable.toString());
+                    UITipDialog.showFall(MyReportActivity.this, "数据异常");
+                }));
+
     }
 
     /**
@@ -768,6 +752,7 @@ public class MyReportActivity extends AbsBaseLoadActivity {
         mSubscription.add(Observable.just("")
                 .observeOn(Schedulers.io())
                 .map(s -> AppUtils.readAssetsTxt(MyReportActivity.this, "local_focus_on.txt"))
+                .filter(s -> !TextUtils.isEmpty(s))
                 .map(s -> {
                     return JSON.parseArray(s, MyLocalFocusOnListModel.class);
                 })
@@ -829,44 +814,32 @@ public class MyReportActivity extends AbsBaseLoadActivity {
         mFamilyCode = reportUserInfoModel.getFamilyRelation();
         mSocietysCode = reportUserInfoModel.getSocietyRelation();
 
-        getAllKeyData();
+        setShowAllKeyData();
     }
 
-
-    public void checkMarriage(List<KeyDataModel> mMarriages) {
-        if (mMarriages == null) return;
-        for (KeyDataModel kmodel : mMarriages) {
-            if (kmodel == null) continue;
-
-            if (TextUtils.equals(kmodel.getDkey(), mMarriagesCode) && basicinfoLayout != null) {
-                basicinfoLayout.tvMarg.setText(kmodel.getDvalue());
-                break;
-            }
-
-        }
-    }
 
     /**
-     * 开启新线程 同步获取所有数据字典
+     * 设置获取的所有数据字典 学历 职业等
      */
-    public void getAllKeyData() {
+    public void setShowAllKeyData() {
         showPraseDialog();
         mSubscription.add(Observable.just("")
-                .observeOn(Schedulers.newThread())
+                .observeOn(Schedulers.io())
                 .map(s -> getAllKeyDataReruest())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> dismissPraseDialog())
                 .subscribe(maps -> {
-                    checkEducation(maps.get(education));
-                    checkLives(maps.get(live_time));
-                    checkJobs(maps.get(occupation));
-                    checkMarriage(maps.get(marriage));
-                    checkInmoneys(maps.get(income));
-                    checkFamilys(maps.get(family_relation));
-                    checkSocietys(maps.get(society_relation));
+                    basicinfoLayout.tvStudySing.setText(this.getCheckKeyDataValue(maps.get(education), mEducationCode));
+                    basicinfoLayout.tvLiveDays.setText(this.getCheckKeyDataValue(maps.get(live_time), mLiveDaysCode));
+                    basicinfoLayout.jobLayout.tvJob.setText(this.getCheckKeyDataValue(maps.get(occupation), mJobCode));
+                    basicinfoLayout.tvMarg.setText(this.getCheckKeyDataValue(maps.get(marriage), mMarriagesCode));
+                    basicinfoLayout.jobLayout.tvInMoney.setText(this.getCheckKeyDataValue(maps.get(income), mInMoneyCode));
+                    basicinfoLayout.contactLayout.tvFamily.setText(this.getCheckKeyDataValue(maps.get(family_relation), mFamilyCode));
+                    basicinfoLayout.contactLayout.tvSociety.setText(this.getCheckKeyDataValue(maps.get(society_relation), mSocietysCode));
 
                 }, Throwable::printStackTrace));
     }
+
 
     /**
      * 同步请求所有数据字典数据
@@ -919,128 +892,44 @@ public class MyReportActivity extends AbsBaseLoadActivity {
 
 
     /**
-     * 获取学历数据
+     * 获取数据字典对象Value
      *
-     * @param mEducations
+     * @param
      */
-    public void checkEducation(List<KeyDataModel> mEducations) {
-        if (mEducations == null) return;
-        for (KeyDataModel kmodel : mEducations) {
+    public String getCheckKeyDataValue(List<KeyDataModel> keyDataModels, String checkCode) {
+        if (keyDataModels == null) {
+            return "";
+        }
+        for (KeyDataModel kmodel : keyDataModels) {
             if (kmodel == null) continue;
 
-            if (TextUtils.equals(kmodel.getDkey(), mEducationCode)) {
-                if (basicinfoLayout != null) {
-                    basicinfoLayout.tvStudySing.setText(kmodel.getDvalue());
-                }
-                break;
+            if (TextUtils.equals(kmodel.getDkey(), checkCode)) {
+                return kmodel.getDvalue();
             }
-
         }
-    }
-
-    /**
-     * 获取学历时长数据
-     *
-     * @param mLiveDays
-     */
-    public void checkLives(List<KeyDataModel> mLiveDays) {
-        if (mLiveDays == null) return;
-        for (KeyDataModel kmodel : mLiveDays) {
-            if (kmodel == null) continue;
-
-            if (TextUtils.equals(kmodel.getDkey(), mLiveDaysCode)) {
-                if (basicinfoLayout != null) {
-                    basicinfoLayout.tvLiveDays.setText(kmodel.getDvalue());
-                }
-                break;
-            }
-
-        }
+        return "";
     }
 
 
     /**
-     * 获取职业数据
+     * 获取RecyclerView 空数据布局提示TextView
      *
-     * @param mJobs
+     * @param str
+     * @return
      */
-    public void checkJobs(List<KeyDataModel> mJobs) {
-        if (mJobs == null) return;
-        for (KeyDataModel kmodel : mJobs) {
-            if (kmodel == null) continue;
-
-            if (TextUtils.equals(kmodel.getDkey(), mJobCode)) {
-                if (basicinfoLayout != null) {
-                    basicinfoLayout.jobLayout.tvJob.setText(kmodel.getDvalue());
-                }
-                break;
-            }
-
-        }
+    @NonNull
+    private TextView getEmptyTextView(String str) {
+        TextView textView = new TextView(this);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.leftMargin = 45;
+        params.topMargin = 30;
+        params.bottomMargin = 30;
+        textView.setLayoutParams(params);
+        textView.setText(str);
+        textView.setTextColor(ContextCompat.getColor(this, R.color.text_black_cd));
+        return textView;
     }
 
-
-    /**
-     * 获取月收入数据
-     *
-     * @param mInMoneys
-     */
-    public void checkInmoneys(List<KeyDataModel> mInMoneys) {
-        if (mInMoneys == null) return;
-        for (KeyDataModel kmodel : mInMoneys) {
-            if (kmodel == null) continue;
-
-            if (TextUtils.equals(kmodel.getDkey(), mInMoneyCode)) {
-                if (basicinfoLayout != null) {
-                    basicinfoLayout.jobLayout.tvInMoney.setText(kmodel.getDvalue());
-                }
-                break;
-            }
-
-        }
-    }
-
-
-    /**
-     * 紧急联系人 亲属关系
-     *
-     * @param mFamilys
-     */
-    public void checkFamilys(List<KeyDataModel> mFamilys) {
-        if (mFamilys == null) return;
-        for (KeyDataModel kmodel : mFamilys) {
-            if (kmodel == null) continue;
-
-            if (TextUtils.equals(kmodel.getDkey(), mFamilyCode)) {
-                if (basicinfoLayout != null) {
-                    basicinfoLayout.contactLayout.tvFamily.setText(kmodel.getDvalue());
-                }
-                break;
-            }
-
-        }
-    }
-
-
-    /**
-     * 紧急联系人 社会关系
-     *
-     * @param mSocietys
-     */
-    public void checkSocietys(List<KeyDataModel> mSocietys) {
-        if (mSocietys == null) return;
-        for (KeyDataModel kmodel : mSocietys) {
-            if (kmodel == null) continue;
-
-            if (TextUtils.equals(kmodel.getDkey(), mSocietysCode)) {
-                if (basicinfoLayout != null) {
-                    basicinfoLayout.contactLayout.tvSociety.setText(kmodel.getDvalue());
-                }
-                break;
-            }
-
-        }
-    }
 
     /**
      * 用于RecclerView 线性布局

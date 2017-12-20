@@ -4,12 +4,10 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.LinearLayout;
 
 import com.cdkj.baselibrary.appmanager.MyCdConfig;
 import com.cdkj.baselibrary.model.IntroductionInfoModel;
@@ -54,8 +52,6 @@ public class SurveyStatementActivity extends BaseCertStepActivity {
         if (getWindow() != null) {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE | WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         }
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        mBinding.webView.setLayoutParams(params);
         mBinding.webView.getSettings().setJavaScriptEnabled(true);//js
         mBinding.webView.getSettings().setDefaultTextEncodingName("UTF-8");
         mBinding.webView.setWebChromeClient(new MyWebViewClient1());
@@ -70,6 +66,7 @@ public class SurveyStatementActivity extends BaseCertStepActivity {
         mBinding.btnStart.setOnClickListener(v -> {
             //打开芝麻认证
             CertificationHelper.openStepPage(this, ZMCertificationActivity.class, mCertListModel, mReportModel);
+            finish();
         });
 
 
@@ -77,7 +74,7 @@ public class SurveyStatementActivity extends BaseCertStepActivity {
 
     private void initData() {
         mBaseBinding.titleView.setMidTitle("调查申明");
-        getKeyUrl(getIntent().getStringExtra("searchText"));
+        getKeyUrl("searchText");
     }
 
 
@@ -93,7 +90,6 @@ public class SurveyStatementActivity extends BaseCertStepActivity {
         map.put("companyCode", MyCdConfig.COMPANYCODE);
 
         Call call = RetrofitUtils.getBaseAPiService().getKeySystemInfo("805917", StringUtils.getJsonToString(map));
-        ;
 
         addCall(call);
 

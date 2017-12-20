@@ -7,6 +7,7 @@ import android.content.Context;
 import com.cdkj.baselibrary.nets.RetrofitUtils;
 import com.cdkj.baselibrary.utils.LogUtil;
 
+//TODO 无用模块去除
 public class CdApplication extends Application {
     /**
      * Global application context.

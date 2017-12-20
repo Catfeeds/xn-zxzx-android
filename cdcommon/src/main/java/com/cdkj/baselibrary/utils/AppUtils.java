@@ -311,7 +311,6 @@ public class AppUtils {
             StringBuffer stringBuffer = new StringBuffer();
             while ((in = bfr.readLine()) != null) {
                 stringBuffer.append(in);
-//                LogUtil.E("地址——————" + in);
             }
             bfr.close();
             isr.close();

@@ -31,4 +31,7 @@
     <string name="no_contacd">暂无紧急联系人</string>
     <string name="no_focus_on">暂无行业关注</string>
     <string name="report_prase">报告解析中...</string>
+    <string name="no_camera_permission">没有获取到权限，无法使用相机和相册功能</string>
+    <string name="service_time">服务时间:</string>
+    <string name="service_phone">服务电话:</string>
 </resources>

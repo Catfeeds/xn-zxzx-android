@@ -46,15 +46,17 @@ public class LocalFocusOnDataParseHelper {
         FocusOnParseShowModel parseShowModel = new FocusOnParseShowModel();
 
         for (IndustryFocusOnListModel.DetailBean detailBean : detailBeans) {
+
             if (detailBean == null) {
                 continue;
             }
 
-            MyLocalFocusOnListModel localFocusOnList = getBizDataByBizCode(detailBean.getBizCode(), myLocalFocusOnList);
+            MyLocalFocusOnListModel localFocusOnList = getBizDataByBizCode(detailBean.getBizCode(), myLocalFocusOnList); //获取行业类型数据
 
             if (localFocusOnList == null) {
                 continue;
             }
+
 
             for (IndustryFocusOnListModel.DetailBean.ExtendInfoBean extendInfoBean : detailBean.getExtendInfo()) { //扩展字段处理
                 if (extendInfoBean == null) {
@@ -76,30 +78,39 @@ public class LocalFocusOnDataParseHelper {
 
             }
 
-            for (MyLocalFocusOnListModel.TypeBean.TypeCodeInfoBean typeCodeListBean : localFocusOnList.getType().getTypeCodeInfo()) {
-                if (typeCodeListBean == null) {
-                    continue;
-                }
-                if (TextUtils.equals(typeCodeListBean.getCode(), detailBean.getType())) {
+            if (localFocusOnList.getType() != null) {
 
-                    parseShowModel.setBizName(localFocusOnList.getBizName());
-                    parseShowModel.setTypeDescribe(typeCodeListBean.getValue());
+                for (MyLocalFocusOnListModel.TypeBean.TypeCodeInfoBean typeCodeListBean : localFocusOnList.getType().getTypeCodeInfo()) {//对比风险类型code
+                    if (typeCodeListBean == null) {
+                        continue;
+                    }
+                    if (TextUtils.equals(typeCodeListBean.getCode(), detailBean.getType())) {
 
-                    for (MyLocalFocusOnListModel.TypeBean.TypeCodeInfoBean.CodeListBeanX.CodeListBean codeListBean : typeCodeListBean.getCodeList().getCodeList()) {
+                        parseShowModel.setBizName(localFocusOnList.getBizName());
+                        parseShowModel.setTypeDescribe(typeCodeListBean.getValue());
 
-                        if (codeListBean == null) {
-                            continue;
+                        if (typeCodeListBean.getCodeList() != null) {
+
+                            for (MyLocalFocusOnListModel.TypeBean.TypeCodeInfoBean.CodeListBeanX.CodeListBean codeListBean : typeCodeListBean.getCodeList().getCodeList()) {
+
+                                if (codeListBean == null) {
+                                    continue;
+                                }
+
+                                if (TextUtils.equals(codeListBean.getCode(), detailBean.getCode())) {
+                                    parseShowModel.setTypeDescribeTitle(typeCodeListBean.getCodeList().getName());
+                                    parseShowModel.setTypeDescribeDetail(codeListBean.getValue());
+                                    break;
+                                }
+
+                            }
                         }
-                        if (TextUtils.equals(codeListBean.getCode(), detailBean.getCode())) {
-                            parseShowModel.setTypeDescribeTitle(typeCodeListBean.getCodeList().getName());
-                            parseShowModel.setTypeDescribeDetail(codeListBean.getValue());
-                            break;
-                        }
+
+                        break;
 
                     }
-                    break;
-
                 }
+
             }
 
             list.add(parseShowModel);

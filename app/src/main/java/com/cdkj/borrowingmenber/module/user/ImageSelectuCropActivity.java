@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
@@ -14,8 +12,6 @@ import android.widget.TextView;
 import com.cdkj.baselibrary.R;
 import com.cdkj.baselibrary.interfaces.CameraPhotoListener;
 import com.cdkj.baselibrary.utils.CameraHelper;
-import com.cdkj.baselibrary.utils.FileProviderHelper;
-import com.cdkj.baselibrary.utils.LogUtil;
 import com.cdkj.baselibrary.utils.ToastUtil;
 import com.yalantis.ucrop.UCrop;
 
@@ -23,7 +19,6 @@ import java.io.File;
 
 import static com.cdkj.baselibrary.utils.CameraHelper.CAPTURE_PHOTO_CODE;
 import static com.cdkj.baselibrary.utils.CameraHelper.CAPTURE_WALBUM_CODE;
-import static com.cdkj.baselibrary.utils.CameraHelper.CAPTURE_ZOOM_CODE;
 
 /**
  * 打开相机 相册 使用uCrop库进行裁剪
@@ -212,6 +207,6 @@ public class ImageSelectuCropActivity extends Activity implements View.OnClickLi
 
     @Override
     public void noPermissions(int code) {
-        ToastUtil.show(this, "没有获取到权限，无法使用相机和相册功能");
+        ToastUtil.show(this, getString(com.cdkj.borrowingmenber.R.string.no_camera_permission));
     }
 }

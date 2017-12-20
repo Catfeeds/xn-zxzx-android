@@ -21,7 +21,7 @@ import static com.cdkj.borrowingmenber.weiget.CertificationHelper.INTENTGETREPOR
 
 /**
  * 检测芝麻信用是否授权检测
- * Created by 李先俊 on 2017/7/27.
+ * Created by cdkj on 2017/7/27.
  */
 
 public abstract class BaseZmPermissionsCheckActivity extends AbsBaseLoadActivity implements ICreditListener {
@@ -30,6 +30,7 @@ public abstract class BaseZmPermissionsCheckActivity extends AbsBaseLoadActivity
     protected ActivityCardandnameCheckBinding mBinding;
     protected ReportModel mReportModel;
     protected CertListModel mCertListModel;
+
     @Override
     public View addMainView() {
         mBinding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.activity_cardandname_check, null, false);
@@ -64,7 +65,7 @@ public abstract class BaseZmPermissionsCheckActivity extends AbsBaseLoadActivity
 
     @Override
     public void onError(Bundle bundle) {
-        showToast("授权失败");
+        showToast("芝麻信用授权失败");
     }
 
     @Override
@@ -72,6 +73,11 @@ public abstract class BaseZmPermissionsCheckActivity extends AbsBaseLoadActivity
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        creditApp.destroy();
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

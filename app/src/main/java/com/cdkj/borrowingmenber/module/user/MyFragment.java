@@ -210,7 +210,7 @@ public class MyFragment extends BaseLazyFragment {
                     return;
                 }
 
-                mBinding.tvServiceTime.setText("服务时间：" + data.getCvalue());
+                mBinding.tvServiceTime.setText(getString(R.string.service_time) + data.getCvalue());
 
             }
 
@@ -237,7 +237,7 @@ public class MyFragment extends BaseLazyFragment {
             @Override
             protected void onSuccess(IntroductionInfoModel data, String SucMessage) {
 
-                mBinding.tvServicePhone.setText("服务电话:"+data.getCvalue());
+                mBinding.tvServicePhone.setText(getString(R.string.service_phone) + data.getCvalue());
 
             }
 

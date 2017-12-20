@@ -4,7 +4,7 @@ android {
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.cdkj.borrowingmenber"
-        minSdkVersion 18
+        minSdkVersion 14
         targetSdkVersion 26
         versionCode 1
         versionName "1.0.0"
@@ -88,10 +88,9 @@ dependencies {
     //arouter
     implementation 'com.alibaba:arouter-api:1.2.2'
     implementation 'com.alibaba:arouter-compiler:1.1.3'
-    /*芝麻认证*/
-//    api(name: 'ZMCert_SDK', ext: 'aar')
+    /*芝麻认证授权*/
     api files('libs/zmxySDKALCmini_V1.01450366738902_release.jar')
-    api files('libs/ZMCert_SDK.aar')
+
 
 }
 
