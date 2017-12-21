@@ -1,7 +1,8 @@
 package com.cdkj.baselibrary.appmanager;
 
 /**
- * Created by 李先俊 on 2017/7/18.
+ * EventBus
+ * Created by cdkj on 2017/7/18.
  */
 
 public class EventTags {
@@ -18,11 +19,5 @@ public class EventTags {
     public final static String MAINFINISH = "5";
     //登录成功
     public final static String LOGINREFRESH = "6";
-    //定位成功
-    public final static String LOCATIONSUCC = "7";
-    //三要素认证成功
-    public final static String THREECERTSUCC = "8";
-
-
 
 }

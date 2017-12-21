@@ -33,6 +33,8 @@ public class TdAllCertActivity extends BaseCertStepActivity {
     @Override
     public void afterCreate(Bundle savedInstanceState) {
         super.afterCreate(savedInstanceState);
+        mBaseBinding.titleView.setVisibility(View.GONE);
+        mBaseBinding.viewV.setVisibility(View.GONE);
         showDoubleWarnListen("是否进行同盾认证", view -> {
             finish();
         }, view -> {

@@ -96,7 +96,6 @@ public abstract class BaseActivity extends AppCompatActivity {
      * 隐藏Dialog
      */
     public void disMissLoading() {
-
         if (loadingDialog != null) {
             loadingDialog.closeDialog();
         }

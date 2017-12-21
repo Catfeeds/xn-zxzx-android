@@ -13,15 +13,11 @@ import com.cdkj.baselibrary.utils.SystemUtils;
 import com.cdkj.borrowingmenber.BaseCertStepActivity;
 import com.cdkj.borrowingmenber.model.FraudCertModel;
 import com.cdkj.borrowingmenber.module.api.MyApiServer;
-import com.cdkj.borrowingmenber.weiget.CertificationHelper;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.Map;
 
 import retrofit2.Call;
 
-import static com.cdkj.baselibrary.appmanager.EventTags.THREECERTSUCC;
 
 /**
  * 3元素认证
@@ -41,6 +37,7 @@ public class ThreeDataCertActivity extends BaseCertStepActivity {
     public void afterCreate(Bundle savedInstanceState) {
         super.afterCreate(savedInstanceState);
         mBaseBinding.titleView.setVisibility(View.GONE);
+        mBaseBinding.viewV.setVisibility(View.GONE);
         mHelper = new PermissionHelper(this);
 
         showDoubleWarnListen("是否进行欺诈信息认证？", view -> {
@@ -60,7 +57,6 @@ public class ThreeDataCertActivity extends BaseCertStepActivity {
                 }
             }, Manifest.permission.READ_PHONE_STATE);
         });
-
     }
 
 
@@ -114,7 +110,6 @@ public class ThreeDataCertActivity extends BaseCertStepActivity {
 
             @Override
             protected void onFinish() {
-                EventBus.getDefault().post(THREECERTSUCC);//定位成功结束上一个界面
                 disMissLoading();
             }
         });

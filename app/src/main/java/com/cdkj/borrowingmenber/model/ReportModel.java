@@ -48,8 +48,18 @@ public class ReportModel implements Parcelable {
     private String PYYS4;
     private String PZM5;
     private String PZM6;
+
+    public String getPYYS4Status() {
+        return PYYS4Status;
+    }
+
+    public void setPYYS4Status(String PYYS4Status) {
+        this.PYYS4Status = PYYS4Status;
+    }
+
     private String PZM7;
     private String PTD8;
+    private String PYYS4Status;//获取运营商认证结果 //：0：未认证，1：结果拉取中，2：认证成功，3：认证失败
 
     public String getPID1() {
         return PID1;
@@ -235,6 +245,9 @@ public class ReportModel implements Parcelable {
         this.readCount = readCount;
     }
 
+    public ReportModel() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -265,9 +278,7 @@ public class ReportModel implements Parcelable {
         dest.writeString(this.PZM6);
         dest.writeString(this.PZM7);
         dest.writeString(this.PTD8);
-    }
-
-    public ReportModel() {
+        dest.writeString(this.PYYS4Status);
     }
 
     protected ReportModel(Parcel in) {
@@ -294,9 +305,10 @@ public class ReportModel implements Parcelable {
         this.PZM6 = in.readString();
         this.PZM7 = in.readString();
         this.PTD8 = in.readString();
+        this.PYYS4Status = in.readString();
     }
 
-    public static final Parcelable.Creator<ReportModel> CREATOR = new Parcelable.Creator<ReportModel>() {
+    public static final Creator<ReportModel> CREATOR = new Creator<ReportModel>() {
         @Override
         public ReportModel createFromParcel(Parcel source) {
             return new ReportModel(source);

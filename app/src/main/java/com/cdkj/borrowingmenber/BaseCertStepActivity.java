@@ -24,7 +24,8 @@ import retrofit2.Call;
 
 import static com.cdkj.borrowingmenber.weiget.CertificationHelper.INTENTCERTCODE;
 
-/**检测步骤
+/**
+ * 检测步骤
  * Created by cdkj on 2017/12/10.
  */
 
@@ -45,6 +46,7 @@ public abstract class BaseCertStepActivity extends AbsBaseLoadActivity {
 
     /**
      * 判断调查单编号是否为空
+     *
      * @return
      */
     protected boolean isCertCodeEmpty() {
@@ -96,6 +98,18 @@ public abstract class BaseCertStepActivity extends AbsBaseLoadActivity {
             e.printStackTrace();
         }
 
+        getReportRequest();
+
+        return mCertListModel != null && mReportModel != null;
+    }
+
+    /**
+     * 获取报告单
+     */
+    protected ReportModel getReportRequest() {
+        if (mCertListModel == null || TextUtils.isEmpty(mCertListModel.getReportCode())) {
+            return null;
+        }
         try {
             Map map2 = RetrofitUtils.getRequestMap();
             map2.put("reportCode", mCertListModel.getReportCode());
@@ -106,7 +120,7 @@ public abstract class BaseCertStepActivity extends AbsBaseLoadActivity {
             e.printStackTrace();
         }
 
-        return mCertListModel != null && mReportModel != null;
+        return mReportModel;
     }
 
 

@@ -108,12 +108,4 @@ public class IndustryFocusOnActivity extends BaseZmPermissionsCheckActivity {
     }
 
 
-    @Subscribe
-    public void locationSucc(String tag) {
-        if (TextUtils.equals(tag, EventTags.THREECERTSUCC)) { //三要素成功结束当前界面
-            finish();
-        }
-    }
-
-
 }

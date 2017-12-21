@@ -15,15 +15,12 @@ import com.cdkj.baselibrary.nets.BaseResponseModelCallBack;
 import com.cdkj.baselibrary.nets.RetrofitUtils;
 import com.cdkj.baselibrary.utils.StringUtils;
 import com.cdkj.borrowingmenber.BaseCertStepActivity;
-import com.cdkj.borrowingmenber.weiget.CertificationHelper;
 
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.Map;
 
 import retrofit2.Call;
 
-import static com.cdkj.baselibrary.appmanager.EventTags.LOCATIONSUCC;
 
 /**
  * 定位认证
@@ -45,7 +42,7 @@ public class LocationCertActivity extends BaseCertStepActivity {
     public void afterCreate(Bundle savedInstanceState) {
         super.afterCreate(savedInstanceState);
         mBaseBinding.titleView.setVisibility(View.GONE);
-
+        mBaseBinding.viewV.setVisibility(View.GONE);
         locationHelper = new LocationHelper(this, new GaoDeLocation(), new LocationCallBackListener() {
             @Override
             public void locationSuccessful(LocationModel locationModel) {
@@ -61,7 +58,6 @@ public class LocationCertActivity extends BaseCertStepActivity {
             public void locationFailure(String msg) {
                 dismissLocationDialog();
                 showDoubleWarnListen("定位失败，无法进行下一步认证，请重试", view -> {
-                    EventBus.getDefault().post(LOCATIONSUCC);//定位失败结束上一个界面
                     finish();
                 }, view -> {
                     showLocationDialog();
@@ -73,14 +69,12 @@ public class LocationCertActivity extends BaseCertStepActivity {
             public void noPermissions() {
                 dismissLocationDialog();
                 showSureDialog("没有定位权限，无法进行下一步认证，请到设置界面授予APP定位权限", view -> {
-                    EventBus.getDefault().post(LOCATIONSUCC);//定位失败结束上一个界面
                     finish();
                 });
             }
         });
 
         showDoubleWarnListen("是否进行定位认证？需要您授予定位权限", view -> {
-            EventBus.getDefault().post(LOCATIONSUCC);//定位失败结束上一个界面
             finish();
         }, view -> {
             showLocationDialog();
@@ -153,10 +147,8 @@ public class LocationCertActivity extends BaseCertStepActivity {
             protected void onSuccess(IsSuccessModes data, String SucMessage) {
                 if (data.isSuccess()) {
                     getCheckData(NEXTSTEP);
-                    EventBus.getDefault().post(LOCATIONSUCC);//定位成功结束上一个界面
                 } else {
                     showDoubleWarnListen("定位失败，无法进行下一步认证，请重试", view -> {
-                        EventBus.getDefault().post(LOCATIONSUCC);//定位失败结束上一个界面
                         finish();
                     }, view -> {
                         locationHelper.startLocation();
@@ -167,7 +159,6 @@ public class LocationCertActivity extends BaseCertStepActivity {
             @Override
             protected void onReqFailure(String errorCode, String errorMessage) {
                 showDoubleWarnListen("定位失败，无法进行下一步认证，请重试", view -> {
-                    EventBus.getDefault().post(LOCATIONSUCC);//定位失败结束上一个界面
                     finish();
 
                 }, view -> {
@@ -191,7 +182,7 @@ public class LocationCertActivity extends BaseCertStepActivity {
                     .create();
         }
         if (!tipDialog.isShowing()) {
-            tipDialog.dismiss();
+            tipDialog.show();
         }
     }
 

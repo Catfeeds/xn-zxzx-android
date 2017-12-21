@@ -12,14 +12,13 @@ import com.cdkj.borrowingmenber.model.UserInfoModel;
 import com.cdkj.borrowingmenber.model.ZMCertFirstStepModel;
 import com.cdkj.borrowingmenber.model.ZmScoreGetModel;
 
-import io.reactivex.Observable;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 
 /**
- * Created by 李先俊 on 2017/12/10.
+ * Created by cdkj on 2017/12/10.
  */
 
 public interface MyApiServer {
@@ -33,6 +32,7 @@ public interface MyApiServer {
     @FormUrlEncoded
     @POST("api")
     Call<BaseResponseModel<ResponseInListModel<CertListModel>>> getWaiteCertList(@Field("code") String code, @Field("json") String json);
+
 
     /**
      * 获取调查单详情
@@ -67,28 +67,31 @@ public interface MyApiServer {
     Call<BaseResponseListModel<KeyDataModel>> getKeyData(@Field("code") String code, @Field("json") String json);
 
 
-
     /**
      * 行业关注列表
+     *
      * @param code
      * @param json
      * @return
      */
     @FormUrlEncoded
     @POST("api")
-    Call<BaseResponseModel<IndustryFocusOnModel>> IndustryFocusOnInfoQuery(@Field("code") String code, @Field("json") String  json);
-    /**
-     * 获取报告单
-     * @param code
-     * @param json
-     * @return
-     */
-    @FormUrlEncoded
-    @POST("api")
-    Call<BaseResponseModel<ReportModel>> getReportData(@Field("code") String code, @Field("json") String  json);
+    Call<BaseResponseModel<IndustryFocusOnModel>> IndustryFocusOnInfoQuery(@Field("code") String code, @Field("json") String json);
 
     /**
-     *zm 分获取
+     * 获取报告单
+     *
+     * @param code
+     * @param json
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api")
+    Call<BaseResponseModel<ReportModel>> getReportData(@Field("code") String code, @Field("json") String json);
+
+    /**
+     * zm 分获取
+     *
      * @param code
      * @param json
      * @return
@@ -98,7 +101,8 @@ public interface MyApiServer {
     Call<BaseResponseModel<ZmScoreGetModel>> getZmScore(@Field("code") String code, @Field("json") String json);
 
     /**
-     *zm 分获取
+     * zm 分获取
+     *
      * @param code
      * @param json
      * @return
@@ -109,7 +113,8 @@ public interface MyApiServer {
 
 
     /**
-     *获取用户信息详情
+     * 获取用户信息详情
+     *
      * @param code
      * @param json
      * @return

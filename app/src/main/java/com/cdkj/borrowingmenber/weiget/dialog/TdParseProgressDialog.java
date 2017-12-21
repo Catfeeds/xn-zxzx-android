@@ -23,7 +23,7 @@ public class TdParseProgressDialog extends AlertDialog {
     private TextView mProTxt;
     private boolean mIsForceUpdate = false;
 
-    private int maxNum = 1 * 60 + 20;
+    public static final int maxNum = 10;
 
     public TdParseProgressDialog(@NonNull Context context, String title, boolean isForceUpdate) {
         super(context);
@@ -44,12 +44,16 @@ public class TdParseProgressDialog extends AlertDialog {
     }
 
     public void setProgress(float progress) {
+
+        mTipTxt.setText(String.format(Locale.getDefault(), "%.2f%%", progress * 10));
+
         if (progress >= maxNum) {
             mTipTxt.setText("认证完成");
-        } else {
-            mProgressBar.setProgress((int) progress);
-            mTipTxt.setText(String.format(Locale.getDefault(), "%.2f%%", progress));
-            mProTxt.setText(progress + " / 100");
+            this.setCancelable(true);
+            dismiss();
         }
+        mProgressBar.setProgress((int) progress);
+
+        mProTxt.setText(progress * 10 + " / 100");
     }
 }

@@ -261,12 +261,4 @@ public class IdcardUploadActivity extends BaseCertStepActivity {
         }, path);
     }
 
-
-    @Subscribe
-    public void locationSucc(String tag) {
-        if (TextUtils.equals(tag, EventTags.LOCATIONSUCC)) { //定位成功结束当前界面
-            finish();
-        }
-    }
-
 }

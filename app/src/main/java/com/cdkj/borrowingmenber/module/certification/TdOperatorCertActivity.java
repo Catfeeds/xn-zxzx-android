@@ -27,10 +27,18 @@ import com.cdkj.baselibrary.utils.StringUtils;
 import com.cdkj.borrowingmenber.BaseCertStepActivity;
 import com.cdkj.borrowingmenber.model.IdAndNameModel;
 import com.cdkj.borrowingmenber.weiget.CertificationHelper;
+import com.cdkj.borrowingmenber.weiget.dialog.TdParseProgressDialog;
 
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
+
+import static com.cdkj.borrowingmenber.weiget.CertificationHelper.openStepPage;
+import static com.cdkj.borrowingmenber.weiget.dialog.TdParseProgressDialog.maxNum;
 
 /**
  * 同盾运营商认证
@@ -49,6 +57,7 @@ public class TdOperatorCertActivity extends BaseCertStepActivity {
 
     private static final String nextUrl = "https://me/do/next";//用户验证完成后的要打开的url
 
+    private UITipDialog tipDialog;
 
     @Override
     public View addMainView() {
@@ -64,22 +73,27 @@ public class TdOperatorCertActivity extends BaseCertStepActivity {
 
         getCheckData(1);
 
-
-//        TdParseProgressDialog dialog = new TdParseProgressDialog(this, "数据认证中", false);
-//
-//        dialog.show();
-//        Observable.interval(1, TimeUnit.SECONDS, AndroidSchedulers.mainThread())    // 创建一个按照给定的时间间隔发射从0开始的整数序列
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .take(maxNum)//只发射开始的N项数据或者一定时间内的数据
-//                .subscribe(aLong -> {
-//                    LogUtil.E("lxj"+aLong);
-//                    dialog.setProgress(aLong);
-//                });
     }
+
+    /**
+     * 显示等待弹框
+     */
+    private void showWaiteDialogInterval() {
+        showWaiteDialog();
+        mSubscription.add(Observable.interval(1, TimeUnit.SECONDS, AndroidSchedulers.mainThread())    // 创建一个按照给定的时间间隔发射从0开始的整数序列
+                .observeOn(AndroidSchedulers.mainThread())
+                .take(11)//等待11秒
+                .subscribe(aLong -> {
+                    if (aLong >= 11) {    //等待 后重新开始查询结果
+                        getReportCheckData();
+                    }
+                }, Throwable::printStackTrace));
+    }
+
 
     @Override
     protected void getAllCheckDataState(int requestCode, boolean isGetALl) {
-        if (requestCode == 1) {
+        if (requestCode != NEXTSTEP) {
             webView.loadUrl(getLoadUrl());
         } else {
             super.getAllCheckDataState(requestCode, isGetALl);
@@ -87,10 +101,17 @@ public class TdOperatorCertActivity extends BaseCertStepActivity {
     }
 
 
+    /**
+     * 获取要加载的url
+     *
+     * @return
+     */
     /*https://open.shujumohe.com/box/yys?box_token=yys?box_token=5613A6F334DC4E12944AF748EE11FDEA&real_name=%E6%9D%8E%E5%85%88%E4%BF%8A&identity_code=dfdfdfddfdd&user_mobile=55656565&real_name=%E6%9D%8E%E5%85%88%E4%BF%8A*/
     @NonNull
     private String getLoadUrl() {
+
         StringBuffer stringBuffer = new StringBuffer(tdUrl);
+
         stringBuffer.append("box_token=" + boxToken);
 
         stringBuffer.append("&cb=" + nextUrl); //完成后的url
@@ -171,7 +192,7 @@ public class TdOperatorCertActivity extends BaseCertStepActivity {
      */
     private void taskIdCheck(String url) {
 
-        if (isCertCodeEmpty()){
+        if (isCertCodeEmpty()) {
             showToast("运营商认证失败，请退出重试。");
             return;
 
@@ -197,7 +218,7 @@ public class TdOperatorCertActivity extends BaseCertStepActivity {
             @Override
             protected void onSuccess(IsSuccessModes data, String SucMessage) {
                 if (data.isSuccess()) {
-                  getCheckData(NEXTSTEP);
+                    getReportCheckData();
                 } else {
                     UITipDialog.showFall(TdOperatorCertActivity.this, "认证失败，请重试");
                 }
@@ -210,6 +231,44 @@ public class TdOperatorCertActivity extends BaseCertStepActivity {
         });
 
     }
+
+    /**
+     * //获取运营商认证结果 //：0：未认证，1：结果拉取中，2：认证成功，3：认证失败
+     */
+    public void getReportCheckData() {
+        if (tipDialog != null && !tipDialog.isShowing()) { //如果没有显示认证中弹框  就显示加载框
+            showLoadingDialog();
+        }
+        mSubscription.add(Observable.just("")
+                .observeOn(Schedulers.io())
+                .map(s -> getReportRequest())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> disMissLoading())
+                .map(reportModel -> reportModel.getPYYS4Status())
+                .subscribe(state -> {
+                    switch (state) {
+                        case "1":
+                            showWaiteDialogInterval();              //显示等待弹框 轮询10秒
+                            break;
+                        case "2":
+                            dismissWaiteDialog();                  //停止加载弹框
+                            getCheckData(NEXTSTEP);                  //认证成功检测下一步
+                            break;
+                        case "3":
+                            dismissWaiteDialog();                  //停止加载弹框
+                            LogUtil.E("认证失败，请重新认证");
+                            showSureDialog("认证失败，请重新认证", view -> {
+                                finish();
+                            });
+//                            openStepPage(this, TdOperatorCertActivity.class, mCertCode);
+//                            finish();
+                            break;
+                        default:
+                            dismissWaiteDialog();                  //停止加载弹框
+                    }
+                }, Throwable::printStackTrace));
+    }
+
 
     /**
      * 获取url里的TaskId
@@ -269,6 +328,11 @@ public class TdOperatorCertActivity extends BaseCertStepActivity {
             webView = null;
         }
 
+        if (tipDialog != null) {
+            tipDialog.dismiss();
+            tipDialog = null;
+        }
+
         super.onDestroy();
     }
 
@@ -280,5 +344,23 @@ public class TdOperatorCertActivity extends BaseCertStepActivity {
         }
     }
 
+    public void showWaiteDialog() {
+        if (tipDialog == null) {
+            tipDialog = new UITipDialog.Builder(this)
+                    .setIconType(UITipDialog.Builder.ICON_TYPE_LOADING)
+                    .setTipWord("认证中...")
+                    .create();
+        }
+
+        if (!tipDialog.isShowing()) {
+            tipDialog.show();
+        }
+    }
+
+    public void dismissWaiteDialog() {
+        if (tipDialog != null && tipDialog.isShowing()) {
+            tipDialog.dismiss();
+        }
+    }
 
 }
