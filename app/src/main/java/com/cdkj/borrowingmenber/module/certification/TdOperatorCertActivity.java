@@ -26,8 +26,6 @@ import com.cdkj.baselibrary.utils.LogUtil;
 import com.cdkj.baselibrary.utils.StringUtils;
 import com.cdkj.borrowingmenber.BaseCertStepActivity;
 import com.cdkj.borrowingmenber.model.IdAndNameModel;
-import com.cdkj.borrowingmenber.weiget.CertificationHelper;
-import com.cdkj.borrowingmenber.weiget.dialog.TdParseProgressDialog;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -36,9 +34,6 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
-
-import static com.cdkj.borrowingmenber.weiget.CertificationHelper.openStepPage;
-import static com.cdkj.borrowingmenber.weiget.dialog.TdParseProgressDialog.maxNum;
 
 /**
  * 同盾运营商认证
@@ -76,30 +71,34 @@ public class TdOperatorCertActivity extends BaseCertStepActivity {
     }
 
     /**
-     * 显示等待弹框
+     * 显示等待弹框并开启定时器
      */
-    private void showWaiteDialogInterval() {
+    private void startTimer() {
         showWaiteDialog();
-        mSubscription.add(Observable.interval(1, TimeUnit.SECONDS, AndroidSchedulers.mainThread())    // 创建一个按照给定的时间间隔发射从0开始的整数序列
+        mSubscription.add(Observable.timer(8, TimeUnit.SECONDS, AndroidSchedulers.mainThread())    // 定时器 8秒后重新请求认证结果
                 .observeOn(AndroidSchedulers.mainThread())
-                .take(11)//等待11秒
                 .subscribe(aLong -> {
-                    if (aLong >= 11) {    //等待 后重新开始查询结果
-                        getReportCheckData();
-                    }
-                }, Throwable::printStackTrace));
+                    getReportCheckData();
+                }, throwable -> {
+                    dismissWaiteDialog(); // 轮询错误 停止等待弹框
+                }));
     }
 
-
     @Override
-    protected void getAllCheckDataState(int requestCode, boolean isGetALl) {
+    protected void checkStateTrue(int requestCode) {
         if (requestCode != NEXTSTEP) {
             webView.loadUrl(getLoadUrl());
         } else {
-            super.getAllCheckDataState(requestCode, isGetALl);
+            dismissWaiteDialog();                  //停止等待弹框
+            super.checkStateTrue(requestCode);
         }
     }
 
+    @Override
+    protected void checkStateFalse(int requestCode) {
+        dismissWaiteDialog();                  //请求错误时停止等待弹框
+        super.checkStateFalse(requestCode);
+    }
 
     /**
      * 获取要加载的url
@@ -248,25 +247,24 @@ public class TdOperatorCertActivity extends BaseCertStepActivity {
                 .subscribe(state -> {
                     switch (state) {
                         case "1":
-                            showWaiteDialogInterval();              //显示等待弹框 轮询10秒
+                            startTimer();              //显示等待弹框 继续轮询
                             break;
                         case "2":
-                            dismissWaiteDialog();                  //停止加载弹框
-                            getCheckData(NEXTSTEP);                  //认证成功检测下一步
+                            getCheckData(NEXTSTEP);                  //认证成功检测下一步 在回调 checkStateTrue checkStateFalse 方法里取消等待弹框 并检测下一步跳转
                             break;
                         case "3":
-                            dismissWaiteDialog();                  //停止加载弹框
+                            dismissWaiteDialog();                  //停止等待弹框
                             LogUtil.E("认证失败，请重新认证");
                             showSureDialog("认证失败，请重新认证", view -> {
                                 finish();
                             });
-//                            openStepPage(this, TdOperatorCertActivity.class, mCertCode);
-//                            finish();
                             break;
                         default:
                             dismissWaiteDialog();                  //停止加载弹框
                     }
-                }, Throwable::printStackTrace));
+                }, throwable -> {
+                    dismissWaiteDialog();                   //请求错误 停止等待弹框
+                }));
     }
 
 

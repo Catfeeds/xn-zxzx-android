@@ -56,7 +56,7 @@ public abstract class BaseResponseModelCallBack<T> implements Callback<BaseRespo
                 checkState(t);      //根据返回错误的状态码实现相应的操作
             } catch (Exception e) {
                 if (LogUtil.isDeBug) {
-                    onReqFailure(NETERRORCODE4, "未知错误" + e.toString());
+                    onReqFailure(NETERRORCODE4, "未知错误" + e);
                 } else {
                     onReqFailure(NETERRORCODE4, "程序出现未知错误");
                 }

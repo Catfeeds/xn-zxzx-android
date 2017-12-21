@@ -10,7 +10,6 @@ import com.cdkj.borrowingmenber.R;
 import com.cdkj.borrowingmenber.model.IdAndNameModel;
 import com.cdkj.borrowingmenber.model.ZmScoreGetModel;
 import com.cdkj.borrowingmenber.module.api.MyApiServer;
-import com.cdkj.borrowingmenber.weiget.CertificationHelper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,18 +31,17 @@ public class ZMScoreGetActivity extends BaseZmPermissionsCheckActivity {
         mBinding.editCardNumber.setEnabled(false);
         mBinding.editName.setEnabled(false);
 
-       getCheckData(1);
+        getCheckData(1);
 
         mBinding.butSure.setText(getString(R.string.next_step));
     }
 
     @Override
-    protected void getAllCheckDataState(int requestCode, boolean isGetALl) {
-
+    protected void checkStateTrue(int requestCode) {
         if (requestCode == 1) {
             setShowData();
         } else {
-            super.getAllCheckDataState(requestCode, isGetALl);
+            super.checkStateTrue(requestCode);
         }
     }
 

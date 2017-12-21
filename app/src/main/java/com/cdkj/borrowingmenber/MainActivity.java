@@ -9,10 +9,13 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.cdkj.baselibrary.adapters.ViewPagerAdapter;
+import com.cdkj.baselibrary.appmanager.EventTags;
 import com.cdkj.baselibrary.base.AbsBaseLoadActivity;
 import com.cdkj.borrowingmenber.databinding.ActivityMainBinding;
 import com.cdkj.borrowingmenber.module.certification.CertificationListFragment;
 import com.cdkj.borrowingmenber.module.user.MyFragment;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -83,6 +86,15 @@ public class MainActivity extends AbsBaseLoadActivity {
                     mainBinding.pagerMain.setCurrentItem(1, false);
                     break;
             }
+        });
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        showDoubleWarnListen("确认退出？", view -> {
+            EventBus.getDefault().post(EventTags.AllFINISH);
+            finish();
         });
     }
 

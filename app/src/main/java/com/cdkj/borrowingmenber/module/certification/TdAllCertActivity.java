@@ -94,7 +94,7 @@ public class TdAllCertActivity extends BaseCertStepActivity {
         if (tipDialog == null) {
             tipDialog = new UITipDialog.Builder(this)
                     .setIconType(UITipDialog.Builder.ICON_TYPE_LOADING)
-                    .setTipWord("数据上传中...")
+                    .setTipWord("认证中...")
                     .create();
         }
         if (!tipDialog.isShowing()) {

@@ -90,8 +90,11 @@ public class LocationCertActivity extends BaseCertStepActivity {
 
     @Override
     protected void onDestroy() {
-        locationHelper.destroyLocation();
-        locationHelper = null;
+        if(locationHelper!=null){
+            locationHelper.destroyLocation();
+            locationHelper = null;
+        }
+
         if (tipDialog != null) {
             tipDialog.dismiss();
             tipDialog = null;

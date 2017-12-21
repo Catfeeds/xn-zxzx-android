@@ -56,7 +56,7 @@ public abstract class BaseZmPermissionsCheckActivity extends BaseCertStepActivit
 
     @Override
     public void onCancel() {
-
+        showToast("芝麻信用授权取消");
     }
 
     @Override

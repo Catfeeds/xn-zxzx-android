@@ -1,9 +1,7 @@
 package com.cdkj.borrowingmenber.module.certification;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 
-import com.cdkj.baselibrary.appmanager.EventTags;
 import com.cdkj.baselibrary.dialog.UITipDialog;
 import com.cdkj.baselibrary.nets.BaseResponseModelCallBack;
 import com.cdkj.baselibrary.nets.RetrofitUtils;
@@ -13,9 +11,6 @@ import com.cdkj.borrowingmenber.R;
 import com.cdkj.borrowingmenber.model.IdAndNameModel;
 import com.cdkj.borrowingmenber.model.IndustryFocusOnModel;
 import com.cdkj.borrowingmenber.module.api.MyApiServer;
-import com.cdkj.borrowingmenber.weiget.CertificationHelper;
-
-import org.greenrobot.eventbus.Subscribe;
 
 import java.util.Map;
 
@@ -47,12 +42,12 @@ public class IndustryFocusOnActivity extends BaseZmPermissionsCheckActivity {
     }
 
     @Override
-    protected void getAllCheckDataState(int requestCode, boolean isGetALl) {
+    protected void checkStateTrue(int requestCode) {
 
         if (requestCode == 1) {
             setShowData();
         } else {
-            super.getAllCheckDataState(requestCode, isGetALl);
+            super.checkStateTrue(requestCode);
         }
     }
 

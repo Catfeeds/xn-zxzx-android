@@ -53,6 +53,14 @@ public class ChangePhoneNumActivity extends AbsBaseLoadActivity implements SendC
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(mSendCodePresenter!=null){
+            mSendCodePresenter.clear();
+        }
+    }
+
+    @Override
     public void afterCreate(Bundle savedInstanceState) {
         mBaseBinding.titleView.setMidTitle("修改手机号");
         mSendCodePresenter = new SendPhoneCoodePresenter(this);

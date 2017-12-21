@@ -67,20 +67,27 @@ public abstract class BaseCertStepActivity extends AbsBaseLoadActivity {
                 .doFinally(() -> disMissLoading())
                 .subscribe(isAll -> {
                     if (isAll) {
-                        getAllCheckDataState(requestCode, isAll);
+                        checkStateTrue(requestCode);
                     } else {
-                        showToast("数据获取失败,请重试");
-                        finish();
+                        checkStateFalse(requestCode);
                     }
-                }, Throwable::printStackTrace));
+                }, throwable -> {
+                    checkStateFalse(requestCode);
+                }));
     }
 
     //是否获取到了所有数据 检测并跳向下一步
-    protected void getAllCheckDataState(int requestCode, boolean isGetALl) {
+    protected void checkStateTrue(int requestCode) {
         if (NEXTSTEP == requestCode) {
             CertificationHelper.checkStartStep(this, mCertListModel, mReportModel);
             finish();
         }
+    }
+
+    //是否获取到了所有数据
+    protected void checkStateFalse(int requestCode) {
+        showToast("数据获取失败,请重试");
+        finish();
     }
 
     private boolean getCheckRequest() {

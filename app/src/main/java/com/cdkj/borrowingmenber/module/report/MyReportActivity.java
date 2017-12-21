@@ -36,6 +36,7 @@ import com.cdkj.borrowingmenber.adapters.TdReportCertRiskListAdapter;
 import com.cdkj.borrowingmenber.databinding.ActivityMyReportBinding;
 import com.cdkj.borrowingmenber.databinding.LayoutBasicUserInfoBinding;
 import com.cdkj.borrowingmenber.databinding.LayoutReportAddressbokBinding;
+import com.cdkj.borrowingmenber.databinding.LayoutReportEmptyBinding;
 import com.cdkj.borrowingmenber.databinding.LayoutReportFocusOnBinding;
 import com.cdkj.borrowingmenber.databinding.LayoutReportFraudBinding;
 import com.cdkj.borrowingmenber.databinding.LayoutReportIdcardBinding;
@@ -272,6 +273,12 @@ public class MyReportActivity extends AbsBaseLoadActivity {
             protected void onSuccess(ReportModel data, String SucMessage) {
                 setShowLayoutState(data.getPortList());
                 parseReportDataRx(data);
+            }
+
+            @Override
+            protected void onReqFailure(String errorCode, String errorMessage) {
+                super.onReqFailure(errorCode, errorMessage);
+                mBaseBinding.contentView.setShowText(errorMessage);
             }
 
             @Override
@@ -795,6 +802,17 @@ public class MyReportActivity extends AbsBaseLoadActivity {
             return;
         }
 
+        mEducationCode = reportUserInfoModel.getEducation();
+        mMarriagesCode = reportUserInfoModel.getMarriage();
+        mLiveDaysCode = reportUserInfoModel.getLiveTime();
+        mJobCode = reportUserInfoModel.getOccupation();
+        mInMoneyCode = reportUserInfoModel.getIncome();
+        mFamilyCode = reportUserInfoModel.getFamilyRelation();
+        mSocietysCode = reportUserInfoModel.getSocietyRelation();
+
+        setShowAllKeyData();
+
+
         if (basicinfoLayout != null) {
             basicinfoLayout.tvChildNum.setText(reportUserInfoModel.getChildrenNum());
             basicinfoLayout.tvLiveCity.setText(reportUserInfoModel.getProvinceCity());
@@ -814,36 +832,38 @@ public class MyReportActivity extends AbsBaseLoadActivity {
             basicinfoLayout.contactLayout.tvSocietyPhone.setText(reportUserInfoModel.getSocietyMobile());
         }
 
-        mEducationCode = reportUserInfoModel.getEducation();
-        mMarriagesCode = reportUserInfoModel.getMarriage();
-        mLiveDaysCode = reportUserInfoModel.getLiveTime();
-        mJobCode = reportUserInfoModel.getOccupation();
-        mInMoneyCode = reportUserInfoModel.getIncome();
-        mFamilyCode = reportUserInfoModel.getFamilyRelation();
-        mSocietysCode = reportUserInfoModel.getSocietyRelation();
 
-        setShowAllKeyData();
     }
-
 
     /**
      * 设置获取的所有数据字典 学历 职业等
      */
     public void setShowAllKeyData() {
-        showPraseDialog();
+        showLoadingDialog();
         mSubscription.add(Observable.just("")
                 .observeOn(Schedulers.io())
                 .map(s -> getAllKeyDataReruest())
+                .map(maps -> {                                                  //获取解析字段
+                    Map<String, String> valueMap = new HashMap<>();
+                    valueMap.put(education, getCheckKeyDataValue(maps.get(education), mEducationCode));
+                    valueMap.put(live_time, getCheckKeyDataValue(maps.get(live_time), mLiveDaysCode));
+                    valueMap.put(occupation, getCheckKeyDataValue(maps.get(occupation), mJobCode));
+                    valueMap.put(marriage, getCheckKeyDataValue(maps.get(marriage), mMarriagesCode));
+                    valueMap.put(income, getCheckKeyDataValue(maps.get(income), mInMoneyCode));
+                    valueMap.put(family_relation, getCheckKeyDataValue(maps.get(family_relation), mFamilyCode));
+                    valueMap.put(society_relation, getCheckKeyDataValue(maps.get(society_relation), mSocietysCode));
+                    return valueMap;
+                })
                 .observeOn(AndroidSchedulers.mainThread())
-                .doFinally(() -> dismissPraseDialog())
-                .subscribe(maps -> {
-                    basicinfoLayout.tvStudySing.setText(getCheckKeyDataValue(maps.get(education), mEducationCode));
-                    basicinfoLayout.tvLiveDays.setText(getCheckKeyDataValue(maps.get(live_time), mLiveDaysCode));
-                    basicinfoLayout.jobLayout.tvJob.setText(getCheckKeyDataValue(maps.get(occupation), mJobCode));
-                    basicinfoLayout.tvMarg.setText(getCheckKeyDataValue(maps.get(marriage), mMarriagesCode));
-                    basicinfoLayout.jobLayout.tvInMoney.setText(getCheckKeyDataValue(maps.get(income), mInMoneyCode));
-                    basicinfoLayout.contactLayout.tvFamily.setText(getCheckKeyDataValue(maps.get(family_relation), mFamilyCode));
-                    basicinfoLayout.contactLayout.tvSociety.setText(getCheckKeyDataValue(maps.get(society_relation), mSocietysCode));
+                .doFinally(() -> disMissLoading())
+                .subscribe(maps -> {                                                //显示解析字段
+                    basicinfoLayout.tvStudySing.setText(maps.get(education));
+                    basicinfoLayout.tvLiveDays.setText(maps.get(live_time));
+                    basicinfoLayout.jobLayout.tvJob.setText(maps.get(occupation));
+                    basicinfoLayout.tvMarg.setText(maps.get(marriage));
+                    basicinfoLayout.jobLayout.tvInMoney.setText(maps.get(income));
+                    basicinfoLayout.contactLayout.tvFamily.setText(maps.get(family_relation));
+                    basicinfoLayout.contactLayout.tvSociety.setText(maps.get(society_relation));
 
                 }, Throwable::printStackTrace));
     }
@@ -927,8 +947,10 @@ public class MyReportActivity extends AbsBaseLoadActivity {
      */
     @NonNull
     private TextView getEmptyTextView(String str) {
+
         TextView textView = new TextView(this);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
         params.leftMargin = 45;
         params.topMargin = 30;
         params.bottomMargin = 30;
