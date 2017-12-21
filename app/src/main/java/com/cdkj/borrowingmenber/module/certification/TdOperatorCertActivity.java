@@ -63,11 +63,9 @@ public class TdOperatorCertActivity extends BaseCertStepActivity {
     @Override
     public void afterCreate(Bundle savedInstanceState) {
         super.afterCreate(savedInstanceState);
-        initLayout();
         mBaseBinding.titleView.setMidTitle("运营商认证");
-
+        initLayout();
         getCheckData(1);
-
     }
 
     /**
@@ -141,11 +139,8 @@ public class TdOperatorCertActivity extends BaseCertStepActivity {
         if (getWindow() != null) {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE | WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         }
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        webView = new WebView(getApplicationContext());
-        webView.setLayoutParams(params);
-        mBinding.llAboutUs.addView(webView, 1);
 
+        webView = new WebView(getApplicationContext());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);//软件解码
         }
@@ -179,8 +174,12 @@ public class TdOperatorCertActivity extends BaseCertStepActivity {
 
         if (webView.getSettings() != null) {
             webView.getSettings().setJavaScriptEnabled(true);//js
-            webView.getSettings().setDefaultTextEncodingName("utf-8");
+            webView.getSettings().setDefaultTextEncodingName("UTF-8");
         }
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        webView.setLayoutParams(params);
+        mBinding.llAboutUs.addView(webView, 1);
 
     }
 

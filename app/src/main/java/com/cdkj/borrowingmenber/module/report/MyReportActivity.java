@@ -950,7 +950,6 @@ public class MyReportActivity extends AbsBaseLoadActivity {
 
         TextView textView = new TextView(this);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
         params.leftMargin = 45;
         params.topMargin = 30;
         params.bottomMargin = 30;

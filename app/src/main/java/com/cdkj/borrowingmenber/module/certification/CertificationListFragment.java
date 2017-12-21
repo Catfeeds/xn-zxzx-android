@@ -1,5 +1,6 @@
 package com.cdkj.borrowingmenber.module.certification;
 
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -58,7 +59,6 @@ public class CertificationListFragment extends BaseLazyFragment {
     }
 
 
-
     @Override
     public void onResume() {
         super.onResume();
@@ -67,11 +67,17 @@ public class CertificationListFragment extends BaseLazyFragment {
         }
     }
 
+    @Override
+    public void onDestroy() {
+        mRefreshHelper.onDestroy();
+        super.onDestroy();
+    }
+
     /**
      * 初始化刷新相关
      */
     private void initRefresh() {
-        mRefreshHelper = new RefreshHelper<CertListModel>(mActivity, new BaseRefreshCallBack<CertListModel>() {
+        mRefreshHelper = new RefreshHelper<CertListModel>(mActivity, new BaseRefreshCallBack<CertListModel>(mActivity) {
             @Override
             public SmartRefreshLayout getRefreshLayout() {
                 return mBinding.listLayout.refreshLayout;
@@ -99,10 +105,7 @@ public class CertificationListFragment extends BaseLazyFragment {
 
     @Override
     protected void lazyLoad() {
-//        if (mBinding == null || mRefreshHelper == null) {
-//            return;
-//        }
-//        mRefreshHelper.onDefaluteMRefresh(false);
+
     }
 
     @Override

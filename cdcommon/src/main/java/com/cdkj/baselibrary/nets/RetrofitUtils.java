@@ -70,7 +70,7 @@ public class RetrofitUtils {
             case TEST:
                 return "http://47.96.161.183:4101/forward-service/";//测试
         }
-        return "";//正式环境
+        return "http://139.196.162.23/forward-service/";//正式环境
     }
 
     /**

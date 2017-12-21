@@ -1,6 +1,7 @@
 package com.cdkj.baselibrary.interfaces;
 
 import android.app.Activity;
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.view.View;
 
@@ -16,8 +17,17 @@ public abstract class BaseRefreshCallBack<T> implements RefreshInterface<T> {
 
     private EmptyViewBinding emptyViewBinding;
 
+    private Activity context;
+
+    public BaseRefreshCallBack(Activity context) {
+        this.context = context;
+    }
+
     @Override
-    public View getEmptyView(Activity context) {
+    public View getEmptyView() {
+        if (context == null) {
+            return null;
+        }
         emptyViewBinding = DataBindingUtil.inflate(context.getLayoutInflater(), R.layout.empty_view, null, false);
         return emptyViewBinding.getRoot();
     }
@@ -62,5 +72,8 @@ public abstract class BaseRefreshCallBack<T> implements RefreshInterface<T> {
 
     }
 
-
+    @Override
+    public void onDestroy() {
+        context = null;
+    }
 }

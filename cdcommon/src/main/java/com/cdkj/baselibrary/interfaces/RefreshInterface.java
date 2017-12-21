@@ -1,12 +1,10 @@
 package com.cdkj.baselibrary.interfaces;
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.DrawableRes;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.cdkj.baselibrary.databinding.EmptyViewBinding;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
@@ -24,7 +22,7 @@ public interface RefreshInterface<T> {
 
     BaseQuickAdapter getAdapter(List<T> listData);
 
-    View getEmptyView(Activity context);
+    View getEmptyView();
 
     void showErrorState(String errorMsg,@DrawableRes int errorImg);
 
@@ -35,5 +33,7 @@ public interface RefreshInterface<T> {
     void onLoadMore(int pageindex, int limit);
 
     void getListDataRequest(int pageindex, int limit, boolean isShowDialog);
+
+    void onDestroy();
 
 }
