@@ -21,7 +21,7 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         application = this;
-        CdApplication.initialize(this, BuildConfig.LOG_DEBUG, "");
+        CdApplication.initialize(this, BuildConfig.LOG_DEBUG);
     }
 
     @Override

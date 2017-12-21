@@ -21,9 +21,8 @@ public class CdApplication extends Application {
         sContext = this;
     }
 
-    public static void initialize(Context context, boolean isDebug, String urlType) {
+    public static void initialize(Context context, boolean isDebug) {
         LogUtil.isDeBug = isDebug;
-        RetrofitUtils.urlType = urlType;
         sContext = context;
     }
 

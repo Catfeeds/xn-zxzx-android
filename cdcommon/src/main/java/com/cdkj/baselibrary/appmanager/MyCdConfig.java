@@ -16,10 +16,6 @@ public class MyCdConfig {
 
     public final static String PROJECTNAME = "zxzxborrowing";
 
-
-    public final static String GENDERMAN = "1";
-    public final static String GENDERWOMAN = "0";
-
     /**
      * 保存的SharedPreferences工具类文件名
      */
@@ -30,9 +26,5 @@ public class MyCdConfig {
      */
     public static final String CACHDIR = "piccach" + PROJECTNAME;
 
-
-    public final static String getBaseUrl() {
-        return FILE_NAME;
-    }
 
 }
