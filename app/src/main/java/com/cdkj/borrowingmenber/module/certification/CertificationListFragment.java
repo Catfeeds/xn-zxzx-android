@@ -11,8 +11,8 @@ import android.view.ViewGroup;
 import com.cdkj.baselibrary.api.ResponseInListModel;
 import com.cdkj.baselibrary.appmanager.SPUtilHelpr;
 import com.cdkj.baselibrary.base.BaseLazyFragment;
-import com.cdkj.baselibrary.interfaces.BaseRefreshCallBack2;
-import com.cdkj.baselibrary.interfaces.RefreshHelper2;
+import com.cdkj.baselibrary.interfaces.BaseRefreshCallBack;
+import com.cdkj.baselibrary.interfaces.RefreshHelper;
 import com.cdkj.baselibrary.nets.BaseResponseModelCallBack;
 import com.cdkj.baselibrary.nets.RetrofitUtils;
 import com.cdkj.baselibrary.utils.StringUtils;
@@ -41,7 +41,7 @@ public class CertificationListFragment extends BaseLazyFragment {
     private FragmentCertificationListBinding mBinding;
 
 
-    private RefreshHelper2<CertListModel> mRefreshHelper; //刷新辅助类
+    private RefreshHelper<CertListModel> mRefreshHelper; //刷新辅助类
 
     public static CertificationListFragment getInstance() {
         CertificationListFragment fragment = new CertificationListFragment();
@@ -71,7 +71,7 @@ public class CertificationListFragment extends BaseLazyFragment {
      * 初始化刷新相关
      */
     private void initRefresh() {
-        mRefreshHelper = new RefreshHelper2<CertListModel>(mActivity, new BaseRefreshCallBack2<CertListModel>() {
+        mRefreshHelper = new RefreshHelper<CertListModel>(mActivity, new BaseRefreshCallBack<CertListModel>() {
             @Override
             public SmartRefreshLayout getRefreshLayout() {
                 return mBinding.listLayout.refreshLayout;

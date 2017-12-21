@@ -1,13 +1,10 @@
 package com.cdkj.baselibrary.interfaces;
 
-import android.content.Context;
-import android.support.annotation.DrawableRes;
+import android.app.Activity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.View;
 
-import com.cdkj.baselibrary.databinding.EmptyViewBinding;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -19,12 +16,12 @@ import java.util.List;
 /**
  * Created by 李先俊 on 2017/10/15.
  */
-//TODO 刷新辅助类优化 刷新动作监听分离 去除SmartRefreshLayout 去除EmptyViewBinding() 方法 loadDeflutEmptyView()方法
+//TODO 刷新类整理
 public class RefreshHelper<T> {
 
     private RefreshInterface mRefreshInterface;//刷新接口
 
-    public BaseQuickAdapter mAdapter;//数据适配器
+    private BaseQuickAdapter mAdapter;//数据适配器
 
     private SmartRefreshLayout mRefreshLayout;
 
@@ -36,22 +33,9 @@ public class RefreshHelper<T> {
 
     private List<T> mDataList;//数据
 
-    private Context mContext;
+    private Activity mContext;
 
-    private String mErrorInfo;//错误提醒文本
-
-    private
-    @DrawableRes
-    int mErrorImg;//错误提醒图片
-
-
-    public void setErrorInfo(String mErrorInfo) {
-        this.mErrorInfo = mErrorInfo;
-    }
-
-    public void setErrorImg(int mErrorImg) {
-        this.mErrorImg = mErrorImg;
-    }
+    private View mEmptyView;
 
     public int getmPageIndex() {
         return mPageIndex;
@@ -77,9 +61,8 @@ public class RefreshHelper<T> {
         return mRecyclerView;
     }
 
-    public EmptyViewBinding mEmptyBinding;
 
-    public RefreshHelper(Context context, RefreshInterface mRefreshInterface) {
+    public RefreshHelper(Activity context, RefreshInterface mRefreshInterface) {
         this.mRefreshInterface = mRefreshInterface;
         this.mContext = context;
     }
@@ -88,20 +71,15 @@ public class RefreshHelper<T> {
     /**
      * 初始化
      *
-     * @param pageIndex 分页下标
-     * @param limit     分页个数
+     * @param limit 分页个数
      */
-    public void init(int pageIndex, int limit) {
-
+    public void init(int limit) {
 
         mRefreshLayout = mRefreshInterface.getRefreshLayout();
         mRecyclerView = mRefreshInterface.getRecyclerView();
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
-        if (mRefreshInterface.loadDeflutEmptyView()) {
-            mEmptyBinding = mRefreshInterface.getEmptyViewBindin();
-        }
 
-        mPageIndex = pageIndex;//分页下标
+        mPageIndex = 1;//分页从1开始
 
         mLimit = limit;//分页数量
 
@@ -109,13 +87,14 @@ public class RefreshHelper<T> {
 
         mAdapter = mRefreshInterface.getAdapter(mDataList);
 
+        mEmptyView = mRefreshInterface.getEmptyView(mContext);
+
         if (mAdapter != null) {
             View tv = new View(mContext); //先设置 不显示任何东西的 emptyView
             mAdapter.setEmptyView(tv);
             mRecyclerView.setAdapter(mAdapter);
         }
         initRefreshLayout();
-
     }
 
 
@@ -179,7 +158,7 @@ public class RefreshHelper<T> {
 
 
     //加载错误布局
-    public void loadError(String str) {
+    public void loadError(String str,int img) {
 
         if (mRefreshLayout != null) {
             if (mRefreshLayout.isRefreshing()) { //停止刷新
@@ -190,21 +169,10 @@ public class RefreshHelper<T> {
             }
         }
 
-        if (mRefreshInterface.loadDeflutEmptyView() && mEmptyBinding != null && mDataList.isEmpty()) {
-            if (TextUtils.isEmpty(str)) {
-                mEmptyBinding.tv.setText("加载错误");
-            } else {
-                mEmptyBinding.tv.setText(str);
-            }
-            mEmptyBinding.img.setVisibility(View.GONE);
-            if (mAdapter != null) mAdapter.setEmptyView(mEmptyBinding.getRoot());
-            if (mRefreshLayout != null && mRefreshLayout.isLoading())
-                mRefreshLayout.finishLoadmore();
-
-        } else if (mRefreshInterface.getEmptyView() != null && mDataList.isEmpty()) {
-            if (mAdapter != null) mAdapter.setEmptyView(mRefreshInterface.getEmptyView());
+        if (mEmptyView != null && mDataList.isEmpty()) {
+            mRefreshInterface.showErrorState(str,img);
+            if (mAdapter != null) mAdapter.setEmptyView(mEmptyView);
         }
-
     }
 
 
@@ -213,8 +181,7 @@ public class RefreshHelper<T> {
      *
      * @param datas
      */
-    public void setData(List<T> datas) {
-
+    public void setData(List<T> datas, String emp,int img) {
         if (mRefreshLayout != null) {
             if (mRefreshLayout.isRefreshing()) {
                 mRefreshLayout.finishRefresh();
@@ -238,25 +205,15 @@ public class RefreshHelper<T> {
                 mPageIndex--;
             } else {
                 mDataList.addAll(datas);
-
                 if (mAdapter != null) {
                     mAdapter.notifyDataSetChanged();
                 }
             }
         }
-        if (mRefreshInterface.loadDeflutEmptyView() && mEmptyBinding != null && mDataList.isEmpty()) {
-            mEmptyBinding.tv.setText(mErrorInfo);
-            if (mErrorImg <= 0) {
-                mEmptyBinding.img.setVisibility(View.GONE);
-            } else {
-                mEmptyBinding.img.setImageResource(mErrorImg);
-                mEmptyBinding.img.setVisibility(View.VISIBLE);
-            }
-            mEmptyBinding.img.setVisibility(View.VISIBLE);
-            if (mAdapter != null) mAdapter.setEmptyView(mEmptyBinding.getRoot());
 
-        } else if (mRefreshInterface.getEmptyView() != null && mDataList.isEmpty()) {
-            if (mAdapter != null) mAdapter.setEmptyView(mRefreshInterface.getEmptyView());
+        if (mEmptyView != null && mDataList.isEmpty()) {
+            mRefreshInterface.showEmptyState(emp,img);
+            if (mAdapter != null) mAdapter.setEmptyView(mEmptyView);
         }
     }
 

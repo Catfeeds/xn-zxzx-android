@@ -1,5 +1,7 @@
 package com.cdkj.baselibrary.interfaces;
 
+import android.app.Activity;
+import android.content.Context;
 import android.support.annotation.DrawableRes;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -11,11 +13,10 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import java.util.List;
 
 /**
+ * 根据需求自己定义
  * Created by 李先俊 on 2017/8/8.
  */
-// TODO 去除去除EmptyViewBinding
 public interface RefreshInterface<T> {
-
 
     SmartRefreshLayout getRefreshLayout();
 
@@ -23,11 +24,11 @@ public interface RefreshInterface<T> {
 
     BaseQuickAdapter getAdapter(List<T> listData);
 
-    boolean loadDeflutEmptyView();
+    View getEmptyView(Activity context);
 
-    EmptyViewBinding getEmptyViewBindin();
+    void showErrorState(String errorMsg,@DrawableRes int errorImg);
 
-    View getEmptyView();
+    void showEmptyState(String errorMsg,@DrawableRes int errorImg);
 
     void onRefresh(int pageindex, int limit);
 

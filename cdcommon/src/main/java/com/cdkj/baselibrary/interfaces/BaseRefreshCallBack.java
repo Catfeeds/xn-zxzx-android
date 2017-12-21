@@ -1,15 +1,11 @@
 package com.cdkj.baselibrary.interfaces;
 
+import android.app.Activity;
 import android.databinding.DataBindingUtil;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.cdkj.baselibrary.R;
 import com.cdkj.baselibrary.databinding.EmptyViewBinding;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-
-import java.util.List;
 
 /**
  * 刷新方法回调
@@ -18,20 +14,42 @@ import java.util.List;
 
 public abstract class BaseRefreshCallBack<T> implements RefreshInterface<T> {
 
+    private EmptyViewBinding emptyViewBinding;
 
     @Override
-    public boolean loadDeflutEmptyView() {
-        return false;
+    public View getEmptyView(Activity context) {
+        emptyViewBinding = DataBindingUtil.inflate(context.getLayoutInflater(), R.layout.empty_view, null, false);
+        return emptyViewBinding.getRoot();
     }
 
     @Override
-    public EmptyViewBinding getEmptyViewBindin() {
-        return null;
+    public void showErrorState(String errorMsg, int img) {
+        if (emptyViewBinding == null) {
+            return;
+        }
+        emptyViewBinding.tv.setText(errorMsg);
+        if (img <= 0) {
+            emptyViewBinding.img.setVisibility(View.GONE);
+        } else {
+            emptyViewBinding.img.setImageResource(img);
+            emptyViewBinding.img.setVisibility(View.VISIBLE);
+        }
+
     }
 
     @Override
-    public View getEmptyView() {
-        return null;
+    public void showEmptyState(String errorMsg, int errorImg) {
+        if (emptyViewBinding == null) {
+            return;
+        }
+        emptyViewBinding.tv.setText(errorMsg);
+        if (errorImg <= 0) {
+            emptyViewBinding.img.setVisibility(View.GONE);
+        } else {
+            emptyViewBinding.img.setImageResource(errorImg);
+            emptyViewBinding.img.setVisibility(View.VISIBLE);
+        }
+
     }
 
     @Override
@@ -43,5 +61,6 @@ public abstract class BaseRefreshCallBack<T> implements RefreshInterface<T> {
     public void onLoadMore(int pageindex, int limit) {
 
     }
+
 
 }
