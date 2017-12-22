@@ -35,7 +35,7 @@ public class RetrofitUtils {
     private static Retrofit getInstance() {
         if (retrofitInstance == null) {
             retrofitInstance = new Retrofit.Builder()
-                    .baseUrl(getBaseURL(DEBUG))
+                    .baseUrl(getBaseURL(RELEASE))
                     .client(OkHttpUtils.getInstance())
                     .addConverterFactory(FastJsonConVerter.create())
 //                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
@@ -70,7 +70,7 @@ public class RetrofitUtils {
             case TEST:
                 return "http://47.96.161.183:4101/forward-service/";//测试
         }
-        return "http://139.196.162.23/forward-service/";//正式环境
+        return "http://139.196.162.23:4101/forward-service/";//正式环境
     }
 
     /**

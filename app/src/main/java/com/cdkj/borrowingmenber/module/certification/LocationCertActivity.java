@@ -90,7 +90,7 @@ public class LocationCertActivity extends BaseCertStepActivity {
 
     @Override
     protected void onDestroy() {
-        if(locationHelper!=null){
+        if (locationHelper != null) {
             locationHelper.destroyLocation();
             locationHelper = null;
         }

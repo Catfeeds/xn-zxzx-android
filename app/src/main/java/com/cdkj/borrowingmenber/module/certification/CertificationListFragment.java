@@ -69,7 +69,9 @@ public class CertificationListFragment extends BaseLazyFragment {
 
     @Override
     public void onDestroy() {
-        mRefreshHelper.onDestroy();
+        if (mRefreshHelper != null) {
+            mRefreshHelper.onDestroy();
+        }
         super.onDestroy();
     }
 

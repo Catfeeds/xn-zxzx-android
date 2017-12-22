@@ -141,6 +141,7 @@ public class TdOperatorCertActivity extends BaseCertStepActivity {
         }
 
         webView = new WebView(getApplicationContext());
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);//软件解码
         }
