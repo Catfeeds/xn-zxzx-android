@@ -126,7 +126,7 @@ public class TdOperatorCertActivity extends BaseCertStepActivity {
         String mobile = getUserPhoneNum();
 
         if (!TextUtils.isEmpty(mobile)) {
-            stringBuffer.append("&user_mobile=" + getUserPhoneNum());//手机号
+            stringBuffer.append("&user_mobile=" + mobile);//手机号
         }
 
         LogUtil.E("同盾" + stringBuffer.toString());

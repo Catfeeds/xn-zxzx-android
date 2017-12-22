@@ -149,7 +149,7 @@ public abstract class BaseCertStepActivity extends AbsBaseLoadActivity {
      * 获取用户手机号码
      */
     public String getUserPhoneNum() {
-        if (mReportModel == null || TextUtils.isEmpty(mReportModel.getF2())) {
+        if (mReportModel == null || TextUtils.isEmpty(mReportModel.getF1())) {
             return "";
         }
 
