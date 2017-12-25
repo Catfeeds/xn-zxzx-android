@@ -107,11 +107,6 @@ public class WebViewActivity extends AbsBaseLoadActivity {
 //       webSettings().setLoadsImagesAutomatically(true);//支持自动加载图片
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);//软件解码
-        }
-        webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);//硬件解码
-
         webView.setWebChromeClient(new MyWebViewClient1());
         webView.setWebViewClient(new WebViewClient() {
             @Override

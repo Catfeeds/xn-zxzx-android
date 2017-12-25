@@ -110,8 +110,8 @@ public class IdcardUploadActivity extends BaseCertStepActivity {
         Map map = RetrofitUtils.getRequestMap();
 
         map.put("identifyPicHand", mPicQiURL3);//手持
-        map.put("identifyPicReverse", mPicQiURL1);//反面
-        map.put("identifyPic", mPicQiURL2);//正面
+        map.put("identifyPicReverse", mPicQiURL2);//反面
+        map.put("identifyPic", mPicQiURL1);//正面
         map.put("searchCode", mCertCode);
 
         Call call = RetrofitUtils.createApi(BaseApiServer.class).successRequest("805254", StringUtils.getJsonToString(map));
