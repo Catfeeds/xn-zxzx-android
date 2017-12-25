@@ -28,14 +28,14 @@ public class LogUtil {
         if (!isDeBug) {
             return;
         }
-        if (responseInfo.length() > 4000) {
-            int chunkCount = responseInfo.length() / 4000;
+        if (responseInfo.length() > 3000) {
+            int chunkCount = responseInfo.length() / 3000;
             for (int i = 0; i <= chunkCount; i++) {
-                int max = 4000 * (i + 1);
+                int max = 3000 * (i + 1);
                 if (max >= responseInfo.length()) {
-                    Log.e(TAG, responseInfo.substring(4000 * i));
+                    Log.e(TAG, responseInfo.substring(3000 * i));
                 } else {
-                    Log.e(TAG, responseInfo.substring(4000 * i, max));
+                    Log.e(TAG, responseInfo.substring(3000 * i, max));
                 }
             }
         } else {

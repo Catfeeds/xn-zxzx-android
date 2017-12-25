@@ -35,7 +35,7 @@ public class StringUtils {
 
         String jsonString = JSON.toJSONString(object);
 
-        LogUtil.BIGLOG("JSON 转换__:        " + jsonString);
+//        LogUtil.BIGLOG("JSON 转换__:        " + jsonString);
 
         return jsonString;
     }
