@@ -39,17 +39,16 @@ public class WelcomeAcitivity extends BaseActivity {
         }
         setContentView(R.layout.activity_welcom);
 
-        Intent intent = new Intent(WelcomeAcitivity.this, AddressBookCertActivity2.class);
+//        Intent intent = new Intent(WelcomeAcitivity.this, AddressBookCertActivity2.class);
+//
+//        startActivity(intent);
 
-        startActivity(intent);
-
-
-//        mSubscription.add(Observable.timer(2, TimeUnit.SECONDS)
-//                .subscribeOn(AndroidSchedulers.mainThread())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(aLong -> {//延迟两秒进行跳转
-//                    startNext();
-//                }, Throwable::printStackTrace));
+        mSubscription.add(Observable.timer(2, TimeUnit.SECONDS)
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(aLong -> {//延迟两秒进行跳转
+                    startNext();
+                }, Throwable::printStackTrace));
     }
 
     /**

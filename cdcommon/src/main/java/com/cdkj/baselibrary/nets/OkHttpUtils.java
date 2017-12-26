@@ -5,6 +5,7 @@ import com.cdkj.baselibrary.utils.LogUtil;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
