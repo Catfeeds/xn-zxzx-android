@@ -898,7 +898,6 @@ public class MyReportActivity extends AbsBaseLoadActivity {
      */
     private List<KeyDataModel> getKeyDataRequest(String key) {
 
-        List<KeyDataModel> dataModels = new ArrayList<>();
 
         Map<String, String> map = RetrofitUtils.getRequestMap();
         map.put("parentKey", key);
@@ -910,12 +909,13 @@ public class MyReportActivity extends AbsBaseLoadActivity {
 
             BaseResponseListModel<KeyDataModel> de = (BaseResponseListModel<KeyDataModel>) call.execute().body();
 
-            dataModels.addAll(de.getData());
+            return de == null || de.getData() == null ? new ArrayList<>() : de.getData();
+
         } catch (Exception e) {
             LogUtil.E("key data error key =" + key + e);
         }
 
-        return dataModels;
+        return new ArrayList<>();
     }
 
 

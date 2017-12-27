@@ -73,7 +73,7 @@ public class TdOperatorCertActivity extends BaseCertStepActivity {
      */
     private void startTimer() {
         showWaiteDialog();
-        mSubscription.add(Observable.timer(8, TimeUnit.SECONDS, AndroidSchedulers.mainThread())    // 定时器 8秒后重新请求认证结果
+        mSubscription.add(Observable.timer(6, TimeUnit.SECONDS, AndroidSchedulers.mainThread())    // 定时器 6秒后重新请求认证结果
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(aLong -> {
                     getReportCheckData();
