@@ -26,7 +26,7 @@ import okhttp3.HttpUrl;
 public class PersistentCookieStore {
     private static final String LOG_TAG = "PersistentCookieStore";
     private static final String COOKIE_PREFS = "Cookies_Prefs";
-    private final Map<String, ConcurrentHashMap<String, Cookie>> cookies;
+    private final Map<String, Map<String, Cookie>> cookies;
     private final SharedPreferences cookiePrefs;
 
     public PersistentCookieStore(Context context) {
@@ -70,7 +70,7 @@ public class PersistentCookieStore {
         }
         //讲cookies持久化到本地
         SharedPreferences.Editor prefsWriter = cookiePrefs.edit();
-        if(cookies.get(url.host())!=null){
+        if (cookies.get(url.host()) != null) {
             prefsWriter.putString(url.host(), TextUtils.join(",", cookies.get(url.host()).keySet()));
         }
         prefsWriter.putString(name, encodeCookie(new SerializableOkHttpCookies(cookie)));
@@ -79,8 +79,8 @@ public class PersistentCookieStore {
 
     public List<Cookie> get(HttpUrl url) {
         ArrayList<Cookie> ret = new ArrayList<>();
-        if (url!=null && cookies.containsKey(url.host())){
-            if(cookies.get(url.host())!=null){
+        if (url != null && cookies.containsKey(url.host())) {
+            if (cookies.get(url.host()) != null) {
                 ret.addAll(cookies.get(url.host()).values());
             }
 
@@ -98,7 +98,7 @@ public class PersistentCookieStore {
 
     public boolean remove(HttpUrl url, Cookie cookie) {
         String name = getCookieToken(cookie);
-        if (cookies.containsKey(url.host()) && cookies.get(url.host())!=null && cookies.get(url.host()).containsKey(name)) {
+        if (cookies.containsKey(url.host()) && cookies.get(url.host()) != null && cookies.get(url.host()).containsKey(name)) {
             cookies.get(url.host()).remove(name);
             SharedPreferences.Editor prefsWriter = cookiePrefs.edit();
             if (cookiePrefs.contains(name)) {
