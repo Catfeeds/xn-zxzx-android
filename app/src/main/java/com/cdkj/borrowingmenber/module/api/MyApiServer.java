@@ -12,16 +12,63 @@ import com.cdkj.borrowingmenber.model.UserInfoModel;
 import com.cdkj.borrowingmenber.model.ZMCertFirstStepModel;
 import com.cdkj.borrowingmenber.model.ZmScoreGetModel;
 
+import java.util.Map;
+
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
+import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 /**
  * Created by cdkj on 2017/12/10.
  */
 
 public interface MyApiServer {
+
+
+    /**
+     * 人行登录验证码
+     *
+     * @return
+     */
+    @Headers({
+            "Accept: image/gif, image/jpeg, image/pjpeg, application/x-ms-application, application/xaml+xml, application/x-ms-xbap, */*",
+            "Accept-Encoding: gzip, deflate",
+            "Accept-Language: zh-CN",
+            "Connection: Keep-Alive",
+            "Cache-Control: no-cache",
+            "Content-Type: application/x-www-form-urlencoded",
+            "Host: ipcrs.pbccrc.org.cn",
+            "Referer: https://ipcrs.pbccrc.org.cn/page/login/loginreg.jsp",
+    })
+    @GET("https://ipcrs.pbccrc.org.cn/imgrc.do")
+    Call<ResponseBody> rhLoginCode(@Query("a") String a);
+
+
+    /**
+     * 人行登录
+     *
+     * @return
+     */
+    @Headers({
+            "Accept: image/gif, image/jpeg, image/pjpeg, application/x-ms-application, application/xaml+xml, application/x-ms-xbap, */*",
+            "Accept-Encoding: gzip, deflate",
+            "Accept-Language: zh-CN",
+            "Connection: Keep-Alive",
+            "Cache-Control: no-cache",
+            "Content-Type: application/x-www-form-urlencoded",
+            "Host: ipcrs.pbccrc.org.cn",
+            "Referer: https://ipcrs.pbccrc.org.cn/page/login/loginreg.jsp",
+//            "User-Agent: Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 10.0; WOW64; Trident/7.0; Touch; .NET4.0C; .NET4.0E; Tablet PC 2.0)",
+    })
+    @FormUrlEncoded
+    @POST("https://ipcrs.pbccrc.org.cn/login.do")
+    Call<ResponseBody> rhLogin(@FieldMap Map<String, String> fields);
 
 
     /**
