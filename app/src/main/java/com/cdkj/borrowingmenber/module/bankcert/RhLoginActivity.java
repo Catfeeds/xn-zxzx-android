@@ -16,15 +16,20 @@ import com.cdkj.borrowingmenber.databinding.ActivityRhLoginBinding;
 import com.cdkj.borrowingmenber.module.api.MyApiServer;
 import com.cdkj.borrowingmenber.weiget.bankcert.BaseRhCertCallBack;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * 人行登录
@@ -54,12 +59,13 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
         mBaseBinding.titleView.setMidTitle("登录");
 
         initListener();
-        getLoginCode();
+//        getLoginCode();
 
     }
 
     private void initListener() {
         mbinding.tvChangeCode.setOnClickListener(v -> getLoginCode());
+        mbinding.imgCode.setOnClickListener(v -> getLoginCode());
         mbinding.btnLogin.setOnClickListener(v -> {
             if (TextUtils.isEmpty(mbinding.editCode.getText().toString())) {
                 showToast("请输入验证码");
@@ -144,9 +150,14 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
         call.enqueue(new BaseRhCertCallBack<ResponseBody>(this) {
             @Override
             protected void onSuccess(ResponseBody responseBody) {
-                disMissLoading();
-                RhReportLookCheckActivity.open(RhLoginActivity.this);
-                finish();
+
+                try {
+                    checkLoginState(responseBody.string());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    LogUtil.E("登录解析失败" + e);
+                }
+
                 LogUtil.E("登录请求成功");
             }
 
@@ -155,6 +166,35 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
                 disMissLoading();
             }
         });
+
+    }
+
+
+    /**
+     * 检测登录状态
+     *
+     * @param rb
+     */
+    private void checkLoginState(String rb) {
+
+        mSubscription.add(Observable.just("")
+                .observeOn(Schedulers.io())
+                .map(s -> {
+                    Document doc = Jsoup.parse(rb);
+                    Elements element = doc.getElementsByClass("erro_div3"); //获取登录错误提醒 如果有 说明登录没成功
+                    return element;
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(elements -> {
+                    if (elements != null && !TextUtils.isEmpty(elements.text())) {
+                        mbinding.errorInfo.setText(elements.text());
+                        return;
+                    }
+                    RhReportLookCheckActivity.open(RhLoginActivity.this);
+                    finish();
+                }, throwable -> {
+                    LogUtil.E("登录解析失败2" + throwable);
+                }));
 
     }
 
