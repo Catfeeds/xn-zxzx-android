@@ -59,7 +59,7 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
         mBaseBinding.titleView.setMidTitle("登录");
 
         initListener();
-//        getLoginCode();
+        getLoginCode();
 
     }
 
@@ -181,15 +181,25 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
                 .observeOn(Schedulers.io())
                 .map(s -> {
                     Document doc = Jsoup.parse(rb);
-                    Elements element = doc.getElementsByClass("erro_div3"); //获取登录错误提醒 如果有 说明登录没成功
-                    return element;
+                    return doc;
                 })
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(elements -> {
-                    if (elements != null && !TextUtils.isEmpty(elements.text())) {
-                        mbinding.errorInfo.setText(elements.text());
-                        return;
+                .map(doc -> {
+                    Elements element = doc.getElementsByClass("erro_div3"); //获取登录错误提醒 如果有 说明登录没成功
+                    if (element != null && !TextUtils.isEmpty(element.text())) {
+                        mbinding.errorInfo.setText(element.text());
+                        return false;
+                    } else {
+                        Elements element2 = doc.getElementsByClass("guide_notice"); //登录成功，但是有提醒 您可以通过以下步骤获取信用报告 说明没有报告单
+                        if (element2 != null && !TextUtils.isEmpty(element2.text())) {
+                            RhNoReportActivity.open(RhLoginActivity.this);
+                            return false;
+                        }
+                        return true;
                     }
+                })
+                .filter(aBoolean -> aBoolean)
+                .subscribe(elements -> {
                     RhReportLookCheckActivity.open(RhLoginActivity.this);
                     finish();
                 }, throwable -> {

@@ -89,11 +89,12 @@ public class RhReportLookCheckActivity extends AbsBaseLoadActivity {
             @Override
             protected void onSuccess(ResponseBody responseBody) {
                 try {
-                    LogUtil.E("id code" + responseBody.string());
-                    if (TextUtils.equals("success", responseBody.string())) {  //获取成功
+                    String succ=responseBody.string();
+                    LogUtil.E("id code" +succ );
+                    if (TextUtils.equals("success",succ)) {  //获取成功
                         mSubscription.add(AppUtils.startCodeDown(60, mBinding.btnGetIdCode));
                         showToast("身份验证码已经发送，请注意查收");
-                    } else if (TextUtils.equals("noTradeCode", responseBody.string())) { //系统异常
+                    } else if (TextUtils.equals("noTradeCode", succ)) { //系统异常
                         showToast("系统异常，请重试");
                     } else { //获取错误
                         showToast("身份验证码已经失败，请重试");
