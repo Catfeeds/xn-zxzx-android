@@ -268,15 +268,11 @@ public class MyReportActivity extends AbsBaseLoadActivity {
         String requestCode = "";
 
         if (TextUtils.isEmpty(reportCode)) {            //如果没有报告单编号，则获取最新的报告单
-
             map.put("loanUser", SPUtilHelpr.getUserId());
             requestCode = "805333";
-
         } else {
-
             map.put("reportCode", reportCode);
-            requestCode = "805334";
-
+            requestCode = "805332";
         }
 
         Call call = RetrofitUtils.createApi(MyApiServer.class).getReportData(requestCode, StringUtils.getJsonToString(map));
@@ -322,9 +318,11 @@ public class MyReportActivity extends AbsBaseLoadActivity {
                 switch (s) {
                     case CertificationHelper.F1:
 //                        mBinding.showViewPhone.setVisibility(View.VISIBLE);
+                        mBinding.showViewBasicinfo.setVisibility(View.VISIBLE);
                         break;
                     case CertificationHelper.F2:
 //                        mBinding.showViewZmCert.setVisibility(View.VISIBLE);
+                        mBinding.showViewBasicinfo.setVisibility(View.VISIBLE);
                         break;
                     case CertificationHelper.F3:
                         mBinding.showViewBasicinfo.setVisibility(View.VISIBLE);

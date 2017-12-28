@@ -134,7 +134,7 @@ public class CertificationHelper {
         }
 
         //打开认证报告
-        MyReportActivity.open(context, certListModel.getReportCode());
+        MyReportActivity.open(context, reportModel.getCode());
 
     }
 
