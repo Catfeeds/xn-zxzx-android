@@ -1,8 +1,10 @@
 package com.cdkj.borrowingmenber.module.user;
 
+import android.Manifest;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -18,8 +20,10 @@ import com.cdkj.baselibrary.model.IntroductionInfoModel;
 import com.cdkj.baselibrary.model.IsSuccessModes;
 import com.cdkj.baselibrary.nets.BaseResponseModelCallBack;
 import com.cdkj.baselibrary.nets.RetrofitUtils;
+import com.cdkj.baselibrary.utils.AppUtils;
 import com.cdkj.baselibrary.utils.CameraHelper;
 import com.cdkj.baselibrary.utils.ImgUtils;
+import com.cdkj.baselibrary.utils.PermissionHelper;
 import com.cdkj.baselibrary.utils.QiNiuHelper;
 import com.cdkj.baselibrary.utils.StringUtils;
 import com.cdkj.baselibrary.utils.ToastUtil;
@@ -48,6 +52,9 @@ public class MyFragment extends BaseLazyFragment {
 
     private static final int LOGOFLAG = 111;
 
+    private String mPhoneNumber;//服务电话号码
+
+    private PermissionHelper mpPermissionHelper;
 
     public static MyFragment getInstance() {
         MyFragment fragment = new MyFragment();
@@ -59,6 +66,8 @@ public class MyFragment extends BaseLazyFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_my, null, false);
+
+        mpPermissionHelper = new PermissionHelper(this);
 
         initListener();
 
@@ -127,6 +136,19 @@ public class MyFragment extends BaseLazyFragment {
         mBinding.rowAboutUs.setOnClickListener(v -> {
             WebViewActivity.openkey(mActivity, "关于我们", "aboutUs ");
         });
+        mBinding.tvServicePhone.setOnClickListener(v -> {
+            mpPermissionHelper.requestPermissions(new PermissionHelper.PermissionListener() {
+                @Override
+                public void doAfterGrand(String... permission) {
+                    AppUtils.callPhonePage(mActivity, mPhoneNumber);
+                }
+
+                @Override
+                public void doAfterDenied(String... permission) {
+
+                }
+            }, Manifest.permission.CALL_PHONE);
+        });
     }
 
     @Override
@@ -139,6 +161,11 @@ public class MyFragment extends BaseLazyFragment {
         String path = data.getStringExtra(CameraHelper.staticPath);
 
         uploadLogo(path);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        mpPermissionHelper.handleRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     /**
@@ -236,7 +263,7 @@ public class MyFragment extends BaseLazyFragment {
         call.enqueue(new BaseResponseModelCallBack<IntroductionInfoModel>(mActivity) {
             @Override
             protected void onSuccess(IntroductionInfoModel data, String SucMessage) {
-
+                mPhoneNumber = data.getCvalue();
                 mBinding.tvServicePhone.setText(getString(R.string.service_phone) + data.getCvalue());
 
             }

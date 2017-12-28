@@ -2,13 +2,9 @@ package com.cdkj.borrowingmenber;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ImageView;
 
 import com.cdkj.baselibrary.appmanager.SPUtilHelpr;
 import com.cdkj.baselibrary.base.BaseActivity;
-import com.cdkj.borrowingmenber.module.certification.AddressBookCertActivity;
-import com.cdkj.borrowingmenber.module.certification.AddressBookCertActivity2;
-import com.cdkj.borrowingmenber.module.certification.IdcardUploadActivity;
 import com.cdkj.borrowingmenber.module.user.LoginActivity;
 
 import java.util.concurrent.TimeUnit;

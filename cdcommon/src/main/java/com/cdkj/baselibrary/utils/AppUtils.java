@@ -1,5 +1,6 @@
 package com.cdkj.baselibrary.utils;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -19,6 +20,7 @@ import android.os.SystemClock;
 import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.telecom.Call;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -428,6 +430,26 @@ public class AppUtils {
         }
 
         return "";
+    }
+
+    /**
+     * 调用拨号界面
+     *
+     * @param phone 电话号码
+     *              需要权限
+     *              <uses-permission android:name="android.permission.CALL_PHONE" />
+     */
+    public static void callPhonePage(Activity activity, String phone) {
+        if (activity == null || TextUtils.isEmpty(phone)) {
+            return;
+        }
+        try {
+            Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phone));
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            activity.startActivity(intent);
+        } catch (Exception e) {
+            LogUtil.E("call phone error" + e);
+        }
     }
 
 }
