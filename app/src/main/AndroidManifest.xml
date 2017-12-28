@@ -139,6 +139,12 @@
             android:name=".module.bankcert.RhLoginActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
+
+        <!--人行登录-->
+        <activity
+            android:name=".module.bankcert.RhReportLookCheckActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
         <!--芝麻认证-->
         <activity
             android:name=".module.certification.ZMCertificationActivity"

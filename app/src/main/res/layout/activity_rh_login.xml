@@ -38,7 +38,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:background="@drawable/gray_line_input_edtext"
-                android:textColorHint="@color/text_hint_color" />
+                android:hint="请输入登录名"
+                android:textColorHint="@color/text_hint_color"
+                android:textSize="14sp" />
 
 
         </LinearLayout>
@@ -64,7 +66,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:background="@drawable/gray_line_input_edtext"
-                android:textColorHint="@color/text_hint_color" />
+                android:hint="请输入密码"
+                android:textColorHint="@color/text_hint_color"
+                android:textSize="14sp" />
 
 
         </LinearLayout>
@@ -93,7 +97,9 @@
                 android:layout_marginRight="5dp"
                 android:layout_weight="1"
                 android:background="@drawable/gray_line_input_edtext"
-                android:textColorHint="@color/text_hint_color" />
+                android:hint="验证码"
+                android:textColorHint="@color/text_hint_color"
+                android:textSize="14sp" />
 
             <ImageView
                 android:id="@+id/img_code"

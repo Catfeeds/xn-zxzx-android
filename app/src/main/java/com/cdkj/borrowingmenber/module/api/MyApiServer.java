@@ -70,6 +70,66 @@ public interface MyApiServer {
     @POST("https://ipcrs.pbccrc.org.cn/login.do")
     Call<ResponseBody> rhLogin(@FieldMap Map<String, String> fields);
 
+    /**
+     * 人行报告身份验证
+     *
+     * @return
+     */
+    @Headers({
+            "Accept: text/plain, */*; q=0.01",
+            "Accept-Encoding: gzip, deflate, br",
+            "Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2",
+            "Connection: Keep-Alive",
+            "Cache-Control: no-cache",
+            "Content-Type:application/x-www-form-urlencoded; charset=UTF-8",
+            "Host: ipcrs.pbccrc.org.cn",
+            "X-Requested-With: XMLHttpRequest",
+            "Referer: https://ipcrs.pbccrc.org.cn/reportAction.do?method=queryReport",
+    })
+    @FormUrlEncoded
+    @POST("https://ipcrs.pbccrc.org.cn/reportAction.do")
+    Call<ResponseBody> idCodeRequest(@FieldMap Map<String,String> map ,@Query("nul") String num);
+
+    /**
+     * Test
+     *
+     * @return
+     */
+    @Headers({
+            "Accept: text/plain, */*; q=0.01",
+            "Accept-Encoding: gzip, deflate, br",
+            "Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2",
+            "Connection: Keep-Alive",
+            "Content-Type:application/x-www-form-urlencoded; charset=UTF-8",
+            "Host: ipcrs.pbccrc.org.cn",
+            "X-Requested-With: XMLHttpRequest",
+            "Referer:https://ipcrs.pbccrc.org.cn/reportAction.do?method=queryReport",
+    })
+    @FormUrlEncoded
+    @POST("https://ipcrs.pbccrc.org.cn/reportAction.do")
+    Call<ResponseBody> checklookRepory(@FieldMap Map<String,String> map);
+
+    /**
+     * Test
+     *
+     * @return
+     */
+    @Headers({
+            "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Accept-Encoding: gzip, deflate, br",
+            "Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2",
+            "Connection: Keep-Alive",
+            "Cache-Control: max-age=0",
+            "Content-Type:application/x-www-form-urlencoded",
+            "Host: ipcrs.pbccrc.org.cn",
+            "X-Requested-With: XMLHttpRequest",
+            "Upgrade-Insecure-Requests:1",
+            "Referer:https://ipcrs.pbccrc.org.cn/reportAction.do?method=queryReport",
+    })
+    @FormUrlEncoded
+    @POST("https://ipcrs.pbccrc.org.cn/simpleReport.do?method=viewReport")
+    Call<ResponseBody> look(@FieldMap Map<String,String> map);
+
 
     /**
      * 获取等待认证列表
@@ -135,6 +195,9 @@ public interface MyApiServer {
     @FormUrlEncoded
     @POST("api")
     Call<BaseResponseModel<ReportModel>> getReportData(@Field("code") String code, @Field("json") String json);
+
+
+
 
     /**
      * zm 分获取

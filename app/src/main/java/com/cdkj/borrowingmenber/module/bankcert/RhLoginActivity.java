@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
@@ -58,7 +59,14 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
 
     private void initListener() {
         mbinding.tvChangeCode.setOnClickListener(v -> getLoginCode());
-        mbinding.btnLogin.setOnClickListener(v -> login());
+        mbinding.btnLogin.setOnClickListener(v -> {
+            if (TextUtils.isEmpty(mbinding.editCode.getText().toString())) {
+                showToast("请输入验证码");
+                return;
+            }
+
+            login();
+        });
     }
 
     /**
@@ -127,7 +135,14 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+
                 disMissLoading();
+
+                if (response.code() == 200) {
+                    RhReportLookCheckActivity.open(RhLoginActivity.this);
+                    finish();
+                }
                 LogUtil.E("登录请求成功" + response.body().toString());
 
             }
