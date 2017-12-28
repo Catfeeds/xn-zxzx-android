@@ -128,7 +128,7 @@ public class MyFragment extends BaseLazyFragment {
             SettingActivity.open(mActivity);
         });
         mBinding.rowReport.setOnClickListener(v -> {
-            MyReportActivity.open(mActivity);
+            MyReportActivity.open(mActivity,"");
         });
         mBinding.linUserInfo.setOnClickListener(v -> {
             ImageSelectActivity2.launchFragment(MyFragment.this, LOGOFLAG);

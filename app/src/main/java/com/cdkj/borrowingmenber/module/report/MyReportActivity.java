@@ -128,13 +128,15 @@ public class MyReportActivity extends AbsBaseLoadActivity {
     private static final String income = "income";
     private static final String family_relation = "family_relation";
     private static final String society_relation = "society_relation";
+    private String reportCode;
 
 
-    public static void open(Context context) {
+    public static void open(Context context, String code) {
         if (context == null) {
             return;
         }
         Intent intent = new Intent(context, MyReportActivity.class);
+        intent.putExtra("code", code);
         context.startActivity(intent);
     }
 
@@ -153,6 +155,9 @@ public class MyReportActivity extends AbsBaseLoadActivity {
         initIdCardClick();
         initAddressBookAdapter();
         initFocusOnAdapter(mFocusOnList);
+        if (getIntent() != null) {
+            reportCode = getIntent().getStringExtra("code");
+        }
         getReportRequest();
     }
 
@@ -259,9 +264,22 @@ public class MyReportActivity extends AbsBaseLoadActivity {
     public void getReportRequest() {
 
         Map map = RetrofitUtils.getRequestMap();
-        map.put("loanUser", SPUtilHelpr.getUserId());
 
-        Call call = RetrofitUtils.createApi(MyApiServer.class).getReportData("805333", StringUtils.getJsonToString(map));
+        String requestCode = "";
+
+        if (TextUtils.isEmpty(reportCode)) {            //如果没有报告单编号，则获取最新的报告单
+
+            map.put("loanUser", SPUtilHelpr.getUserId());
+            requestCode = "805333";
+
+        } else {
+
+            map.put("reportCode", reportCode);
+            requestCode = "805334";
+
+        }
+
+        Call call = RetrofitUtils.createApi(MyApiServer.class).getReportData(requestCode, StringUtils.getJsonToString(map));
 
         addCall(call);
 
