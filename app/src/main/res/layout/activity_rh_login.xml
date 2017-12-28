@@ -35,10 +35,12 @@
                 android:textColor="@color/text_black_cd" />
 
             <EditText
+                android:id="@+id/edit_login_name"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:background="@drawable/gray_line_input_edtext"
                 android:hint="请输入登录名"
+                android:text="chenshan2819"
                 android:textColorHint="@color/text_hint_color"
                 android:textSize="14sp" />
 
@@ -63,10 +65,12 @@
                 android:textColor="@color/text_black_cd" />
 
             <EditText
+                android:id="@+id/edit_login_password"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:background="@drawable/gray_line_input_edtext"
                 android:hint="请输入密码"
+                android:text="q1i1a1n1"
                 android:textColorHint="@color/text_hint_color"
                 android:textSize="14sp" />
 

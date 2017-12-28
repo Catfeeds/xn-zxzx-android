@@ -15,6 +15,7 @@ import com.cdkj.baselibrary.utils.LogUtil;
 import com.cdkj.borrowingmenber.R;
 import com.cdkj.borrowingmenber.databinding.ActivityRhReportCheckBinding;
 import com.cdkj.borrowingmenber.module.api.MyApiServer;
+import com.cdkj.borrowingmenber.weiget.bankcert.BaseRhCertCallBack;
 
 import java.io.IOException;
 import java.util.Date;
@@ -82,16 +83,17 @@ public class RhReportLookCheckActivity extends AbsBaseLoadActivity {
 
         Call<ResponseBody> call = RetrofitUtils.createApi(MyApiServer.class).idCodeRequest(map, new Date().getTime() + "");
 
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+        showLoadingDialog();
 
+        call.enqueue(new BaseRhCertCallBack<ResponseBody>(this) {
+            @Override
+            protected void onSuccess(ResponseBody responseBody) {
                 try {
-                    LogUtil.E("id code" + response.body().string());
-                    if (TextUtils.equals("success", response.body().string())) {  //获取成功
+                    LogUtil.E("id code" + responseBody.string());
+                    if (TextUtils.equals("success", responseBody.string())) {  //获取成功
                         mSubscription.add(AppUtils.startCodeDown(60, mBinding.btnGetIdCode));
                         showToast("身份验证码已经发送，请注意查收");
-                    } else if (TextUtils.equals("noTradeCode", response.body().string())) { //系统异常
+                    } else if (TextUtils.equals("noTradeCode", responseBody.string())) { //系统异常
                         showToast("系统异常，请重试");
                     } else { //获取错误
                         showToast("身份验证码已经失败，请重试");
@@ -102,10 +104,11 @@ public class RhReportLookCheckActivity extends AbsBaseLoadActivity {
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                LogUtil.E("code失败" + t);
+            protected void onFinish() {
+                disMissLoading();
             }
         });
+
 
     }
 
@@ -123,14 +126,14 @@ reportformat	21*/
         map.put("reportformat", "21"); //21 个人信用报告  24 个人信用概要 25 个人信息提示
 
         Call<ResponseBody> call = RetrofitUtils.createApi(MyApiServer.class).checklookRepory(map);
-
-        call.enqueue(new Callback<ResponseBody>() {
+        showLoadingDialog();
+        call.enqueue(new BaseRhCertCallBack<ResponseBody>(this) {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                LogUtil.E("查看检测" + response.body().toString());
+            protected void onSuccess(ResponseBody responseBody) {
+                LogUtil.E("查看检测" + responseBody.toString());
 
                 try {
-                    if (TextUtils.equals(response.body().string(), "0")) //成功
+                    if (TextUtils.equals(responseBody.string(), "0")) //成功
                     {
                         look();
 
@@ -143,8 +146,8 @@ reportformat	21*/
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                LogUtil.E("查看检测失败" + t);
+            protected void onFinish() {
+                disMissLoading();
             }
         });
 
@@ -164,10 +167,10 @@ tradeCode	tb4k7f*/
 
         Call<ResponseBody> call = RetrofitUtils.createApi(MyApiServer.class).look(map);
 
-        call.enqueue(new Callback<ResponseBody>() {
+        call.enqueue(new BaseRhCertCallBack<ResponseBody>(this) {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                LogUtil.E("查看成功" + response.body().toString());
+            protected void onSuccess(ResponseBody responseBody) {
+                LogUtil.E("查看成功");
                 try {
                     WebSettings webSettings = mBinding.web.getSettings();
                     if (webSettings != null) {
@@ -181,15 +184,15 @@ tradeCode	tb4k7f*/
                         webSettings.setLoadsImagesAutomatically(true);//支持自动加载图片
                     }
 
-                    mBinding.web.loadData(response.body().string(), "text/html;charset=UTF-8", "UTF-8");
+                    mBinding.web.loadData(responseBody.string(), "text/html;charset=UTF-8", "UTF-8");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                LogUtil.E("查看失败" + t);
+            protected void onFinish() {
+                disMissLoading();
             }
         });
 

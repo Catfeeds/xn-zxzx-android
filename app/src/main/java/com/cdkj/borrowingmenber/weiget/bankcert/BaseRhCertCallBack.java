@@ -11,6 +11,7 @@ import com.cdkj.baselibrary.utils.LogUtil;
 import java.lang.ref.SoftReference;
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -26,7 +27,7 @@ import static com.cdkj.baselibrary.nets.NetHelper.getThrowableStateString;
  * （人行）网络请求回调
  * Created by Administrator on 2016/9/3.
  */
-public abstract class BaseRhCertCallBack<T> implements Callback<BaseResponseListModel<T>> {
+public abstract class BaseRhCertCallBack<T> implements Callback<ResponseBody> {
 
     private Context context;
 
@@ -36,7 +37,7 @@ public abstract class BaseRhCertCallBack<T> implements Callback<BaseResponseList
     }
 
     @Override
-    public void onResponse(Call<BaseResponseListModel<T>> call, Response<BaseResponseListModel<T>> response) {
+    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
         onFinish();
 
@@ -48,8 +49,7 @@ public abstract class BaseRhCertCallBack<T> implements Callback<BaseResponseList
         if (response.isSuccessful()) {
 
             try {
-                BaseResponseListModel t = response.body();
-                checkState(t);      //根据返回错误的状态码实现相应的操作
+                onSuccess(response.body());
             } catch (Exception e) {
                 if (LogUtil.isDeBug) {
                     onReqFailure(NETERRORCODE4, "未知错误" + e.toString());
@@ -65,7 +65,7 @@ public abstract class BaseRhCertCallBack<T> implements Callback<BaseResponseList
     }
 
     @Override
-    public void onFailure(Call<BaseResponseListModel<T>> call, Throwable t) {
+    public void onFailure(Call<ResponseBody> call, Throwable t) {
 
         if (call.isCanceled()) {                //如果是主动请求取消的就不执行
             return;
@@ -80,41 +80,13 @@ public abstract class BaseRhCertCallBack<T> implements Callback<BaseResponseList
 
     }
 
-    /**
-     * 检查错误码
-     *
-     * @param baseModelNew 根据返回错误的状态码实现相应的操作
-     */
-    protected void checkState(BaseResponseListModel baseModelNew) {
-
-        String state = baseModelNew.getErrorCode();
-
-        if (REQUESTOK.equals(state)) { //请求成功
-
-            List<T> t = (List<T>) baseModelNew.getData();
-
-            if (t == null) {
-                onFinish();
-                onNull();
-                return;
-            }
-
-            onSuccess(t, baseModelNew.getErrorInfo());
-
-        } else if (REQUESTFECODE4.equals(state)) {
-            onLoginFailure(context, baseModelNew.getErrorInfo());
-        } else {
-            onReqFailure(state, baseModelNew.getErrorInfo());
-        }
-    }
-
 
     /**
      * 请求成功
      *
-     * @param data
+     * @param responseBody
      */
-    protected abstract void onSuccess(List<T> data, String SucMessage);
+    protected abstract void onSuccess(ResponseBody responseBody);
 
     /**
      * 请求失败
@@ -126,14 +98,7 @@ public abstract class BaseRhCertCallBack<T> implements Callback<BaseResponseList
         NetHelper.onReqFailure(context, errorCode, errorMessage);
     }
 
-    /**
-     * 重新登录
-     *
-     * @param
-     */
-    protected void onLoginFailure(Context context, String errorMessage) {
-        NetHelper.onLoginFailure(context, errorMessage);
-    }
+
 
     /**
      * 请求数据为空

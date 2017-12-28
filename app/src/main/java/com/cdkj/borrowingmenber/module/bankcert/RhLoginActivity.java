@@ -14,6 +14,7 @@ import com.cdkj.baselibrary.utils.LogUtil;
 import com.cdkj.borrowingmenber.R;
 import com.cdkj.borrowingmenber.databinding.ActivityRhLoginBinding;
 import com.cdkj.borrowingmenber.module.api.MyApiServer;
+import com.cdkj.borrowingmenber.weiget.bankcert.BaseRhCertCallBack;
 
 import java.io.IOException;
 import java.util.Date;
@@ -65,6 +66,16 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
                 return;
             }
 
+            if (TextUtils.isEmpty(mbinding.editLoginName.getText().toString())) {
+                showToast("请输入登录名");
+                return;
+            }
+
+            if (TextUtils.isEmpty(mbinding.editCode.getText().toString())) {
+                showToast("请输入密码");
+                return;
+            }
+
             login();
         });
     }
@@ -77,29 +88,25 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
         Call<ResponseBody> call = RetrofitUtils.createApi(MyApiServer.class).rhLoginCode(new Date().getTime() + "");
 
         showLoadingDialog();
-        call.enqueue(new Callback<ResponseBody>() {
+        call.enqueue(new BaseRhCertCallBack<ResponseBody>(this) {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                disMissLoading();
-                if (response.code() != 200) {
-                    LogUtil.E("请求验证码失败" + response.code());
-                    return;
-                }
+            protected void onSuccess(ResponseBody responseBody) {
+
                 try {
-                    Glide.with(RhLoginActivity.this).load(response.body().bytes()).error(com.cdkj.baselibrary.R.drawable.default_pic).into(mbinding.imgCode);
-                } catch (IOException e) {
+                    Glide.with(RhLoginActivity.this).load(responseBody.bytes()).error(com.cdkj.baselibrary.R.drawable.default_pic).into(mbinding.imgCode);
+                } catch (Exception e) {
                     LogUtil.E("加载" + e);
                 }
 
-                LogUtil.E("请求验证码成功" + response.body());
+                LogUtil.E("请求验证码成功");
             }
 
             @Override
-            public void onFailure(Call call, Throwable t) {
+            protected void onFinish() {
                 disMissLoading();
-                LogUtil.E("请求验证码失败" + t.toString());
             }
         });
+
     }
 
 
@@ -125,33 +132,30 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
         Map<String, String> map = new HashMap<>();
         map.put("_@IMGRC@_", mbinding.editCode.getText().toString());
         map.put("date", new Date().getTime() + "");
-        map.put("loginname", "chenshan2819");
-        map.put("password", "q1i1a1n1");
+
+        map.put("loginname", mbinding.editLoginName.getText().toString());
+        map.put("password", mbinding.editLoginPassword.getText().toString());
+
         map.put("method", "login");
 //            map.put("org.apache.struts.taglib.html.TOKEN", "083f89e3c71eedf1ac40a7fc771c95a583d2fd765cbd92fa5a4316f4");
 
         Call<ResponseBody> call = RetrofitUtils.createApi(MyApiServer.class).rhLogin(map);
         showLoadingDialog();
-        call.enqueue(new Callback<ResponseBody>() {
+        call.enqueue(new BaseRhCertCallBack<ResponseBody>(this) {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-
-
+            protected void onSuccess(ResponseBody responseBody) {
                 disMissLoading();
-
-                if (response.code() == 200) {
-                    RhReportLookCheckActivity.open(RhLoginActivity.this);
-                    finish();
-                }
-                LogUtil.E("登录请求成功" + response.body().toString());
-
+                RhReportLookCheckActivity.open(RhLoginActivity.this);
+                finish();
+                LogUtil.E("登录请求成功");
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                LogUtil.E("登录失败" + t);
+            protected void onFinish() {
+                disMissLoading();
             }
         });
+
     }
 
 
