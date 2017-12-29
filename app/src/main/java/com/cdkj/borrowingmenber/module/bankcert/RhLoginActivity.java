@@ -193,15 +193,21 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
                         Elements element2 = doc.getElementsByClass("guide_notice"); //登录成功，但是有提醒 您可以通过以下步骤获取信用报告 说明没有报告单
                         if (element2 != null && !TextUtils.isEmpty(element2.text())) {
                             RhNoReportActivity.open(RhLoginActivity.this);
+                            finish();
                             return false;
                         }
                         return true;
                     }
                 })
-                .filter(aBoolean -> aBoolean)
+
                 .subscribe(elements -> {
-                    RhReportLookCheckActivity.open(RhLoginActivity.this);
-                    finish();
+                    if (elements) {
+                        RhReportLookCheckActivity.open(RhLoginActivity.this);
+                        finish();
+                    } else {
+                        getLoginCode();   //登录失败重新获取验证码
+                    }
+
                 }, throwable -> {
                     LogUtil.E("登录解析失败2" + throwable);
                 }));
