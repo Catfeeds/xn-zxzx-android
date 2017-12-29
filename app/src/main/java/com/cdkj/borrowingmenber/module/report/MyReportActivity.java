@@ -128,7 +128,7 @@ public class MyReportActivity extends AbsBaseLoadActivity {
     private static final String income = "income";
     private static final String family_relation = "family_relation";
     private static final String society_relation = "society_relation";
-    private String reportCode;
+    private String reportCode=null;
 
 
     public static void open(Context context, String code) {
@@ -298,7 +298,6 @@ public class MyReportActivity extends AbsBaseLoadActivity {
             @Override
             protected void onFinish() {
                 disMissLoading();
-                dismissPraseDialog();
             }
         });
 

@@ -112,6 +112,7 @@ public class MyFragment extends BaseLazyFragment {
 
                 ImgUtils.loadLogo(MyFragment.this, MyCdConfig.QINIUURL + data.getPhoto(), mBinding.imgUserLogo);
                 mBinding.tvUserName.setText(data.getMobile());
+                SPUtilHelpr.saveUserId(data.getUserId());
                 SPUtilHelpr.saveUserPhoneNum(data.getMobile());
             }
 
@@ -128,7 +129,7 @@ public class MyFragment extends BaseLazyFragment {
             SettingActivity.open(mActivity);
         });
         mBinding.rowReport.setOnClickListener(v -> {
-            MyReportActivity.open(mActivity,"");
+            MyReportActivity.open(mActivity, "");
         });
         mBinding.linUserInfo.setOnClickListener(v -> {
             ImageSelectActivity2.launchFragment(MyFragment.this, LOGOFLAG);

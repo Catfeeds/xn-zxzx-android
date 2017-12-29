@@ -144,7 +144,7 @@ public class CertificationHelper {
      * @param context
      * @param certListModel
      */
-    public static void checkRequest(Activity context, CertListModel certListModel) {
+    public static Call checkRequest(Activity context, CertListModel certListModel) {
 
         Map map = RetrofitUtils.getRequestMap();
         map.put("reportCode", certListModel.getReportCode());
@@ -168,6 +168,8 @@ public class CertificationHelper {
                 }
             }
         });
+
+        return call;
 
     }
 

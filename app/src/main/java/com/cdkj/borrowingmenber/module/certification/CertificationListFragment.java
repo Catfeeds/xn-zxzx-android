@@ -131,7 +131,7 @@ public class CertificationListFragment extends BaseLazyFragment {
             if (certListModel == null || adapter.isUsed(certListModel.getStatus())) { //已过期不允许在进行填写
                 return;
             }
-            CertificationHelper.checkRequest(mActivity, certListModel);
+            addCall(CertificationHelper.checkRequest(mActivity, certListModel));
         });
 
         return adapter;
