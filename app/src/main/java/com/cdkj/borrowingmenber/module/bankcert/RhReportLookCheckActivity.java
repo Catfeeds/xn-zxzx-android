@@ -131,18 +131,21 @@ reportformat	21*/
         call.enqueue(new BaseRhCertCallBack<ResponseBody>(this) {
             @Override
             protected void onSuccess(ResponseBody responseBody) {
-                LogUtil.E("查看检测" + responseBody.toString());
 
                 try {
+                    LogUtil.E("查看检测" + responseBody.string());
+
                     if (TextUtils.equals(responseBody.string(), "0")) //成功
                     {
-                        look();
+                        lookReport();
 
                     } else { //失败
+
                         showToast("报告查看失败，请重试");
+
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (Exception e) {
+
                 }
             }
 
@@ -155,7 +158,10 @@ reportformat	21*/
     }
 
 
-    private void look() {
+    /**
+     * 查看报告
+     */
+    private void lookReport() {
 /*counttime	1
 reportformat	21
 tradeCode	tb4k7f*/

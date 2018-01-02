@@ -16,8 +16,11 @@ import com.cdkj.borrowingmenber.databinding.ActivityRhLoginBinding;
 import com.cdkj.borrowingmenber.module.api.MyApiServer;
 import com.cdkj.borrowingmenber.weiget.bankcert.BaseRhCertCallBack;
 
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
+import org.jsoup.helper.HttpConnection;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
@@ -37,6 +40,8 @@ import retrofit2.Call;
  */
 
 public class RhLoginActivity extends AbsBaseLoadActivity {
+
+    private Document loginDoc; //登录获取到的Document
 
     public static void open(Context context) {
         if (context == null) {
@@ -180,8 +185,8 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
         mSubscription.add(Observable.just("")
                 .observeOn(Schedulers.io())
                 .map(s -> {
-                    Document doc = Jsoup.parse(rb);
-                    return doc;
+                    loginDoc = Jsoup.parse(rb);
+                    return loginDoc;
                 })
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(doc -> {
@@ -190,20 +195,12 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
                         mbinding.errorInfo.setText(element.text());
                         return false;
                     } else {
-                        Elements element2 = doc.getElementsByClass("guide_notice"); //登录成功，但是有提醒 您可以通过以下步骤获取信用报告 说明没有报告单
-                        if (element2 != null && !TextUtils.isEmpty(element2.text())) {
-                            RhNoReportActivity.open(RhLoginActivity.this);
-                            finish();
-                            return false;
-                        }
                         return true;
                     }
                 })
-
                 .subscribe(elements -> {
                     if (elements) {
-                        RhReportLookCheckActivity.open(RhLoginActivity.this);
-                        finish();
+                        checkIsHasReport();
                     } else {
                         getLoginCode();   //登录失败重新获取验证码
                     }
@@ -211,6 +208,97 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
                 }, throwable -> {
                     LogUtil.E("登录解析失败2" + throwable);
                 }));
+
+    }
+
+
+    /**
+     * 检测登录用户是否有报告
+     */
+    public void checkIsHasReport() {
+        mSubscription.add(Observable.just("")
+                .observeOn(Schedulers.io())
+                .map(s -> {
+
+                    Elements element = loginDoc.getElementsByClass("popupbox"); //登录成功，但是有引导提醒（安全等级低）说明没有报告单
+
+                    if (element != null && element.text() != null && element.text().contains("新手导航")) {
+                        return false;
+                    }
+                    Elements element2 = loginDoc.getElementsByClass("guide_notice"); //登录成功，但是有引导提醒（安全等级低）说明没有报告单
+
+                    if (element2 != null && !TextUtils.isEmpty(element2.text())) {
+                        return false;
+                    }
+
+                    // 备用方案
+                    //
+                    // 1.获取用户信息菜单下 三个选项不可为没有报告
+                    // 2. erro_div1 出现错误提醒暂无消息为没有报告
+                    // 3.身份验证码不可输入
+                    //4.获取按钮不可点击
+                    return true;
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(isHas -> {
+                    getLeftMenuReportInfo();
+//                    if (isHas) {                                                         //有报告单，直接进入到查看界面
+//                        RhReportLookCheckActivity.open(RhLoginActivity.this);
+//                    } else {
+//                        RhNoReportActivity.open(RhLoginActivity.this);          //没有报告单
+//                    }
+//                    finish();
+                }, throwable -> {
+                    LogUtil.E("登录报告单验证" + throwable.toString());
+                }));
+    }
+
+    /**
+     * 获取登录成功后左菜单
+     */
+    public void getLeftMenuReportInfo() {
+
+        Call<ResponseBody> call = RetrofitUtils.createApi(MyApiServer.class).getLeftMenuReportInfo();
+
+        addCall(call);
+
+        showLoadingDialog();
+
+        call.enqueue(new BaseRhCertCallBack<ResponseBody>(this) {
+            @Override
+            protected void onSuccess(ResponseBody responseBody) {
+                try {
+                    String str = responseBody.string();
+                    LogUtil.BIGLOG("获取左边菜单" + str);
+
+                    mSubscription.add(Observable.just("")
+                            .observeOn(Schedulers.io())
+                            .map(s -> {
+                                Document menuDoc = Jsoup.parse(str);
+                                return menuDoc;
+                            }).subscribe(menuDoc -> {
+
+                                //后台生成的代码
+                                Elements radio = menuDoc.getElementsByClass("radio_type");
+                                for (Element element : radio) {
+                                    LogUtil.E("报告可选" + element.is("disabled"));
+                                }
+
+                            }, throwable -> {
+                                LogUtil.E("报告可选" + throwable);
+                            }));
+
+
+                } catch (IOException e) {
+                    LogUtil.E("左菜单解析" + e);
+                }
+            }
+
+            @Override
+            protected void onFinish() {
+                disMissLoading();
+            }
+        });
 
     }
 

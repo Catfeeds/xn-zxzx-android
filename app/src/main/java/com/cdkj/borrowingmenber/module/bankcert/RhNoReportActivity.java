@@ -10,7 +10,7 @@ import com.cdkj.baselibrary.base.AbsBaseLoadActivity;
 import com.cdkj.borrowingmenber.R;
 import com.cdkj.borrowingmenber.databinding.ActivityRhReportNoBinding;
 
-/**
+/**没有人行报告
  * Created by 李先俊 on 2017/12/28.
  */
 
