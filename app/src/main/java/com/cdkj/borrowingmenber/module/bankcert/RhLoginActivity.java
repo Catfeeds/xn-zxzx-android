@@ -42,6 +42,7 @@ import retrofit2.Call;
 public class RhLoginActivity extends AbsBaseLoadActivity {
 
     private Document loginDoc; //登录获取到的Document
+    private boolean isMe;
 
     public static void open(Context context) {
         if (context == null) {
@@ -62,6 +63,18 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
     @Override
     public void afterCreate(Bundle savedInstanceState) {
         mBaseBinding.titleView.setMidTitle("登录");
+
+        isMe = true;
+        mbinding.tvTop.setOnClickListener(v -> {
+            if (isMe) {
+                mbinding.editLoginName.setText("lixianjun_1995");
+                mbinding.editLoginPassword.setText("lxjzx123456");
+            } else {
+                mbinding.editLoginName.setText("chenshan2819");
+                mbinding.editLoginPassword.setText("q1i1a1n1");
+            }
+            isMe = !isMe;
+        });
 
         initListener();
         getLoginCode();
@@ -296,19 +309,28 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
                     return menuDoc;
                 }).subscribe(menuDoc -> {
 
-//                    Elements radio = menuDoc.getElementsByClass("radio_type");
-                    Element radio = menuDoc.getElementById("radiobutton1"); //个人信用报告 按钮
+                    Elements radio = menuDoc.select("[disabled]");
 
-
-                    boolean is = radio.attr("disabled").equals("disabled");
-                    LogUtil.E("开启3" + is);
-                    LogUtil.E("开启" + radio.is("disableb"));
-
-                    if (radio != null && is) {
-                        RhReportLookCheckActivity.open(RhLoginActivity.this);  //进入报告单查看界面
-                    } else {
-                        RhNoReportActivity.open(RhLoginActivity.this);          //没有报告单
+                    for (Element element : radio) {
+                        if (TextUtils.equals("21", element.attr("value"))) {  // 个人报告点击被禁用 disabled
+                            RhNoReportActivity.open(RhLoginActivity.this);          //没有报告单
+                            break;
+                        }
                     }
+
+                    RhReportLookCheckActivity.open(RhLoginActivity.this);  //进入报告单查看界面
+
+//                    Elements radio = menuDoc.getElementsByClass("radio_type");
+
+
+//                    Element radio = menuDoc.getElementById("radiobutton1"); //个人信用报告 按钮
+//
+//
+//                    boolean is = radio.attr("disabled").equals("disabled");
+//                    LogUtil.E("开启3" + is);
+//                    LogUtil.E("开启" + radio.is("disableb"));
+//
+
 
                 }, throwable -> {
                     LogUtil.E("报告可选" + throwable);
