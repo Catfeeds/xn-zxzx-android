@@ -220,16 +220,16 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
                 .observeOn(Schedulers.io())
                 .map(s -> {
 
-                    Elements element = loginDoc.getElementsByClass("popupbox"); //登录成功，但是有引导提醒（安全等级低）说明没有报告单
-
-                    if (element != null && element.text() != null && element.text().contains("新手导航")) {
-                        return false;
-                    }
-                    Elements element2 = loginDoc.getElementsByClass("guide_notice"); //登录成功，但是有引导提醒（安全等级低）说明没有报告单
-
-                    if (element2 != null && !TextUtils.isEmpty(element2.text())) {
-                        return false;
-                    }
+//                    Elements element = loginDoc.getElementsByClass("popupbox"); //登录成功，但是有引导提醒（安全等级低）说明没有报告单
+//
+//                    if (element != null && element.text() != null && element.text().contains("新手导航")) {
+//                        return false;
+//                    }
+//                    Elements element2 = loginDoc.getElementsByClass("guide_notice"); //登录成功，但是有引导提醒（安全等级低）说明没有报告单
+//
+//                    if (element2 != null && !TextUtils.isEmpty(element2.text())) {
+//                        return false;
+//                    }
 
                     // 备用方案
                     //
@@ -241,13 +241,11 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
                 })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(isHas -> {
-                    getLeftMenuReportInfo();
-//                    if (isHas) {                                                         //有报告单，直接进入到查看界面
-//                        RhReportLookCheckActivity.open(RhLoginActivity.this);
-//                    } else {
-//                        RhNoReportActivity.open(RhLoginActivity.this);          //没有报告单
-//                    }
-//                    finish();
+                    if (isHas) {                                                         //有报告单，直接进入到查看界面
+                        getLeftMenuReportInfo();
+                    } else {
+                        RhNoReportActivity.open(RhLoginActivity.this);          //没有报告单
+                    }
                 }, throwable -> {
                     LogUtil.E("登录报告单验证" + throwable.toString());
                 }));
@@ -270,24 +268,7 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
                 try {
                     String str = responseBody.string();
                     LogUtil.BIGLOG("获取左边菜单" + str);
-
-                    mSubscription.add(Observable.just("")
-                            .observeOn(Schedulers.io())
-                            .map(s -> {
-                                Document menuDoc = Jsoup.parse(str);
-                                return menuDoc;
-                            }).subscribe(menuDoc -> {
-
-                                //后台生成的代码
-                                Elements radio = menuDoc.getElementsByClass("radio_type");
-                                for (Element element : radio) {
-                                    LogUtil.E("报告可选" + element.is("disabled"));
-                                }
-
-                            }, throwable -> {
-                                LogUtil.E("报告可选" + throwable);
-                            }));
-
+                    checkCanLookReport(str);
 
                 } catch (IOException e) {
                     LogUtil.E("左菜单解析" + e);
@@ -300,6 +281,38 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
             }
         });
 
+    }
+
+    /**
+     * 检测是否有可查看报告
+     *
+     * @param str
+     */
+    private void checkCanLookReport(String str) {
+        mSubscription.add(Observable.just("")
+                .observeOn(Schedulers.io())
+                .map(s -> {
+                    Document menuDoc = Jsoup.parse(str);
+                    return menuDoc;
+                }).subscribe(menuDoc -> {
+
+//                    Elements radio = menuDoc.getElementsByClass("radio_type");
+                    Element radio = menuDoc.getElementById("radiobutton1"); //个人信用报告 按钮
+
+
+                    boolean is = radio.attr("disabled").equals("disabled");
+                    LogUtil.E("开启3" + is);
+                    LogUtil.E("开启" + radio.is("disableb"));
+
+                    if (radio != null && is) {
+                        RhReportLookCheckActivity.open(RhLoginActivity.this);  //进入报告单查看界面
+                    } else {
+                        RhNoReportActivity.open(RhLoginActivity.this);          //没有报告单
+                    }
+
+                }, throwable -> {
+                    LogUtil.E("报告可选" + throwable);
+                }));
     }
 
 

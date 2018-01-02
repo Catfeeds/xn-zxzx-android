@@ -8,11 +8,12 @@
         android:orientation="vertical">
 
         <TextView
-            android:layout_marginTop="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="您还没有资信报告，请先进行认证" />
+            android:layout_marginTop="10dp"
+            android:padding="15dp"
+            android:text="您目前没有可供查看的资信报告，请进行认证后再进行查看" />
 
     </LinearLayout>
 </layout>
