@@ -49,6 +49,12 @@
                 android:layout_height="wrap_content"
                 app:txt_title="我的资信报告" />
 
+            <com.cdkj.baselibrary.views.RowMoreInfoLayout
+                android:id="@+id/row_my_rh_report"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:txt_title="我的人行报告" />
+
 
             <com.cdkj.baselibrary.views.RowMoreInfoLayout
                 android:id="@+id/row_setting"
@@ -86,6 +92,16 @@
                 android:paddingTop="10dp"
                 android:textColor="@color/text_color"
                 tools:text="服务时间:9:30-18:00" />
+
+            <TextView
+                android:id="@+id/tv_version"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/bg_gray"
+                android:gravity="center|top"
+                android:paddingTop="40dp"
+                android:textColor="@color/text_color"
+                tools:text="V  1.1.1" />
 
         </LinearLayout>
     </ScrollView>

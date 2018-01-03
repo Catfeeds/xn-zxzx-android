@@ -41,10 +41,18 @@ import retrofit2.Call;
  * Created by cdkj on 2017/12/28.
  */
 
-public class RhLoginActivity extends BaseCertStepActivity {
+public class RhLoginActivity extends AbsBaseLoadActivity {
 
     private Document loginDoc; //登录获取到的Document
     private boolean isMe;//研发测试使用
+
+    public static void open(Context context) {
+        if (context == null) {
+            return;
+        }
+        Intent intent = new Intent(context, RhLoginActivity.class);
+        context.startActivity(intent);
+    }
 
 
     private ActivityRhLoginBinding mbinding;
@@ -163,10 +171,9 @@ public class RhLoginActivity extends BaseCertStepActivity {
         call.enqueue(new BaseRhCertCallBack<ResponseBody>(this) {
             @Override
             protected void onSuccess(ResponseBody responseBody) {
-
                 try {
                     checkLoginState(responseBody.string());
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                     LogUtil.E("登录解析失败" + e);
                 }
@@ -201,6 +208,7 @@ public class RhLoginActivity extends BaseCertStepActivity {
                     Elements element = doc.getElementsByClass("erro_div3"); //获取登录错误提醒 如果有 说明登录没成功
                     if (element != null && !TextUtils.isEmpty(element.text())) {
                         mbinding.errorInfo.setText(element.text());
+                        showToast(element.text());
                         return false;
                     } else {
                         return true;
@@ -208,7 +216,8 @@ public class RhLoginActivity extends BaseCertStepActivity {
                 })
                 .subscribe(elements -> {
                     if (elements) {
-                        checkIsHasReport();
+                        getLeftMenuReportInfo();
+//                        checkIsHasReport();
                     } else {
                         getLoginCode();   //登录失败重新获取验证码
                     }
@@ -227,7 +236,7 @@ public class RhLoginActivity extends BaseCertStepActivity {
         mSubscription.add(Observable.just("")
                 .observeOn(Schedulers.io())
                 .map(s -> {
-
+                    //待验证 方式
                     Elements element = loginDoc.getElementsByClass("popupbox"); //登录成功，但是有引导提醒（安全等级低）说明没有报告单
 
                     if (element != null && element.text() != null && element.text().contains("新手导航")) {
@@ -313,7 +322,7 @@ public class RhLoginActivity extends BaseCertStepActivity {
                     if (checkRadioButtonDisabled(radio)) {
                         RhNoReportActivity.open(RhLoginActivity.this);          //没有报告单
                     } else {
-                        CertificationHelper.openStepPage(RhLoginActivity.this, RhReportLookCheckActivity.class, mCertCode);
+                        RhReportLookCheckActivity.open(this);
                     }
                     finish();
 
@@ -333,7 +342,7 @@ public class RhLoginActivity extends BaseCertStepActivity {
         for (Element element : radio) {
             if (element == null) continue;
 
-            if (TextUtils.equals(RhReportLookCheckActivity.reportType + "", element.attr("value"))) {  // 如果获取的元素里 有 value=21 说明个人信用报告被禁用
+            if (TextUtils.equals(RhReportLookCheckActivity.reportType , element.attr("value"))) {  // 如果获取的元素里 有 value=21 说明个人信用报告被禁用
                 return true;
             }
         }

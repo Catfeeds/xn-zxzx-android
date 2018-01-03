@@ -1,17 +1,20 @@
 package com.cdkj.borrowingmenber.module.bankcert;
 
+import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.widget.LinearLayout;
 
-import com.cdkj.baselibrary.model.IsSuccessModes;
-import com.cdkj.baselibrary.nets.BaseResponseModelCallBack;
+import com.cdkj.baselibrary.base.AbsBaseLoadActivity;
 import com.cdkj.baselibrary.nets.RetrofitUtils;
 import com.cdkj.baselibrary.utils.AppUtils;
 import com.cdkj.baselibrary.utils.LogUtil;
-import com.cdkj.borrowingmenber.BaseCertStepActivity;
 import com.cdkj.borrowingmenber.R;
 import com.cdkj.borrowingmenber.databinding.ActivityRhReportCheckBinding;
 import com.cdkj.borrowingmenber.module.api.MyApiServer;
@@ -30,11 +33,21 @@ import retrofit2.Call;
  * Created by cdkj on 2017/12/28.
  */
 
-public class RhReportLookCheckActivity extends BaseCertStepActivity {
+public class RhReportLookCheckActivity extends AbsBaseLoadActivity {
 
     private ActivityRhReportCheckBinding mBinding;
 
-    public static final int reportType = 21;  //21 个人信用报告  24 个人信用概要 25 个人信息提示
+    private WebView webView;
+
+    public static final String reportType = "21";  //21 个人信用报告  24 个人信用概要 25 个人信息提示
+
+    public static void open(Context context) {
+        if (context == null) {
+            return;
+        }
+        Intent intent = new Intent(context, RhReportLookCheckActivity.class);
+        context.startActivity(intent);
+    }
 
 
     @Override
@@ -46,8 +59,27 @@ public class RhReportLookCheckActivity extends BaseCertStepActivity {
     @Override
     public void afterCreate(Bundle savedInstanceState) {
         mBaseBinding.titleView.setMidTitle("查看报告");
-
         initListener();
+        addWebView();
+    }
+
+    private void addWebView() {
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        webView = new WebView(getApplicationContext());
+        webView.setLayoutParams(params);
+        mBinding.linRoot.addView(webView, 1);
+        webView.setVisibility(View.GONE);
+        WebSettings webSettings = webView.getSettings();
+        if (webSettings != null) {
+            webSettings.setJavaScriptEnabled(true);//js
+            webSettings.setDefaultTextEncodingName("UTF-8");
+            webSettings.setSupportZoom(true);   //// 支持缩放
+            webSettings.setBuiltInZoomControls(true);//// 支持缩放
+            webSettings.setDomStorageEnabled(true);//开启DOM
+            webSettings.setLoadWithOverviewMode(true);//// 缩放至屏幕的大小
+            webSettings.setUseWideViewPort(true);//将图片调整到适合webview的大小
+            webSettings.setLoadsImagesAutomatically(true);//支持自动加载图片
+        }
     }
 
     private void initListener() {
@@ -67,7 +99,7 @@ public class RhReportLookCheckActivity extends BaseCertStepActivity {
         Map<String, String> map = new HashMap<>();
 
         map.put("method", "sendAgain");
-        map.put("reportformat", reportType + ""); //21 个人信用报告  24 个人信用概要 25 个人信息提
+        map.put("reportformat", reportType); //21 个人信用报告  24 个人信用概要 25 个人信息提
 
         Call<ResponseBody> call = RetrofitUtils.createApi(MyApiServer.class).idCodeRequest(map, new Date().getTime() + "");
 
@@ -112,7 +144,7 @@ reportformat	21*/
 
         map.put("method", "checkTradeCode");
         map.put("code", mBinding.editCode.getText().toString());
-        map.put("reportformat", reportType + ""); //21 个人信用报告  24 个人信用概要 25 个人信息提示
+        map.put("reportformat", reportType); //21 个人信用报告  24 个人信用概要 25 个人信息提示
 
         Call<ResponseBody> call = RetrofitUtils.createApi(MyApiServer.class).checklookRepory(map);
         showLoadingDialog();
@@ -121,8 +153,6 @@ reportformat	21*/
             protected void onSuccess(ResponseBody responseBody) {
 
                 try {
-                    LogUtil.E("查看检测" + responseBody.string());
-
                     if (TextUtils.equals(responseBody.string(), "0")) //成功
                     {
                         lookReport();
@@ -153,36 +183,26 @@ reportformat	21*/
 /*counttime	1
 reportformat	21
 tradeCode	tb4k7f*/
-
         Map<String, String> map = new HashMap<>();
-
         map.put("counttime", "1");
         map.put("tradeCode", mBinding.editCode.getText().toString());
-        map.put("reportformat", reportType + ""); //21 个人信用报告  24 个人信用概要 25 个人信息提示
+        map.put("reportformat", reportType); //21 个人信用报告  24 个人信用概要 25 个人信息提示
 
         Call<ResponseBody> call = RetrofitUtils.createApi(MyApiServer.class).look(map);
+
+        showLoadingDialog();
 
         call.enqueue(new BaseRhCertCallBack<ResponseBody>(this) {
             @Override
             protected void onSuccess(ResponseBody responseBody) {
                 LogUtil.E("查看成功");
                 try {
-                    WebSettings webSettings = mBinding.web.getSettings();
-                    if (webSettings != null) {
-                        webSettings.setJavaScriptEnabled(true);//js
-                        webSettings.setDefaultTextEncodingName("UTF-8");
-                        webSettings.setSupportZoom(true);   //// 支持缩放
-                        webSettings.setBuiltInZoomControls(true);//// 支持缩放
-                        webSettings.setDomStorageEnabled(true);//开启DOM
-                        webSettings.setLoadWithOverviewMode(true);//// 缩放至屏幕的大小
-                        webSettings.setUseWideViewPort(true);//将图片调整到适合webview的大小
-                        webSettings.setLoadsImagesAutomatically(true);//支持自动加载图片
-                    }
+                    webView.setVisibility(View.VISIBLE);
+                    mBinding.linTopInput.setVisibility(View.GONE);
+
                     String reportHtmlString = responseBody.string();
 
-                    uploadRhReportHtmlString(reportHtmlString);//上传人行报告
-
-                    mBinding.web.loadData(reportHtmlString, "text/html;charset=UTF-8", "UTF-8");
+                    webView.loadData(reportHtmlString, "text/html;charset=UTF-8", "UTF-8");
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -196,39 +216,18 @@ tradeCode	tb4k7f*/
         });
     }
 
-    /**
-     * 上传人行报告
-     */
-    private void uploadRhReportHtmlString(String rhHtmlStr) {
-
-        if (isCertCodeEmpty() || TextUtils.isEmpty(rhHtmlStr)) {  //请求参数不能为空
-            finish();
-            return;
+    @Override
+    protected void onDestroy() {
+        if (webView != null) {
+            webView.clearHistory();
+            ((ViewGroup) webView.getParent()).removeView(webView);
+            webView.loadUrl("about:blank");
+            webView.stopLoading();
+            webView.setWebChromeClient(null);
+            webView.setWebViewClient(null);
+            webView.destroy();
+            webView = null;
         }
-
-        Call call = RetrofitUtils.createApi(MyApiServer.class).uploadRhReport(rhHtmlStr, mCertCode);
-
-        addCall(call);
-
-        showLoadingDialog();
-
-        call.enqueue(new BaseResponseModelCallBack<IsSuccessModes>(this) {
-            @Override
-            protected void onSuccess(IsSuccessModes data, String SucMessage) {
-                if (data.isSuccess()) {
-                    getCheckData(NEXTSTEP);
-                } else {
-                    showToast("认证失败,请重试");
-                    finish();
-                }
-            }
-
-            @Override
-            protected void onFinish() {
-                disMissLoading();
-            }
-        });
-
+        super.onDestroy();
     }
-
 }

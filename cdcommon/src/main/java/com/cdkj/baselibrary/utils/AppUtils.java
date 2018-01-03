@@ -160,7 +160,7 @@ public class AppUtils {
                     @Override
                     public void accept(Disposable disposable) throws Exception {
                         RxView.enabled(btn).accept(false);
-                        RxTextView.text(btn).accept("60秒后重发");
+                        RxTextView.text(btn).accept(count + "秒后重发");
                     }
                 })
                 .subscribe(new Consumer<Long>() {

@@ -2,63 +2,66 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <LinearLayout
+        android:id="@+id/lin_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/lin_top_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:paddingBottom="10dp"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:paddingTop="10dp">
+            android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:text="身份验证码:"
-                android:textColor="@color/text_black_cd" />
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingBottom="10dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingTop="10dp">
 
-            <EditText
-                android:id="@+id/edit_code"
-                android:layout_width="0dp"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text="身份验证码:"
+                    android:textColor="@color/text_black_cd" />
+
+                <EditText
+                    android:id="@+id/edit_code"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/gray_line_input_edtext"
+                    android:hint="请输入身份验证码"
+                    android:textColorHint="@color/text_hint_color"
+                    android:textSize="14sp" />
+
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_get_id_code"
+                style="@style/common_button"
                 android:layout_height="40dp"
-                android:layout_weight="1"
-                android:background="@drawable/gray_line_input_edtext"
-                android:hint="请输入身份验证码"
-                android:textColorHint="@color/text_hint_color"
-                android:textSize="14sp" />
+                android:layout_gravity="right"
+                android:layout_marginLeft="150dp"
+                android:layout_marginTop="5dp"
+                android:text="点击获取身份验证码" />
 
 
+            <Button
+                android:id="@+id/btn_look"
+                style="@style/common_button"
+                android:text="下一步" />
         </LinearLayout>
 
-        <Button
-            android:id="@+id/btn_get_id_code"
-            style="@style/common_button"
-            android:layout_height="40dp"
-            android:layout_gravity="right"
-            android:layout_marginLeft="150dp"
-            android:layout_marginTop="5dp"
-            android:text="点击获取身份验证码" />
 
-
-        <Button
-            android:id="@+id/btn_look"
-            style="@style/common_button"
-            android:text="下一步" />
-
-        <WebView
-            android:id="@+id/web"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone">
-
-        </WebView>
 
     </LinearLayout>
 </layout>

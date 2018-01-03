@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
+        android:background="#f9f9f9"
         android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/img"
+            android:layout_width="105dp"
+            android:layout_height="105dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="40dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/no_report" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -13,7 +23,13 @@
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
             android:padding="15dp"
-            android:text="您目前没有可供查看的资信报告，请进行认证后再进行查看。" />
+            android:text="您目前没有可供查看的报告，请进行认证后再进行查看。" />
+
+        <Button
+            android:id="@+id/btn_i_know"
+            style="@style/common_button"
+            android:layout_marginTop="10dp"
+            android:text="我知道了" />
 
     </LinearLayout>
 </layout>
