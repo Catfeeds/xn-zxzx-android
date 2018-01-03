@@ -46,6 +46,16 @@ public class CertListModel implements Parcelable {
     private String PZM6;
     private String PZM7;
     private String PTD8;
+
+    public String getPRH9() {
+        return PRH9;
+    }
+
+    public void setPRH9(String PRH9) {
+        this.PRH9 = PRH9;
+    }
+
+    private String PRH9;
     private int remainCount;
     private String status;
 

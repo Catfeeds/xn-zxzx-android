@@ -3,6 +3,7 @@ package com.cdkj.borrowingmenber.module.api;
 import com.cdkj.baselibrary.api.BaseResponseListModel;
 import com.cdkj.baselibrary.api.BaseResponseModel;
 import com.cdkj.baselibrary.api.ResponseInListModel;
+import com.cdkj.baselibrary.model.IsSuccessModes;
 import com.cdkj.borrowingmenber.model.CertListModel;
 import com.cdkj.borrowingmenber.model.FraudCertModel;
 import com.cdkj.borrowingmenber.model.IndustryFocusOnModel;
@@ -88,7 +89,7 @@ public interface MyApiServer {
     })
     @FormUrlEncoded
     @POST("https://ipcrs.pbccrc.org.cn/reportAction.do")
-    Call<ResponseBody> idCodeRequest(@FieldMap Map<String,String> map ,@Query("nul") String num);
+    Call<ResponseBody> idCodeRequest(@FieldMap Map<String, String> map, @Query("nul") String num);
 
     /**
      * Test
@@ -107,7 +108,7 @@ public interface MyApiServer {
     })
     @FormUrlEncoded
     @POST("https://ipcrs.pbccrc.org.cn/reportAction.do")
-    Call<ResponseBody> checklookRepory(@FieldMap Map<String,String> map);
+    Call<ResponseBody> checklookRepory(@FieldMap Map<String, String> map);
 
     /**
      * Test
@@ -128,8 +129,9 @@ public interface MyApiServer {
     })
     @FormUrlEncoded
     @POST("https://ipcrs.pbccrc.org.cn/simpleReport.do?method=viewReport")
-    Call<ResponseBody> look(@FieldMap Map<String,String> map);
-   /**
+    Call<ResponseBody> look(@FieldMap Map<String, String> map);
+
+    /**
      * 获取左菜单下 获取信用信息请求
      *
      * @return
@@ -217,8 +219,6 @@ public interface MyApiServer {
     Call<BaseResponseModel<ReportModel>> getReportData(@Field("code") String code, @Field("json") String json);
 
 
-
-
     /**
      * zm 分获取
      *
@@ -252,5 +252,14 @@ public interface MyApiServer {
     @FormUrlEncoded
     @POST("api")
     Call<BaseResponseModel<UserInfoModel>> getUserInfoDetails(@Field("code") String code, @Field("json") String json);
+
+    /**
+     * @param rhString 人行报告
+     * @param code     调查单编号
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api")
+    Call<BaseResponseModel<IsSuccessModes>> uploadRhReport(@Field("PRH9") String rhString, @Field("searchCode") String code);
 
 }

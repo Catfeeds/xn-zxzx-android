@@ -1,17 +1,17 @@
 package com.cdkj.borrowingmenber.module.bankcert;
 
-import android.content.Context;
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.webkit.WebSettings;
 
-import com.cdkj.baselibrary.base.AbsBaseLoadActivity;
+import com.cdkj.baselibrary.model.IsSuccessModes;
+import com.cdkj.baselibrary.nets.BaseResponseModelCallBack;
 import com.cdkj.baselibrary.nets.RetrofitUtils;
 import com.cdkj.baselibrary.utils.AppUtils;
 import com.cdkj.baselibrary.utils.LogUtil;
+import com.cdkj.borrowingmenber.BaseCertStepActivity;
 import com.cdkj.borrowingmenber.R;
 import com.cdkj.borrowingmenber.databinding.ActivityRhReportCheckBinding;
 import com.cdkj.borrowingmenber.module.api.MyApiServer;
@@ -24,26 +24,17 @@ import java.util.Map;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * 人行报告查看验证
  * Created by cdkj on 2017/12/28.
  */
 
-public class RhReportLookCheckActivity extends AbsBaseLoadActivity {
+public class RhReportLookCheckActivity extends BaseCertStepActivity {
 
     private ActivityRhReportCheckBinding mBinding;
 
-
-    public static void open(Context context) {
-        if (context == null) {
-            return;
-        }
-        Intent intent = new Intent(context, RhReportLookCheckActivity.class);
-        context.startActivity(intent);
-    }
+    public static final int reportType = 21;  //21 个人信用报告  24 个人信用概要 25 个人信息提示
 
 
     @Override
@@ -67,19 +58,16 @@ public class RhReportLookCheckActivity extends AbsBaseLoadActivity {
                 showToast("请输入身份验证码");
                 return;
             }
-
             checkLookReport();
-
         });
     }
 
     private void getIdCode() {
 
-
         Map<String, String> map = new HashMap<>();
 
         map.put("method", "sendAgain");
-        map.put("reportformat", "21"); //21 个人信用报告  24 个人信用概要 25 个人信息提
+        map.put("reportformat", reportType + ""); //21 个人信用报告  24 个人信用概要 25 个人信息提
 
         Call<ResponseBody> call = RetrofitUtils.createApi(MyApiServer.class).idCodeRequest(map, new Date().getTime() + "");
 
@@ -124,7 +112,7 @@ reportformat	21*/
 
         map.put("method", "checkTradeCode");
         map.put("code", mBinding.editCode.getText().toString());
-        map.put("reportformat", "21"); //21 个人信用报告  24 个人信用概要 25 个人信息提示
+        map.put("reportformat", reportType + ""); //21 个人信用报告  24 个人信用概要 25 个人信息提示
 
         Call<ResponseBody> call = RetrofitUtils.createApi(MyApiServer.class).checklookRepory(map);
         showLoadingDialog();
@@ -170,7 +158,7 @@ tradeCode	tb4k7f*/
 
         map.put("counttime", "1");
         map.put("tradeCode", mBinding.editCode.getText().toString());
-        map.put("reportformat", "21"); //21 个人信用报告  24 个人信用概要 25 个人信息提示
+        map.put("reportformat", reportType + ""); //21 个人信用报告  24 个人信用概要 25 个人信息提示
 
         Call<ResponseBody> call = RetrofitUtils.createApi(MyApiServer.class).look(map);
 
@@ -190,10 +178,48 @@ tradeCode	tb4k7f*/
                         webSettings.setUseWideViewPort(true);//将图片调整到适合webview的大小
                         webSettings.setLoadsImagesAutomatically(true);//支持自动加载图片
                     }
+                    String reportHtmlString = responseBody.string();
 
-                    mBinding.web.loadData(responseBody.string(), "text/html;charset=UTF-8", "UTF-8");
+                    uploadRhReportHtmlString(reportHtmlString);//上传人行报告
+
+                    mBinding.web.loadData(reportHtmlString, "text/html;charset=UTF-8", "UTF-8");
+
                 } catch (IOException e) {
                     e.printStackTrace();
+                }
+            }
+
+            @Override
+            protected void onFinish() {
+                disMissLoading();
+            }
+        });
+    }
+
+    /**
+     * 上传人行报告
+     */
+    private void uploadRhReportHtmlString(String rhHtmlStr) {
+
+        if (isCertCodeEmpty() || TextUtils.isEmpty(rhHtmlStr)) {  //请求参数不能为空
+            finish();
+            return;
+        }
+
+        Call call = RetrofitUtils.createApi(MyApiServer.class).uploadRhReport(rhHtmlStr, mCertCode);
+
+        addCall(call);
+
+        showLoadingDialog();
+
+        call.enqueue(new BaseResponseModelCallBack<IsSuccessModes>(this) {
+            @Override
+            protected void onSuccess(IsSuccessModes data, String SucMessage) {
+                if (data.isSuccess()) {
+                    getCheckData(NEXTSTEP);
+                } else {
+                    showToast("认证失败,请重试");
+                    finish();
                 }
             }
 

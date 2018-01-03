@@ -11,9 +11,11 @@ import com.bumptech.glide.Glide;
 import com.cdkj.baselibrary.base.AbsBaseLoadActivity;
 import com.cdkj.baselibrary.nets.RetrofitUtils;
 import com.cdkj.baselibrary.utils.LogUtil;
+import com.cdkj.borrowingmenber.BaseCertStepActivity;
 import com.cdkj.borrowingmenber.R;
 import com.cdkj.borrowingmenber.databinding.ActivityRhLoginBinding;
 import com.cdkj.borrowingmenber.module.api.MyApiServer;
+import com.cdkj.borrowingmenber.weiget.CertificationHelper;
 import com.cdkj.borrowingmenber.weiget.bankcert.BaseRhCertCallBack;
 
 import org.jsoup.Connection;
@@ -39,18 +41,11 @@ import retrofit2.Call;
  * Created by cdkj on 2017/12/28.
  */
 
-public class RhLoginActivity extends AbsBaseLoadActivity {
+public class RhLoginActivity extends BaseCertStepActivity {
 
     private Document loginDoc; //登录获取到的Document
-    private boolean isMe;
+    private boolean isMe;//研发测试使用
 
-    public static void open(Context context) {
-        if (context == null) {
-            return;
-        }
-        Intent intent = new Intent(context, RhLoginActivity.class);
-        context.startActivity(intent);
-    }
 
     private ActivityRhLoginBinding mbinding;
 
@@ -233,16 +228,16 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
                 .observeOn(Schedulers.io())
                 .map(s -> {
 
-//                    Elements element = loginDoc.getElementsByClass("popupbox"); //登录成功，但是有引导提醒（安全等级低）说明没有报告单
-//
-//                    if (element != null && element.text() != null && element.text().contains("新手导航")) {
-//                        return false;
-//                    }
-//                    Elements element2 = loginDoc.getElementsByClass("guide_notice"); //登录成功，但是有引导提醒（安全等级低）说明没有报告单
-//
-//                    if (element2 != null && !TextUtils.isEmpty(element2.text())) {
-//                        return false;
-//                    }
+                    Elements element = loginDoc.getElementsByClass("popupbox"); //登录成功，但是有引导提醒（安全等级低）说明没有报告单
+
+                    if (element != null && element.text() != null && element.text().contains("新手导航")) {
+                        return false;
+                    }
+                    Elements element2 = loginDoc.getElementsByClass("guide_notice"); //登录成功，但是有引导提醒（安全等级低）说明没有报告单
+
+                    if (element2 != null && !TextUtils.isEmpty(element2.text())) {
+                        return false;
+                    }
 
                     // 备用方案
                     //
@@ -302,39 +297,47 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
      * @param str
      */
     private void checkCanLookReport(String str) {
+
         mSubscription.add(Observable.just("")
                 .observeOn(Schedulers.io())
                 .map(s -> {
                     Document menuDoc = Jsoup.parse(str);
                     return menuDoc;
+
                 }).subscribe(menuDoc -> {
 
-                    Elements radio = menuDoc.select("[disabled]");
+                    Elements radio = menuDoc.select("[disabled]");// 获取带有disabled属性的元素 三个资信报告类型选择框
 
-                    for (Element element : radio) {
-                        if (TextUtils.equals("21", element.attr("value"))) {  // 个人报告点击被禁用 disabled
-                            RhNoReportActivity.open(RhLoginActivity.this);          //没有报告单
-                            break;
-                        }
+                    if (radio == null) return;
+
+                    if (checkRadioButtonDisabled(radio)) {
+                        RhNoReportActivity.open(RhLoginActivity.this);          //没有报告单
+                    } else {
+                        CertificationHelper.openStepPage(RhLoginActivity.this, RhReportLookCheckActivity.class, mCertCode);
                     }
-
-                    RhReportLookCheckActivity.open(RhLoginActivity.this);  //进入报告单查看界面
-
-//                    Elements radio = menuDoc.getElementsByClass("radio_type");
-
-
-//                    Element radio = menuDoc.getElementById("radiobutton1"); //个人信用报告 按钮
-//
-//
-//                    boolean is = radio.attr("disabled").equals("disabled");
-//                    LogUtil.E("开启3" + is);
-//                    LogUtil.E("开启" + radio.is("disableb"));
-//
-
+                    finish();
 
                 }, throwable -> {
                     LogUtil.E("报告可选" + throwable);
                 }));
+    }
+
+    /**
+     * 检测 disabled 元素禁用情况
+     *
+     * @param radio
+     * @return
+     */
+    private boolean checkRadioButtonDisabled(Elements radio) {
+
+        for (Element element : radio) {
+            if (element == null) continue;
+
+            if (TextUtils.equals(RhReportLookCheckActivity.reportType + "", element.attr("value"))) {  // 如果获取的元素里 有 value=21 说明个人信用报告被禁用
+                return true;
+            }
+        }
+        return false;
     }
 
 

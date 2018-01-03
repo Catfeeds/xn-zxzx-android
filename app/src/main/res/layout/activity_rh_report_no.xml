@@ -13,7 +13,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
             android:padding="15dp"
-            android:text="您目前没有可供查看的资信报告，请进行认证后再进行查看" />
+            android:text="您目前没有可供查看的资信报告，请进行认证后再进行查看。" />
 
     </LinearLayout>
 </layout>
