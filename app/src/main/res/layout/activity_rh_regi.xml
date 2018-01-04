@@ -113,7 +113,6 @@
                 android:layout_height="40dp"
                 android:background="@drawable/gray_line_input_edtext"
                 android:hint="请输入证件号码"
-                android:inputType="textPassword"
                 android:paddingLeft="10dp"
                 android:textColorHint="@color/text_hint_color"
                 android:textSize="14sp" />
