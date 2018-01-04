@@ -44,7 +44,6 @@ import retrofit2.Call;
 public class RhLoginActivity extends AbsBaseLoadActivity {
 
     private Document loginDoc; //登录获取到的Document
-    private boolean isMe;//研发测试使用
 
     public static void open(Context context) {
         if (context == null) {
@@ -66,18 +65,6 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
     @Override
     public void afterCreate(Bundle savedInstanceState) {
         mBaseBinding.titleView.setMidTitle("登录");
-
-        isMe = true;
-        mbinding.tvTop.setOnClickListener(v -> {
-            if (isMe) {
-                mbinding.editLoginName.setText("lixianjun_1995");
-                mbinding.editLoginPassword.setText("lxjzx123456");
-            } else {
-                mbinding.editLoginName.setText("chenshan2819");
-                mbinding.editLoginPassword.setText("q1i1a1n1");
-            }
-            isMe = !isMe;
-        });
 
         initListener();
         getLoginCode();

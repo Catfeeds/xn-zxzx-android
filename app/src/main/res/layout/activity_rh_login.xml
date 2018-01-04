@@ -15,40 +15,6 @@
             android:layout_gravity="center"
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             android:layout_marginRight="10dp"
             android:layout_marginTop="15dp"
             android:text="中国人民银行征信中心登录"
@@ -88,6 +54,7 @@
                 android:layout_height="40dp"
                 android:background="@drawable/gray_line_input_edtext"
                 android:hint="请输入登录名"
+                android:paddingLeft="10dp"
                 android:text="chenshan2819"
                 android:textColorHint="@color/text_hint_color"
                 android:textSize="14sp" />
@@ -118,6 +85,7 @@
                 android:layout_height="40dp"
                 android:background="@drawable/gray_line_input_edtext"
                 android:hint="请输入密码"
+                android:paddingLeft="10dp"
                 android:text="q1i1a1n1"
                 android:textColorHint="@color/text_hint_color"
                 android:textSize="14sp" />
@@ -150,6 +118,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/gray_line_input_edtext"
                 android:hint="验证码"
+                android:paddingLeft="10dp"
                 android:textColorHint="@color/text_hint_color"
                 android:textSize="14sp" />
 

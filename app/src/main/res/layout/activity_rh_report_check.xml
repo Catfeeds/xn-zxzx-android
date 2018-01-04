@@ -39,6 +39,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/gray_line_input_edtext"
                     android:hint="请输入身份验证码"
+                    android:paddingLeft="10dp"
                     android:textColorHint="@color/text_hint_color"
                     android:textSize="14sp" />
 
@@ -60,7 +61,6 @@
                 style="@style/common_button"
                 android:text="下一步" />
         </LinearLayout>
-
 
 
     </LinearLayout>

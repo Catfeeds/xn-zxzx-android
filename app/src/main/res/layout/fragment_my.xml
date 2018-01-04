@@ -60,7 +60,6 @@
                 android:id="@+id/row_setting"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
                 app:txt_title="个人设置" />
 
 
@@ -68,7 +67,6 @@
                 android:id="@+id/row_about_us"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
                 app:txt_title="关于我们" />
 
 
