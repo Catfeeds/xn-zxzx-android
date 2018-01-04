@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="id_card_type">
+        <item>身份证0</item>
+        <item>户口簿1</item>
+        <item>护照2</item>
+        <item>军官证3</item>
+        <item>士兵证4</item>
+        <item>港澳居民来往内地通行证5</item>
+        <item>台湾同胞来往内地通行证6</item>
+        <item>临时身份证7</item>
+        <item>外国人居留证8</item>
+        <item>警官证9</item>
+        <item>香港身份证A</item>
+        <item>澳门身份证B</item>
+        <item>台湾身份证C</item>
+        <item>其他证件X</item>
+    </string-array>
+</resources>

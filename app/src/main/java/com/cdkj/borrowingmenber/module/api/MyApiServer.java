@@ -152,6 +152,27 @@ public interface MyApiServer {
     @GET("https://ipcrs.pbccrc.org.cn/reportAction.do?method=queryReport")
     Call<ResponseBody> getLeftMenuReportInfo();
 
+    /**
+     * 获取左菜单下 获取信用信息请求
+     *
+     * @return
+     */
+    @Headers({
+            "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Accept-Encoding: gzip, deflate, br",
+            "Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2",
+            "Connection: Keep-Alive",
+            "Cache-Control: max-age=0",
+            "Content-Type:application/x-www-form-urlencoded",
+            "Host: ipcrs.pbccrc.org.cn",
+            "X-Requested-With: XMLHttpRequest",
+            "Upgrade-Insecure-Requests:1",
+            "https://ipcrs.pbccrc.org.cn/login.do",
+            "Upgrade-Insecure-Requests:1",
+    })
+    @GET("https://ipcrs.pbccrc.org.cn/welcome.do")
+    Call<ResponseBody> getWelcomePage();
+
 
     /**
      * 获取等待认证列表
