@@ -59,7 +59,16 @@ public class ReportModel implements Parcelable {
 
     private String PZM7;
     private String PTD8;
+    private String PRH9;
     private String PYYS4Status;//获取运营商认证结果 //：0：未认证，1：结果拉取中，2：认证成功，3：认证失败
+
+    public String getPRH9() {
+        return PRH9;
+    }
+
+    public void setPRH9(String PRH9) {
+        this.PRH9 = PRH9;
+    }
 
     public String getPID1() {
         return PID1;

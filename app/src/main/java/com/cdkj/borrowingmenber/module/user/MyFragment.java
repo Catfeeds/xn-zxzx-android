@@ -31,6 +31,7 @@ import com.cdkj.borrowingmenber.R;
 import com.cdkj.borrowingmenber.databinding.FragmentMyBinding;
 import com.cdkj.borrowingmenber.model.UserInfoModel;
 import com.cdkj.borrowingmenber.module.api.MyApiServer;
+import com.cdkj.borrowingmenber.module.bankcert.RhLoginActivity;
 import com.cdkj.borrowingmenber.module.report.MyReportActivity;
 
 import java.util.HashMap;
@@ -73,6 +74,9 @@ public class MyFragment extends BaseLazyFragment {
 
         getServiceTime();
         getServiceTelephone();
+
+        mBinding.tvVersion.setText("V " + AppUtils.getAppVersionName(mActivity));
+
         return mBinding.getRoot();
 
     }
@@ -125,31 +129,44 @@ public class MyFragment extends BaseLazyFragment {
 
 
     private void initListener() {
+        //设置
         mBinding.rowSetting.setOnClickListener(v -> {
             SettingActivity.open(mActivity);
         });
+        //我的报告
         mBinding.rowReport.setOnClickListener(v -> {
             MyReportActivity.open(mActivity, "");
         });
+        //用户信息点击
         mBinding.linUserInfo.setOnClickListener(v -> {
             ImageSelectActivity2.launchFragment(MyFragment.this, LOGOFLAG);
         });
+        //关于我们
         mBinding.rowAboutUs.setOnClickListener(v -> {
             WebViewActivity.openkey(mActivity, "关于我们", "aboutUs ");
         });
+        //拨打电话
         mBinding.tvServicePhone.setOnClickListener(v -> {
-            mpPermissionHelper.requestPermissions(new PermissionHelper.PermissionListener() {
-                @Override
-                public void doAfterGrand(String... permission) {
-                    AppUtils.callPhonePage(mActivity, mPhoneNumber);
-                }
-
-                @Override
-                public void doAfterDenied(String... permission) {
-
-                }
-            }, Manifest.permission.CALL_PHONE);
+            callPhone();
         });
+        //人行报告
+        mBinding.rowMyRhReport.setOnClickListener(v -> {
+            RhLoginActivity.open(mActivity);
+        });
+    }
+
+    private void callPhone() {
+        mpPermissionHelper.requestPermissions(new PermissionHelper.PermissionListener() {
+            @Override
+            public void doAfterGrand(String... permission) {
+                AppUtils.callPhonePage(mActivity, mPhoneNumber);
+            }
+
+            @Override
+            public void doAfterDenied(String... permission) {
+
+            }
+        }, Manifest.permission.CALL_PHONE);
     }
 
     @Override

@@ -193,9 +193,16 @@ public class WebViewActivity extends AbsBaseLoadActivity {
 
     @Override
     protected void onDestroy() {
-        webView.destroy();
-        mBinding.llAboutUs.removeAllViews();
-        webView = null;
+        if (webView != null) {
+            webView.clearHistory();
+            ((ViewGroup) webView.getParent()).removeView(webView);
+            webView.loadUrl("about:blank");
+            webView.stopLoading();
+            webView.setWebChromeClient(null);
+            webView.setWebViewClient(null);
+            webView.destroy();
+            webView = null;
+        }
         super.onDestroy();
     }
 

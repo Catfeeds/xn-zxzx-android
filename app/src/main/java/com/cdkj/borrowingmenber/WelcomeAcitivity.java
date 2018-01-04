@@ -5,6 +5,8 @@ import android.os.Bundle;
 
 import com.cdkj.baselibrary.appmanager.SPUtilHelpr;
 import com.cdkj.baselibrary.base.BaseActivity;
+import com.cdkj.borrowingmenber.module.bankcert.RhLoginActivity;
+import com.cdkj.borrowingmenber.module.bankcert.RhReportLookCheckActivity;
 import com.cdkj.borrowingmenber.module.user.LoginActivity;
 
 import java.util.concurrent.TimeUnit;

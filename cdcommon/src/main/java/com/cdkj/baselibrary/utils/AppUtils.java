@@ -1,6 +1,5 @@
 package com.cdkj.baselibrary.utils;
 
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -10,36 +9,23 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
-import android.os.SystemClock;
 import android.provider.ContactsContract;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.telecom.Call;
-import android.text.InputFilter;
-import android.text.Spanned;
 import android.text.TextUtils;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.WindowManager;
 import android.widget.Button;
 
+import com.cdkj.baselibrary.R;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -47,7 +33,6 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 
 /**
@@ -160,28 +145,23 @@ public class AppUtils {
                     @Override
                     public void accept(Disposable disposable) throws Exception {
                         RxView.enabled(btn).accept(false);
-                        RxTextView.text(btn).accept("60秒后重发");
+                        RxTextView.text(btn).accept(count + "秒后重发");
                     }
                 })
+                .doFinally(() -> {
+                    RxView.enabled(btn).accept(true);
+                    RxTextView.text(btn).accept("重发验证码");
+                    btn.setBackgroundResource(R.drawable.selector_blue);
+                })
                 .subscribe(new Consumer<Long>() {
-                    @Override
-                    public void accept(Long aLong) throws Exception {
-                        RxView.enabled(btn).accept(false);
-                        RxTextView.text(btn).accept((count - aLong) + "秒后重发");
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        RxView.enabled(btn).accept(true);
-                        RxTextView.text(btn).accept("重发验证码");
-                    }
-                }, new Action() {
-                    @Override
-                    public void run() throws Exception {
-                        RxView.enabled(btn).accept(true);
-                        RxTextView.text(btn).accept("重发验证码");
-                    }
-                });
+                               @Override
+                               public void accept(Long aLong) throws Exception {
+                                   RxView.enabled(btn).accept(false);
+                                   RxTextView.text(btn).accept((count - aLong) + "秒后重发");
+                                   btn.setBackgroundResource(R.drawable.btn_no_click_gray);
+                               }
+                           }
+                );
     }
 
 

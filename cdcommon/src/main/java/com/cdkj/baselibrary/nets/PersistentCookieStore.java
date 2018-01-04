@@ -132,7 +132,7 @@ public class PersistentCookieStore {
         try {
             ObjectOutputStream outputStream = new ObjectOutputStream(os);
             outputStream.writeObject(cookie);
-        } catch (IOException e) {
+        } catch (Exception e) {
             Log.d(LOG_TAG, "IOException in encodeCookie", e);
             return null;
         }
@@ -152,10 +152,8 @@ public class PersistentCookieStore {
         try {
             ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
             cookie = ((SerializableOkHttpCookies) objectInputStream.readObject()).getCookies();
-        } catch (IOException e) {
+        } catch (Exception e) {
             Log.d(LOG_TAG, "IOException in decodeCookie", e);
-        } catch (ClassNotFoundException e) {
-            Log.d(LOG_TAG, "ClassNotFoundException in decodeCookie", e);
         }
         return cookie;
     }
