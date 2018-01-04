@@ -43,7 +43,7 @@ public class LocalFocusOnDataParseHelper {
         if (detailBeans == null || myLocalFocusOnList == null || detailBeans.isEmpty() || myLocalFocusOnList.isEmpty()) {
             return list;
         }
-        FocusOnParseShowModel parseShowModel = new FocusOnParseShowModel();
+
 
         for (IndustryFocusOnListModel.DetailBean detailBean : detailBeans) {
 
@@ -57,6 +57,7 @@ public class LocalFocusOnDataParseHelper {
                 continue;
             }
 
+            FocusOnParseShowModel parseShowModel = new FocusOnParseShowModel();
 
             for (IndustryFocusOnListModel.DetailBean.ExtendInfoBean extendInfoBean : detailBean.getExtendInfo()) { //扩展字段处理
                 if (extendInfoBean == null) {
