@@ -75,7 +75,7 @@ public class MyFragment extends BaseLazyFragment {
         getServiceTime();
         getServiceTelephone();
 
-        mBinding.tvVersion.setText("V " + AppUtils.getAppVersionName(mActivity));
+        mBinding.tvVersion.setText("当前版本: v" + AppUtils.getAppVersionName(mActivity));
 
         return mBinding.getRoot();
 
