@@ -210,6 +210,47 @@ public interface MyApiServer {
     @GET("https://ipcrs.pbccrc.org.cn/welcome.do")
     Call<ResponseBody> getWelcomePage();
 
+    /*		<script type="text/javascript">
+            function loginOut(){
+				if(confirm("确定要退出平台吗?")){
+					$.ajax({
+				   		cache:false,
+				        type:"post",
+				        async: false,
+						url:"login.do?num="+Math.random(),
+						data:{method:"loginOut"},
+						dataType:"text",
+						success:function(){
+							window.parent.location.href="https://ipcrs.pbccrc.org.cn/";
+						}
+				  	});
+				}
+			}
+
+
+		</script>*/
+
+    /**
+     * 退出登录
+     *
+     * @return
+     */
+    @Headers({
+            "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Accept-Encoding: gzip, deflate, br",
+            "Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2",
+            "Connection: Keep-Alive",
+            "Cache-Control: no-cache",
+            "Content-Type:application/x-www-form-urlencoded",
+            "Host: ipcrs.pbccrc.org.cn",
+            "X-Requested-With: XMLHttpRequest",
+            "Upgrade-Insecure-Requests:1",
+            "https://ipcrs.pbccrc.org.cn/login.do",
+    })
+    @FormUrlEncoded
+    @POST("https://ipcrs.pbccrc.org.cn/login.do?method=loginOut")
+    Call<ResponseBody> logOut(@Field("num") String num);
+
 
     /**
      * 获取等待认证列表

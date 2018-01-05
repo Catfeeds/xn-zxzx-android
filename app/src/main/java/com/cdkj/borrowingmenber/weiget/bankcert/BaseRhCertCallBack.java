@@ -85,13 +85,13 @@ public abstract class BaseRhCertCallBack<T> implements Callback<ResponseBody> {
      *
      * @param response
      * @return
-     * @throws IOException
+     * @throws Exception
      */
-    private boolean checkSuccessByType(Response<ResponseBody> response) throws Exception {
+    private void checkSuccessByType(Response<ResponseBody> response) throws Exception {
 
         if (this.transitionType == RESPONSETYPE) {
             onSuccess(response.body());
-            return true;
+            return;
         }
 
         String strRe = response.body().string();
@@ -100,7 +100,7 @@ public abstract class BaseRhCertCallBack<T> implements Callback<ResponseBody> {
 
             onReqFailure(NETERRORCODE4, "数据获取失败");
 
-            return true;
+            return;
 
         }
         if (this.transitionType == STRINGTYPE) {
@@ -116,12 +116,15 @@ public abstract class BaseRhCertCallBack<T> implements Callback<ResponseBody> {
 
                 onReqFailure(NETERRORCODE4, "系统繁忙,请稍后再试");
 
-                return true;
+                return;
             }
 
+            if (document == null || TextUtils.isEmpty(document.title()) || TextUtils.isEmpty(document.text())) { //判断长时间未操作
+                onReqFailure(NETERRORCODE4, "系统繁忙,请稍后再试");
+                return;
+            }
             onSuccess(document);
         }
-        return false;
     }
 
     @Override
