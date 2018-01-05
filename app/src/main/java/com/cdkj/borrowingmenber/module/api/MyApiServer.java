@@ -50,6 +50,43 @@ public interface MyApiServer {
     @GET("https://ipcrs.pbccrc.org.cn/imgrc.do")
     Call<ResponseBody> rhLoginCode(@Query("a") String a);
 
+    /**
+     * 人行注册验证码
+     *
+     * @return
+     */
+    @Headers({
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2",
+            "Connection: Keep-Alive",
+            "Cache-Control: no-cache",
+            "Host: ipcrs.pbccrc.org.cn",
+            "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:57.0) Gecko/20100101 Firefox/57.0",
+            "Referer: https://ipcrs.pbccrc.org.cn/userReg.do",
+    })
+    @GET("https://ipcrs.pbccrc.org.cn/imgrc.do")
+    Call<ResponseBody> rhRegiCode(@Query("") String a);
+
+    /**
+     * 人行注册请求
+     *
+     * @return
+     */
+    @Headers({
+            "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Accept-Encoding: gzip, deflate, br",
+            "Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2",
+            "Connection: Keep-Alive",
+            "Host: ipcrs.pbccrc.org.cn",
+            "Content-Type: application/x-www-form-urlencoded",
+            "Upgrade-Insecure-Requests: 1",
+            "Referer: https://ipcrs.pbccrc.org.cn/userReg.do",
+    })
+    @FormUrlEncoded
+    @POST("https://ipcrs.pbccrc.org.cn/userReg.do")
+    Call<ResponseBody> rhRegiRequest(@FieldMap Map<String, String> map);
+
 
     /**
      * 人行登录

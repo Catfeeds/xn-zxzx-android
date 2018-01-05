@@ -114,7 +114,7 @@ public abstract class BaseRhCertCallBack<T> implements Callback<ResponseBody> {
 
             if (document == null || (elements != null && elements.size() > 0)) {
 
-                onReqFailure(NETERRORCODE4, "系统繁忙");
+                onReqFailure(NETERRORCODE4, "系统繁忙,请稍后再试");
 
                 return true;
             }
