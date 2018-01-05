@@ -1,6 +1,7 @@
 package com.cdkj.borrowingmenber.weiget.bankcert;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.cdkj.baselibrary.CdApplication;
 import com.cdkj.baselibrary.api.BaseResponseListModel;
@@ -8,6 +9,12 @@ import com.cdkj.baselibrary.nets.NetHelper;
 import com.cdkj.baselibrary.nets.NetUtils;
 import com.cdkj.baselibrary.utils.LogUtil;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
 import java.lang.ref.SoftReference;
 import java.util.List;
 
@@ -31,9 +38,16 @@ public abstract class BaseRhCertCallBack<T> implements Callback<ResponseBody> {
 
     private Context context;
 
-    public BaseRhCertCallBack(Context context) {
+    public static final int DOCTYPE = 0; //Document对象
+    public static final int STRINGTYPE = 1;//String
+    public static final int RESPONSETYPE = 2;//不做转换
+
+    private int transitionType = 2;
+
+    public BaseRhCertCallBack(Context context, int transitionType) {
         SoftReference<Context> mS = new SoftReference<>(context);
         this.context = mS.get();
+        this.transitionType = transitionType;
     }
 
     @Override
@@ -49,12 +63,14 @@ public abstract class BaseRhCertCallBack<T> implements Callback<ResponseBody> {
         if (response.isSuccessful()) {
 
             try {
-                onSuccess(response.body());
+
+                checkSuccessByType(response);
+
             } catch (Exception e) {
                 if (LogUtil.isDeBug) {
                     onReqFailure(NETERRORCODE4, "未知错误" + e.toString());
                 } else {
-                    onReqFailure(NETERRORCODE4, "程序出现未知错误");
+                    onReqFailure(NETERRORCODE4, "系统错误");
                 }
             }
 
@@ -62,6 +78,53 @@ public abstract class BaseRhCertCallBack<T> implements Callback<ResponseBody> {
             onReqFailure(NETERRORCODE4, "网络请求失败");
         }
 
+    }
+
+    /**
+     * 根据type 判断转换类型
+     *
+     * @param response
+     * @return
+     * @throws Exception
+     */
+    private void checkSuccessByType(Response<ResponseBody> response) throws Exception {
+
+        if (this.transitionType == RESPONSETYPE) {
+            onSuccess(response.body());
+            return;
+        }
+
+        String strRe = response.body().string();
+
+        if (TextUtils.isEmpty(strRe)) {
+
+            onReqFailure(NETERRORCODE4, "数据获取失败");
+
+            return;
+
+        }
+        if (this.transitionType == STRINGTYPE) {
+
+            onSuccess(strRe);
+
+        } else if (this.transitionType == DOCTYPE) {
+
+            Document document = Jsoup.parse(strRe);
+            Elements elements = document.getElementsByClass("error");
+
+            if (document == null || (elements != null && elements.size() > 0)) {
+
+                onReqFailure(NETERRORCODE4, "系统繁忙,请稍后再试");
+
+                return;
+            }
+
+            if (document == null || TextUtils.isEmpty(document.title()) || TextUtils.isEmpty(document.text())) { //判断长时间未操作
+                onReqFailure(NETERRORCODE4, "系统繁忙,请稍后再试");
+                return;
+            }
+            onSuccess(document);
+        }
     }
 
     @Override
@@ -86,7 +149,27 @@ public abstract class BaseRhCertCallBack<T> implements Callback<ResponseBody> {
      *
      * @param responseBody
      */
-    protected abstract void onSuccess(ResponseBody responseBody);
+    protected void onSuccess(ResponseBody responseBody) {
+
+    }
+
+    /**
+     * 请求成功 转为Document对象
+     *
+     * @param doc
+     */
+    protected void onSuccess(Document doc) {
+
+    }
+
+    /**
+     * 请求成功 String
+     *
+     * @param str
+     */
+    protected void onSuccess(String str) {
+
+    }
 
     /**
      * 请求失败
@@ -97,7 +180,6 @@ public abstract class BaseRhCertCallBack<T> implements Callback<ResponseBody> {
     protected void onReqFailure(String errorCode, String errorMessage) {
         NetHelper.onReqFailure(context, errorCode, errorMessage);
     }
-
 
 
     /**

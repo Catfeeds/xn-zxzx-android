@@ -50,6 +50,43 @@ public interface MyApiServer {
     @GET("https://ipcrs.pbccrc.org.cn/imgrc.do")
     Call<ResponseBody> rhLoginCode(@Query("a") String a);
 
+    /**
+     * 人行注册验证码
+     *
+     * @return
+     */
+    @Headers({
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate",
+            "Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2",
+            "Connection: Keep-Alive",
+            "Cache-Control: no-cache",
+            "Host: ipcrs.pbccrc.org.cn",
+            "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:57.0) Gecko/20100101 Firefox/57.0",
+            "Referer: https://ipcrs.pbccrc.org.cn/userReg.do",
+    })
+    @GET("https://ipcrs.pbccrc.org.cn/imgrc.do")
+    Call<ResponseBody> rhRegiCode(@Query("") String a);
+
+    /**
+     * 人行注册请求
+     *
+     * @return
+     */
+    @Headers({
+            "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Accept-Encoding: gzip, deflate, br",
+            "Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2",
+            "Connection: Keep-Alive",
+            "Host: ipcrs.pbccrc.org.cn",
+            "Content-Type: application/x-www-form-urlencoded",
+            "Upgrade-Insecure-Requests: 1",
+            "Referer: https://ipcrs.pbccrc.org.cn/userReg.do",
+    })
+    @FormUrlEncoded
+    @POST("https://ipcrs.pbccrc.org.cn/userReg.do")
+    Call<ResponseBody> rhRegiRequest(@FieldMap Map<String, String> map);
+
 
     /**
      * 人行登录
@@ -151,6 +188,68 @@ public interface MyApiServer {
     })
     @GET("https://ipcrs.pbccrc.org.cn/reportAction.do?method=queryReport")
     Call<ResponseBody> getLeftMenuReportInfo();
+
+    /**
+     * 获取左菜单下 获取信用信息请求
+     *
+     * @return
+     */
+    @Headers({
+            "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Accept-Encoding: gzip, deflate, br",
+            "Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2",
+            "Connection: Keep-Alive",
+            "Cache-Control: max-age=0",
+            "Content-Type:application/x-www-form-urlencoded",
+            "Host: ipcrs.pbccrc.org.cn",
+            "X-Requested-With: XMLHttpRequest",
+            "Upgrade-Insecure-Requests:1",
+            "https://ipcrs.pbccrc.org.cn/login.do",
+            "Upgrade-Insecure-Requests:1",
+    })
+    @GET("https://ipcrs.pbccrc.org.cn/welcome.do")
+    Call<ResponseBody> getWelcomePage();
+
+    /*		<script type="text/javascript">
+            function loginOut(){
+				if(confirm("确定要退出平台吗?")){
+					$.ajax({
+				   		cache:false,
+				        type:"post",
+				        async: false,
+						url:"login.do?num="+Math.random(),
+						data:{method:"loginOut"},
+						dataType:"text",
+						success:function(){
+							window.parent.location.href="https://ipcrs.pbccrc.org.cn/";
+						}
+				  	});
+				}
+			}
+
+
+		</script>*/
+
+    /**
+     * 退出登录
+     *
+     * @return
+     */
+    @Headers({
+            "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Accept-Encoding: gzip, deflate, br",
+            "Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2",
+            "Connection: Keep-Alive",
+            "Cache-Control: no-cache",
+            "Content-Type:application/x-www-form-urlencoded",
+            "Host: ipcrs.pbccrc.org.cn",
+            "X-Requested-With: XMLHttpRequest",
+            "Upgrade-Insecure-Requests:1",
+            "https://ipcrs.pbccrc.org.cn/login.do",
+    })
+    @FormUrlEncoded
+    @POST("https://ipcrs.pbccrc.org.cn/login.do?method=loginOut")
+    Call<ResponseBody> logOut(@Field("num") String num);
 
 
     /**

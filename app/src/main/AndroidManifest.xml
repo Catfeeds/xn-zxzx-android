@@ -151,6 +151,17 @@
             android:name=".module.bankcert.RhNoReportActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
+        <!--人行开始-->
+        <activity
+            android:name=".module.bankcert.RhStartActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <!--人行注册-->
+        <activity
+            android:name=".module.bankcert.RhRegisterActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+
         <!--芝麻认证-->
         <activity
             android:name=".module.certification.ZMCertificationActivity"
@@ -170,6 +181,7 @@
                     android:scheme="borrowing" />
             </intent-filter>
         </activity>
+
 
     </application>
 

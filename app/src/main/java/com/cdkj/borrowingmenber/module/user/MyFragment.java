@@ -32,6 +32,7 @@ import com.cdkj.borrowingmenber.databinding.FragmentMyBinding;
 import com.cdkj.borrowingmenber.model.UserInfoModel;
 import com.cdkj.borrowingmenber.module.api.MyApiServer;
 import com.cdkj.borrowingmenber.module.bankcert.RhLoginActivity;
+import com.cdkj.borrowingmenber.module.bankcert.RhStartActivity;
 import com.cdkj.borrowingmenber.module.report.MyReportActivity;
 
 import java.util.HashMap;
@@ -152,6 +153,7 @@ public class MyFragment extends BaseLazyFragment {
         //人行报告
         mBinding.rowMyRhReport.setOnClickListener(v -> {
             RhLoginActivity.open(mActivity);
+//            RhStartActivity.open(mActivity);
         });
     }
 

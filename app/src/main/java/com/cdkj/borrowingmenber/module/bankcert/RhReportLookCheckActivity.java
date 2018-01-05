@@ -105,22 +105,16 @@ public class RhReportLookCheckActivity extends AbsBaseLoadActivity {
 
         showLoadingDialog();
 
-        call.enqueue(new BaseRhCertCallBack<ResponseBody>(this) {
+        call.enqueue(new BaseRhCertCallBack<ResponseBody>(this, BaseRhCertCallBack.STRINGTYPE) {
             @Override
-            protected void onSuccess(ResponseBody responseBody) {
-                try {
-                    String succ = responseBody.string();
-                    LogUtil.E("id code" + succ);
-                    if (TextUtils.equals("success", succ)) {  //获取成功
-                        mSubscription.add(AppUtils.startCodeDown(60, mBinding.btnGetIdCode));
-                        showToast("身份验证码已经发送，请注意查收");
-                    } else if (TextUtils.equals("noTradeCode", succ)) { //系统异常
-                        showToast("系统异常，请重试");
-                    } else { //获取错误
-                        showToast("身份验证码已经失败，请重试");
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
+            protected void onSuccess(String str) {
+                if (TextUtils.equals("success", str)) {  //获取成功
+                    mSubscription.add(AppUtils.startCodeDown(60, mBinding.btnGetIdCode));
+                    showToast("身份验证码已经发送，请注意查收");
+                } else if (TextUtils.equals("noTradeCode", str)) { //系统异常
+                    showToast("系统异常，请重试");
+                } else { //获取错误
+                    showToast("身份验证码已经失败，请重试");
                 }
             }
 
@@ -148,22 +142,14 @@ reportformat	21*/
 
         Call<ResponseBody> call = RetrofitUtils.createApi(MyApiServer.class).checklookRepory(map);
         showLoadingDialog();
-        call.enqueue(new BaseRhCertCallBack<ResponseBody>(this) {
+        call.enqueue(new BaseRhCertCallBack<ResponseBody>(this, BaseRhCertCallBack.STRINGTYPE) {
             @Override
-            protected void onSuccess(ResponseBody responseBody) {
-
-                try {
-                    if (TextUtils.equals(responseBody.string(), "0")) //成功
-                    {
-                        lookReport();
-
-                    } else { //失败
-
-                        showToast("报告查看失败，请重试");
-
-                    }
-                } catch (Exception e) {
-
+            protected void onSuccess(String str) {
+                if (TextUtils.equals(str, "0")) //成功
+                {
+                    lookReport();
+                } else { //失败
+                    showToast("报告查看失败，请重试");
                 }
             }
 
@@ -192,21 +178,13 @@ tradeCode	tb4k7f*/
 
         showLoadingDialog();
 
-        call.enqueue(new BaseRhCertCallBack<ResponseBody>(this) {
+        call.enqueue(new BaseRhCertCallBack<ResponseBody>(this, BaseRhCertCallBack.STRINGTYPE) {
             @Override
-            protected void onSuccess(ResponseBody responseBody) {
+            protected void onSuccess(String str) {
                 LogUtil.E("查看成功");
-                try {
-                    webView.setVisibility(View.VISIBLE);
-                    mBinding.linTopInput.setVisibility(View.GONE);
-
-                    String reportHtmlString = responseBody.string();
-
-                    webView.loadData(reportHtmlString, "text/html;charset=UTF-8", "UTF-8");
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                webView.setVisibility(View.VISIBLE);
+                mBinding.linTopInput.setVisibility(View.GONE);
+                webView.loadData(str, "text/html;charset=UTF-8", "UTF-8");
             }
 
             @Override

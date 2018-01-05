@@ -44,7 +44,6 @@ public class LocalFocusOnDataParseHelper {
             return list;
         }
 
-
         for (IndustryFocusOnListModel.DetailBean detailBean : detailBeans) {
 
             if (detailBean == null) {
@@ -82,9 +81,11 @@ public class LocalFocusOnDataParseHelper {
             if (localFocusOnList.getType() != null) {
 
                 for (MyLocalFocusOnListModel.TypeBean.TypeCodeInfoBean typeCodeListBean : localFocusOnList.getType().getTypeCodeInfo()) {//对比风险类型code
+
                     if (typeCodeListBean == null) {
                         continue;
                     }
+
                     if (TextUtils.equals(typeCodeListBean.getCode(), detailBean.getType())) {
 
                         parseShowModel.setBizName(localFocusOnList.getBizName());

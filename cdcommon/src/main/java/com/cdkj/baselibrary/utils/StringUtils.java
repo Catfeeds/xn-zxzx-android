@@ -41,6 +41,10 @@ public class StringUtils {
     }
 
 
+    public static boolean contains(String s, String b) {
+        if (s == null || b == null) return false;
+        return s.contains(b);
+    }
 
 
     public static int parseInt(String s) {
@@ -114,12 +118,6 @@ public class StringUtils {
         return subString(s, start, s.length());
     }
 
-    public static String subStringLenghtEnd(String s) {
-        if (TextUtils.isEmpty(s)) {
-            return "";
-        }
-        return subString(s, s.length() - 1, s.length());
-    }
 
     //int前面补零
     public static String frontCompWithZoreString(Object sourceDate, int formatLength) {
