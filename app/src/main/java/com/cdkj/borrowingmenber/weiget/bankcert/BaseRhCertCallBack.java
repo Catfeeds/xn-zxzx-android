@@ -119,7 +119,7 @@ public abstract class BaseRhCertCallBack<T> implements Callback<ResponseBody> {
                 return;
             }
 
-            if (document == null || TextUtils.isEmpty(document.title()) || TextUtils.isEmpty(document.text())) { //判断长时间未操作
+            if (document == null || TextUtils.isEmpty(document.title()) || TextUtils.isEmpty(document.text())) { //判断长时间未操作 未操作时会返回一段js代码出一个alert弹框
                 onReqFailure(NETERRORCODE4, "系统繁忙,请稍后再试");
                 return;
             }

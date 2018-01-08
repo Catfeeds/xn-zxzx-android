@@ -410,7 +410,7 @@ public class BasicInfoCertActivity extends BaseCertStepActivity {
     }
 
     private void showMarriagesicker() {
-        if (mMarriages == null || mMarriages == null) return;
+        if (mMarriages == null || mMarriagesPicker == null) return;
         if (mMarriages.isEmpty()) {
             getMarriagesData();
             return;

@@ -94,7 +94,7 @@
                     android:layout_weight="1"
                     android:textColor="#838383"
                     android:textColorHint="@color/text_hint_color"
-                    android:textSize="12sp"
+                    android:textSize="13sp"
                     tools:text="版本号: V  1.1.1" />
 
                 <ImageView

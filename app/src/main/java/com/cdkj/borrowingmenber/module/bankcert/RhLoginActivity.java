@@ -295,7 +295,7 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
         call.enqueue(new BaseRhCertCallBack<ResponseBody>(this, BaseRhCertCallBack.DOCTYPE) {
             @Override
             protected void onSuccess(Document document) {
-                if (document != null && StringUtils.contains(document.text(), "欢迎登录个人信用信息服务平台") || StringUtils.contains(document.text(), "上次访问时间")) { //如果没获取到说明登录失败
+                if (StringUtils.contains(document.text(), "欢迎登录个人信用信息服务平台") || StringUtils.contains(document.text(), "上次访问时间")) { //如果没获取到说明登录失败
                     getLeftMenuReportInfo();
                 } else {
                     showError();
