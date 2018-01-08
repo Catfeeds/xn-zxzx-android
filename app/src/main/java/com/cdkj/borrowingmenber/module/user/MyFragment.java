@@ -151,8 +151,8 @@ public class MyFragment extends BaseLazyFragment {
         });
         //人行报告
         mBinding.rowMyRhReport.setOnClickListener(v -> {
-            RhLoginActivity.open(mActivity);
-//            RhStartActivity.open(mActivity);
+//            RhLoginActivity.open(mActivity);
+            RhStartActivity.open(mActivity);
         });
     }
 
