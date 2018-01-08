@@ -20,7 +20,7 @@ public class FocusOnParseShowModel {
 
     private String evenTEndTimeDesc;//event_end_time_desc 违约时间
 
-    private String extend;//扩展字段
+    private String extend="";//扩展字段
 
     public String getExtend() {
         return extend;

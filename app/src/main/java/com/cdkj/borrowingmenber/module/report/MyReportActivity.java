@@ -36,7 +36,6 @@ import com.cdkj.borrowingmenber.adapters.TdReportCertRiskListAdapter;
 import com.cdkj.borrowingmenber.databinding.ActivityMyReportBinding;
 import com.cdkj.borrowingmenber.databinding.LayoutBasicUserInfoBinding;
 import com.cdkj.borrowingmenber.databinding.LayoutReportAddressbokBinding;
-import com.cdkj.borrowingmenber.databinding.LayoutReportEmptyBinding;
 import com.cdkj.borrowingmenber.databinding.LayoutReportFocusOnBinding;
 import com.cdkj.borrowingmenber.databinding.LayoutReportFraudBinding;
 import com.cdkj.borrowingmenber.databinding.LayoutReportIdcardBinding;
@@ -53,7 +52,6 @@ import com.cdkj.borrowingmenber.model.IndustryFocusOnListModel;
 import com.cdkj.borrowingmenber.model.KeyDataModel;
 import com.cdkj.borrowingmenber.model.LocationReportModel;
 import com.cdkj.borrowingmenber.model.MobileModel;
-import com.cdkj.borrowingmenber.model.MyLocalFocusOnListModel;
 import com.cdkj.borrowingmenber.model.ReportContactModel;
 import com.cdkj.borrowingmenber.model.ReportModel;
 import com.cdkj.borrowingmenber.model.ReportParseData;
@@ -774,35 +772,30 @@ public class MyReportActivity extends AbsBaseLoadActivity {
 
 
     /**
-     * 解析本地xml数据获取行业关注对照数据
+     * 解析本地数据获取行业关注对照数据
      */
     public void getLocaFocusOnData(List<IndustryFocusOnListModel.DetailBean> data) {
 
         showPraseDialog();
         mSubscription.add(Observable.just("")
                 .observeOn(Schedulers.io())
-                .map(s -> {
-                    AppUtils.readAssetsTxt(MyReportActivity.this, "local_focus_on.txt");
-                    return JSON.parseArray(s, MyLocalFocusOnListModel.class);
-                })
                 .map(myLocalFocusOnListModels -> {
-                    LocalFocusOnDataParseHelper localFocusOnDataParseHelper = new LocalFocusOnDataParseHelper(myLocalFocusOnListModels);
-                    return localFocusOnDataParseHelper.parseShowData(data);
+                    LocalFocusOnDataParseHelper localFocusOnDataParseHelper = new LocalFocusOnDataParseHelper();
+                    return localFocusOnDataParseHelper.parseShowData(this, data);
                 })
                 .filter(focusOnParseShowModels -> focusOnParseShowModels != null)
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> dismissPraseDialog())
-                .subscribe(s -> {
+                .subscribe(focusOnParseShowModels -> {
                     mFocusOnList.clear();
-                    mFocusOnList.addAll(s);
+                    mFocusOnList.addAll(focusOnParseShowModels);
                     mFocusonListAdapter.notifyDataSetChanged();
 
                 }, throwable -> {
                     mFocusOnList.clear();
                     mFocusonListAdapter.notifyDataSetChanged();
-                    LogUtil.E("数据错误" + throwable);
+                    LogUtil.E("行业关注清单解析" + throwable);
                 }));
-
     }
 
 

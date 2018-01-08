@@ -1,46 +1,79 @@
 package com.cdkj.borrowingmenber.weiget;
 
+import android.content.Context;
 import android.text.TextUtils;
 
+import com.alibaba.fastjson.JSON;
+import com.cdkj.baselibrary.utils.AppUtils;
 import com.cdkj.borrowingmenber.model.FocusOnParseShowModel;
 import com.cdkj.borrowingmenber.model.IndustryFocusOnListModel;
 import com.cdkj.borrowingmenber.model.MyLocalFocusOnListModel;
 
+import org.apache.commons.collections4.map.CompositeMap;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
+import io.reactivex.Observable;
+
+import static com.loc.g.s;
 
 /**
  * 本地行业关注名单数据解析类
  * Created by cdkcj on 2017/12/12.
  */
-//TODO 行业关注数据解析 方法修改
-
-//方案1 ： 获取本地json 遍历对比解析 （目前使用方案）
-
-//方案2： 将所有数据写在switch判断语句里 根据switch判断来选择
 
 public class LocalFocusOnDataParseHelper {
 
-    private List<MyLocalFocusOnListModel> myLocalFocusOnList;
 
-    private LocalFocusOnDataParseHelper() {
+    private HashMap<String, MyLocalFocusOnListModel> parMap = new HashMap<>();
+    ;
 
+    /**
+     * 处理扩展字段
+     *
+     * @param detailBean
+     * @param
+     */
+    private FocusOnParseShowModel parseExtendInfo(IndustryFocusOnListModel.DetailBean detailBean) {
+
+        FocusOnParseShowModel parseShowModel = new FocusOnParseShowModel();
+
+        for (IndustryFocusOnListModel.DetailBean.ExtendInfoBean extendInfoBean : detailBean.getExtendInfo()) { //扩展字段处理
+            if (extendInfoBean == null) {
+                continue;
+            }
+
+            //TODO 公检法扩展字段需要处理
+            if (TextUtils.equals("AB", detailBean.getBizCode())) {
+                parseShowModel.addExtend(extendInfoBean.getValue());
+            } else {
+                if (TextUtils.equals(extendInfoBean.getKey(), "event_max_amt_code")) {
+                    parseShowModel.setMaxMoney(getMaxMoney(extendInfoBean.getValue()));
+                    parseShowModel.setMaxMoneyName(getMaxCodeName());
+
+                } else if (TextUtils.equals(extendInfoBean.getKey(), "event_end_time_desc")) {
+                    parseShowModel.setEvenTEndTimeDesc(getMaxMoney(extendInfoBean.getValue()));
+                    parseShowModel.setEvenTEndTimeDescName(extendInfoBean.getDescription());
+                }
+            }
+        }
+
+        return parseShowModel;
     }
 
-    public LocalFocusOnDataParseHelper(List<MyLocalFocusOnListModel> myLocalFocusOnList) {
-        this.myLocalFocusOnList = myLocalFocusOnList;
-    }
 
     /**
      * 根据获取的关注数据code 对比本地数据解析要显示的数据
      * <p>
      * 解析过程中数据量较多，最好进行线程处理
      */
-    public List<FocusOnParseShowModel> parseShowData(List<IndustryFocusOnListModel.DetailBean> detailBeans) {
+    public List<FocusOnParseShowModel> parseShowData(Context context, List<IndustryFocusOnListModel.DetailBean> detailBeans) {
 
         List<FocusOnParseShowModel> list = new ArrayList<>();
 
-        if (detailBeans == null || myLocalFocusOnList == null || detailBeans.isEmpty() || myLocalFocusOnList.isEmpty()) {
+        if (detailBeans == null || detailBeans.isEmpty()) {
             return list;
         }
 
@@ -49,77 +82,90 @@ public class LocalFocusOnDataParseHelper {
             if (detailBean == null) {
                 continue;
             }
-
-            MyLocalFocusOnListModel localFocusOnList = getBizDataByBizCode(detailBean.getBizCode(), myLocalFocusOnList); //获取行业类型数据
+//            MyLocalFocusOnListModel localFocusOnList = getBizDataByBizCode(detailBean.getBizCode(), myLocalFocusOnList); //获取行业类型数据 解析全部数据时
+            MyLocalFocusOnListModel localFocusOnList = getBizDataByBizCode(context, detailBean.getBizCode()); //获取行业类型数据
 
             if (localFocusOnList == null) {
                 continue;
             }
 
-            FocusOnParseShowModel parseShowModel = new FocusOnParseShowModel();
+            FocusOnParseShowModel parseShowModel = parseExtendInfo(detailBean); //扩展字段处理
 
-            for (IndustryFocusOnListModel.DetailBean.ExtendInfoBean extendInfoBean : detailBean.getExtendInfo()) { //扩展字段处理
-                if (extendInfoBean == null) {
-                    continue;
-                }
-                //TODO 公检法扩展字段需要处理
-                if (TextUtils.equals("AB", localFocusOnList.getBizCode())) {
-                    parseShowModel.addExtend(extendInfoBean.getValue());
-                } else {
-                    if (TextUtils.equals(extendInfoBean.getKey(), "event_max_amt_code")) {
-                        parseShowModel.setMaxMoney(getMaxMoney(extendInfoBean.getValue()));
-                        parseShowModel.setMaxMoneyName(getMaxCodeName());
-
-                    } else if (TextUtils.equals(extendInfoBean.getKey(), "event_end_time_desc")) {
-                        parseShowModel.setEvenTEndTimeDesc(getMaxMoney(extendInfoBean.getValue()));
-                        parseShowModel.setEvenTEndTimeDescName(extendInfoBean.getDescription());
-                    }
-                }
-
-            }
-
-            if (localFocusOnList.getType() != null) {
-
-                for (MyLocalFocusOnListModel.TypeBean.TypeCodeInfoBean typeCodeListBean : localFocusOnList.getType().getTypeCodeInfo()) {//对比风险类型code
-
-                    if (typeCodeListBean == null) {
-                        continue;
-                    }
-
-                    if (TextUtils.equals(typeCodeListBean.getCode(), detailBean.getType())) {
-
-                        parseShowModel.setBizName(localFocusOnList.getBizName());
-                        parseShowModel.setTypeDescribe(typeCodeListBean.getValue());
-
-                        if (typeCodeListBean.getCodeList() != null) {
-
-                            for (MyLocalFocusOnListModel.TypeBean.TypeCodeInfoBean.CodeListBeanX.CodeListBean codeListBean : typeCodeListBean.getCodeList().getCodeList()) {
-
-                                if (codeListBean == null) {
-                                    continue;
-                                }
-
-                                if (TextUtils.equals(codeListBean.getCode(), detailBean.getCode())) {
-                                    parseShowModel.setTypeDescribeTitle(typeCodeListBean.getCodeList().getName());
-                                    parseShowModel.setTypeDescribeDetail(codeListBean.getValue());
-                                    break;
-                                }
-
-                            }
-                        }
-
-                        break;
-
-                    }
-                }
-
-            }
+            parseShowModel = parseFocusType(detailBean, localFocusOnList, parseShowModel);//行业类型处理
 
             list.add(parseShowModel);
         }
 
         return list;
 
+    }
+
+    /**
+     * 解析行业数据
+     * @param detailBean
+     * @param localFocusOnList
+     * @param parseShowModel
+     * @return
+     */
+    private FocusOnParseShowModel parseFocusType(IndustryFocusOnListModel.DetailBean detailBean, MyLocalFocusOnListModel localFocusOnList, FocusOnParseShowModel parseShowModel) {
+
+        if (localFocusOnList != null && localFocusOnList.getType() != null) {
+
+            for (MyLocalFocusOnListModel.TypeBean.TypeCodeInfoBean typeCodeListBean : localFocusOnList.getType().getTypeCodeInfo()) {//对比风险类型code
+
+                if (typeCodeListBean == null) {
+                    continue;
+                }
+
+                if (TextUtils.equals(typeCodeListBean.getCode(), detailBean.getType())) {
+
+                    parseShowModel.setBizName(localFocusOnList.getBizName());           //获取行业名称
+                    parseShowModel.setTypeDescribe(typeCodeListBean.getValue());       //获取行业关注描述
+
+                    if (typeCodeListBean.getCodeList() != null) {
+
+                        for (MyLocalFocusOnListModel.TypeBean.TypeCodeInfoBean.CodeListBeanX.CodeListBean codeListBean : typeCodeListBean.getCodeList().getCodeList()) {
+
+                            if (codeListBean == null) {
+                                continue;
+                            }
+
+                            if (TextUtils.equals(codeListBean.getCode(), detailBean.getCode())) {
+                                parseShowModel.setTypeDescribeTitle(typeCodeListBean.getCodeList().getName());
+                                parseShowModel.setTypeDescribeDetail(codeListBean.getValue());
+                                break;
+                            }
+
+                        }
+                    }
+
+                    break;
+
+                }
+            }
+
+        }
+
+        return parseShowModel;
+    }
+
+    /**
+     * 根据code 解析获取本地行业关注数据 已经解析过的数据储存在HashMap里避免二次解析
+     *
+     * @param context
+     * @param code    要解析的行业关注数据名称 AA
+     * @return
+     */
+
+    public MyLocalFocusOnListModel getBizDataByBizCode(Context context, String code) {
+
+        MyLocalFocusOnListModel focusOnListModel = parMap.get(code);
+
+        if (focusOnListModel == null) {
+            focusOnListModel = JSON.parseObject(AppUtils.readAssetsTxt(context, code + ".txt"), MyLocalFocusOnListModel.class);
+            parMap.put(code, focusOnListModel);
+        }
+        return focusOnListModel;
     }
 
 
