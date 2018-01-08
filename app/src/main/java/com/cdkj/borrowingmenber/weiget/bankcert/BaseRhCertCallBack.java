@@ -110,16 +110,20 @@ public abstract class BaseRhCertCallBack<T> implements Callback<ResponseBody> {
         } else if (this.transitionType == DOCTYPE) {
 
             Document document = Jsoup.parse(strRe);
-            Elements elements = document.getElementsByClass("error");
 
-            if (document == null || (elements != null && elements.size() > 0)) {
-
+            if (document == null) {
                 onReqFailure(NETERRORCODE4, "系统繁忙,请稍后再试");
-
                 return;
             }
 
-            if (document == null || TextUtils.isEmpty(document.title()) || TextUtils.isEmpty(document.text())) { //判断长时间未操作 未操作时会返回一段js代码出一个alert弹框
+            Elements elements = document.getElementsByClass("error");
+
+            if (elements != null && elements.size() > 0) {
+                onReqFailure(NETERRORCODE4, "系统繁忙,请稍后再试");
+                return;
+            }
+
+            if (TextUtils.isEmpty(document.title()) || TextUtils.isEmpty(document.text())) { //判断长时间未操作 未操作时会返回一段js代码出一个alert弹框
                 onReqFailure(NETERRORCODE4, "系统繁忙,请稍后再试");
                 return;
             }
