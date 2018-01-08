@@ -128,7 +128,7 @@ public class MyReportActivity extends AbsBaseLoadActivity {
     private static final String income = "income";
     private static final String family_relation = "family_relation";
     private static final String society_relation = "society_relation";
-    private String reportCode=null;
+    private String reportCode = null;
 
 
     public static void open(Context context, String code) {
@@ -781,15 +781,12 @@ public class MyReportActivity extends AbsBaseLoadActivity {
         showPraseDialog();
         mSubscription.add(Observable.just("")
                 .observeOn(Schedulers.io())
-                .map(s -> AppUtils.readAssetsTxt(MyReportActivity.this, "local_focus_on.txt"))
-                .filter(s -> !TextUtils.isEmpty(s))
                 .map(s -> {
+                    AppUtils.readAssetsTxt(MyReportActivity.this, "local_focus_on.txt");
                     return JSON.parseArray(s, MyLocalFocusOnListModel.class);
                 })
                 .map(myLocalFocusOnListModels -> {
-                    return new LocalFocusOnDataParseHelper(myLocalFocusOnListModels);
-                })
-                .map(localFocusOnDataParseHelper -> {
+                    LocalFocusOnDataParseHelper localFocusOnDataParseHelper = new LocalFocusOnDataParseHelper(myLocalFocusOnListModels);
                     return localFocusOnDataParseHelper.parseShowData(data);
                 })
                 .filter(focusOnParseShowModels -> focusOnParseShowModels != null)
@@ -801,6 +798,8 @@ public class MyReportActivity extends AbsBaseLoadActivity {
                     mFocusonListAdapter.notifyDataSetChanged();
 
                 }, throwable -> {
+                    mFocusOnList.clear();
+                    mFocusonListAdapter.notifyDataSetChanged();
                     LogUtil.E("数据错误" + throwable);
                 }));
 
