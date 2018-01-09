@@ -170,7 +170,7 @@ reportformat	21*/
 reportformat	21
 tradeCode	tb4k7f*/
         Map<String, String> map = new HashMap<>();
-        map.put("counttime", "1");
+        map.put("counttime", "1");    //发送验证码后 验证码倒计时剩余数字 1-60 TODO counttime应该由解析而得到
         map.put("tradeCode", mBinding.editCode.getText().toString());
         map.put("reportformat", reportType); //21 个人信用报告  24 个人信用概要 25 个人信息提示
 

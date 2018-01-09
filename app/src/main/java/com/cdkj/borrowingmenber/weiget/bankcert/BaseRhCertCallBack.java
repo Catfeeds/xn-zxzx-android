@@ -8,6 +8,7 @@ import com.cdkj.baselibrary.api.BaseResponseListModel;
 import com.cdkj.baselibrary.nets.NetHelper;
 import com.cdkj.baselibrary.nets.NetUtils;
 import com.cdkj.baselibrary.utils.LogUtil;
+import com.cdkj.baselibrary.utils.ToastUtil;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -194,7 +195,7 @@ public abstract class BaseRhCertCallBack<T> implements Callback<ResponseBody> {
      * 请求数据为空
      */
     protected void onNull() {
-        NetHelper.onNull(context);
+        ToastUtil.show(context, "系统繁忙,请稍后再试");
     }
 
     /**

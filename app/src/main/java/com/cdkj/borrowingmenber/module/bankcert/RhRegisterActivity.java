@@ -12,6 +12,7 @@ import com.bigkoo.pickerview.OptionsPickerView;
 import com.bumptech.glide.Glide;
 import com.cdkj.baselibrary.activitys.WebViewActivity;
 import com.cdkj.baselibrary.base.AbsBaseLoadActivity;
+import com.cdkj.baselibrary.nets.PersistentCookieStore;
 import com.cdkj.baselibrary.nets.RetrofitUtils;
 import com.cdkj.baselibrary.utils.LogUtil;
 import com.cdkj.baselibrary.utils.StringUtils;
@@ -22,6 +23,7 @@ import com.cdkj.borrowingmenber.module.api.MyApiServer;
 import com.cdkj.borrowingmenber.weiget.bankcert.BaseRhCertCallBack;
 
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
@@ -47,6 +49,10 @@ public class RhRegisterActivity extends AbsBaseLoadActivity {
 
     private String mCardTpyeCode = "0";//选择的证件类型Code  默认为身份证
 
+    private String regiToken = "";//用于注册请求
+
+    private int i = 0;
+
     public static void open(Context context) {
         if (context == null) {
             return;
@@ -69,13 +75,16 @@ public class RhRegisterActivity extends AbsBaseLoadActivity {
     @Override
     public void afterCreate(Bundle savedInstanceState) {
 
+        PersistentCookieStore ff = new PersistentCookieStore(getApplicationContext());
+
+        ff.removeAll();
+
         mBaseBinding.titleView.setMidTitle("填写身份信息");
 
         initCardTypePicker();
 
         initListener();
-
-//        getRetiCodeImg();
+        rhRegiRequestInit();
 
     }
 
@@ -91,11 +100,12 @@ public class RhRegisterActivity extends AbsBaseLoadActivity {
         });
         //注册下一步
         mBinding.btnRegi1.setOnClickListener(v -> {
+            hideError();
             regiNext();
         });
         //获取验证码
-        mBinding.tvChangeCode.setOnClickListener(v -> getRetiCodeImg());
-        mBinding.imgCode.setOnClickListener(v -> getRetiCodeImg());
+        mBinding.tvChangeCode.setOnClickListener(v -> getRetiCodeImg(true));
+        mBinding.imgCode.setOnClickListener(v -> getRetiCodeImg(true));
     }
 
     /**
@@ -180,8 +190,24 @@ public class RhRegisterActivity extends AbsBaseLoadActivity {
     /**
      * 获取注册验证码图片
      */
-    private void getRetiCodeImg() {
-        Call<ResponseBody> call = RetrofitUtils.createApi(MyApiServer.class).rhRegiCode(new Date().getTime() + "");
+    private void getRetiCodeImg(boolean istouch) {
+        Call<ResponseBody> call = null;
+        if (!istouch) {
+            if (i == 0) {
+                call = RetrofitUtils.createApi(MyApiServer.class).rhRegiCode1("0." + new Date().getTime() + "314");
+            } else {
+                call = RetrofitUtils.createApi(MyApiServer.class).rhRegiCode("0." + new Date().getTime() + "314");
+            }
+
+        } else {
+            if (i == 0) {
+                call = RetrofitUtils.createApi(MyApiServer.class).rhRegiCode1("" + new Date().getTime());
+            } else {
+                call = RetrofitUtils.createApi(MyApiServer.class).rhRegiCode("" + new Date().getTime());
+            }
+
+        }
+
 
         addCall(call);
         showLoadingDialog();
@@ -213,13 +239,22 @@ public class RhRegisterActivity extends AbsBaseLoadActivity {
         Map<String, String> map = new HashMap<>();
         map.put("1", "on");
         map.put("method", "checkIdentity");
-        map.put("org.apache.struts.taglib.html.TOKEN", "7dc93b932ad82457edaefb95da16732a");
-        map.put("name", mBinding.editRegiName.getText().toString());
-        map.put("certType", mCardTpyeCode);
-        map.put("certNo", mBinding.editCardNum.getText().toString());
-        map.put("_@IMGRC@_", mBinding.editCode.getText().toString());
+        map.put("org.apache.struts.taglib.html.TOKEN", regiToken);  //解析页面的得到的token
+        map.put("userInfoVO.name", mBinding.editRegiName.getText().toString());
+        map.put("userInfoVO.certType", mCardTpyeCode);                          //证件类型
+        map.put("userInfoVO.certNo", mBinding.editCardNum.getText().toString());
+        map.put("_@IMGRC@_", mBinding.editCode.getText().toString());     //验证码
 
-        Call call = RetrofitUtils.createApi(MyApiServer.class).rhRegiRequest(map);
+        Call call = null;
+
+        if (i == 0) {
+            call = RetrofitUtils.createApi(MyApiServer.class).rhRegiRequest1(map);
+        } else {
+            call = RetrofitUtils.createApi(MyApiServer.class).rhRegiRequest(map);
+        }
+
+        i++;
+
 
         addCall(call);
 
@@ -229,18 +264,11 @@ public class RhRegisterActivity extends AbsBaseLoadActivity {
 
             @Override
             protected void onSuccess(Document doc) {
-                Elements element = doc.getElementsByClass("erro_div1"); //获取登录错误提醒 如果有 说明登录没成功
-                if (element != null && !TextUtils.isEmpty(element.text())) {
-                    mBinding.errorInfo.setText(element.text());
-                    showToast(element.text());
-                    return;
-                }
-                Elements element2 = doc.getElementsByClass("span-grey2"); //获取登录错误提醒 如果有 说明登录没成功
-                if (element2 != null && StringUtils.contains(element2.text(), "我已阅读并同意")) {
-                    mBinding.errorInfo.setText("注册失败，请重试");
-                    showToast("注册失败，请重试");
-                    return;
-                }
+
+                checkGetToken(doc);
+
+                checkRegiSuccess(doc);
+
 
             }
 
@@ -251,6 +279,95 @@ public class RhRegisterActivity extends AbsBaseLoadActivity {
 
         });
 
+    }
+
+    /**
+     * 检测注册是否成功
+     *
+     * @param doc
+     */
+    private void checkRegiSuccess(Document doc) {
+
+
+        Elements element = doc.getElementsByClass("erro_div1"); //获取注册错误提醒 如果有 说明登录没成功
+        if (element != null && !TextUtils.isEmpty(element.text())) {
+            showError(element.text());
+            getRetiCodeImg(true);
+            return;
+        }
+        Elements element2 = doc.getElementsByClass("span-grey2"); //如果有 说明登录没成功
+        if (element2 != null && StringUtils.contains(element2.text(), "我已阅读并同意")) {
+            showError("注册失败，请重试");
+            getRetiCodeImg(true);
+            return;
+        }
+
+        Elements elements3 = doc.getElementsByClass("regist_text span-14");// 注册成功第二步 用于检测是否出现了第二步骤的元素 没出现说明登录失败
+
+        if (elements3 != null && StringUtils.contains(elements3.text(), "登录名") || StringUtils.contains(elements3.text(), "确认密码")) {
+            checkGetToken(doc); //用于获取下一个页面的token
+            RhRegister2Activity.open(RhRegisterActivity.this, regiToken);
+            finish();
+            return;
+        }
+        getRetiCodeImg(true);
+        showError("注册失败，请重试");
+    }
+
+    private void showError(String text) {
+        mBinding.errorInfo.setText(text);
+        mBinding.errorInfo.setVisibility(View.VISIBLE);
+        showToast(text);
+    }
+
+    private void hideError() {
+        mBinding.errorInfo.setText("");
+        mBinding.errorInfo.setVisibility(View.GONE);
+    }
+
+    /**
+     * 注册请求 用户获取token
+     */
+    private void rhRegiRequestInit() {
+
+        Call call = RetrofitUtils.createApi(MyApiServer.class).rhRegiRequestInit();
+
+        addCall(call);
+
+        showLoadingDialog();
+
+        call.enqueue(new BaseRhCertCallBack(this, BaseRhCertCallBack.DOCTYPE) {
+
+            @Override
+            protected void onSuccess(Document doc) {
+                checkGetToken(doc);
+//                getRetiCodeImg(false);
+            }
+
+            @Override
+            protected void onFinish() {
+                disMissLoading();
+            }
+
+        });
+
+    }
+
+    /**
+     * 检测获取token
+     *
+     * @param doc
+     */
+    private void checkGetToken(Document doc) {
+        Elements elements = doc.select("input[name]");
+        if (elements == null) return;
+        for (Element element : elements) {
+            if (TextUtils.equals("org.apache.struts.taglib.html.TOKEN", element.attr("name"))) {
+                regiToken = element.attr("value");
+                LogUtil.E("注册token" + regiToken);
+                break;
+            }
+        }
     }
 
 }

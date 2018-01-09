@@ -162,6 +162,17 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
 
+        <!--人行注册 2-->
+        <activity
+            android:name=".module.bankcert.RhRegister2Activity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <!--人行注册 3-->
+        <activity
+            android:name=".module.bankcert.RhRegister3Activity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+
         <!--芝麻认证-->
         <activity
             android:name=".module.certification.ZMCertificationActivity"

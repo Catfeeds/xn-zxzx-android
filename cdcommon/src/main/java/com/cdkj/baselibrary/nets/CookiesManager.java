@@ -4,6 +4,7 @@ package com.cdkj.baselibrary.nets;
 
 
 import com.cdkj.baselibrary.CdApplication;
+import com.cdkj.baselibrary.utils.LogUtil;
 
 import java.util.List;
 
@@ -32,6 +33,11 @@ class CookiesManager implements CookieJar {
     @Override
     public List<Cookie> loadForRequest(HttpUrl url) {
         List<Cookie> cookies = cookieStore.get(url);
+
+        for (Cookie cookie : cookies) {
+            LogUtil.E("Cookie"+cookie.toString());
+        }
+
         return cookies;
     }
 }
