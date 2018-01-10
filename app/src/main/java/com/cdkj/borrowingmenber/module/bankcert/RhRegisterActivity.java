@@ -75,13 +75,9 @@ public class RhRegisterActivity extends AbsBaseLoadActivity {
     @Override
     public void afterCreate(Bundle savedInstanceState) {
 
-        PersistentCookieStore ff = new PersistentCookieStore(getApplicationContext());
-
-        ff.removeAll();
-
         mBaseBinding.titleView.setMidTitle("填写身份信息");
 
-        initCardTypePicker();
+//        initCardTypePicker();
 
         initListener();
         rhRegiRequestInit();
@@ -91,9 +87,9 @@ public class RhRegisterActivity extends AbsBaseLoadActivity {
     private void initListener() {
 
         //证件类型
-        mBinding.linCardType.setOnClickListener(v -> {
-            if (mCardTypePicker != null) mCardTypePicker.show();
-        });
+//        mBinding.linCardType.setOnClickListener(v -> {
+//            if (mCardTypePicker != null) mCardTypePicker.show();
+//        });
         //服务协议
         mBinding.tvRead1.setOnClickListener(v -> {
             WebViewActivity.openURL(this, "服务协议", "https://ipcrs.pbccrc.org.cn/html/servearticle.html");
@@ -113,23 +109,23 @@ public class RhRegisterActivity extends AbsBaseLoadActivity {
      */
     private void regiNext() {
 
-//        if (TextUtils.isEmpty(mBinding.editRegiName.getText().toString())) {
-//            showToast("请输入姓名");
-//            return;
-//        }
-//        if (TextUtils.isEmpty(mBinding.editCardNum.getText().toString())) {
-//            showToast("请输入证件号码");
-//            return;
-//        }
-//        if (TextUtils.isEmpty(mBinding.editCode.getText().toString())) {
-//            showToast("请输入验证码");
-//            return;
-//        }
-//
-//        if (!mBinding.checkboxRead.isChecked()) {
-//            showToast("请阅读并同意服务协议");
-//            return;
-//        }
+        if (TextUtils.isEmpty(mBinding.editRegiName.getText().toString())) {
+            showToast("请输入姓名");
+            return;
+        }
+        if (TextUtils.isEmpty(mBinding.editCardNum.getText().toString())) {
+            showToast("请输入证件号码");
+            return;
+        }
+        if (TextUtils.isEmpty(mBinding.editCode.getText().toString())) {
+            showToast("请输入验证码");
+            return;
+        }
+
+        if (!mBinding.checkboxRead.isChecked()) {
+            showToast("请阅读并同意服务协议");
+            return;
+        }
         rhRegiRequest();
     }
 

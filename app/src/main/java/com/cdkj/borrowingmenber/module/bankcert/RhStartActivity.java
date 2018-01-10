@@ -36,6 +36,7 @@ public class RhStartActivity extends AbsBaseLoadActivity {
 
     @Override
     public void afterCreate(Bundle savedInstanceState) {
+        mBaseBinding.titleView.setMidTitle("中国人民银行征信中心");
         mBinding.btnRhLogin.setOnClickListener(v -> RhLoginActivity.open(this));
         mBinding.btnRhRegister.setOnClickListener(v -> RhRegisterActivity.open(this));
     }

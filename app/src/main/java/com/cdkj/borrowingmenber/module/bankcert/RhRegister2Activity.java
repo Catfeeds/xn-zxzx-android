@@ -43,13 +43,13 @@ import retrofit2.Call;
  * 人行注册页面 第二部
  * Created by cdkj on 2018/1/4.
  */
-
+//TODO 人行注册输入正则验证
 public class RhRegister2Activity extends AbsBaseLoadActivity {
 
 
     private String regiToken = "";//用于注册请求
 
-    private String tcId="";//获取得到验证码后得到 用于注册
+    private String tcId = "";//获取得到验证码后得到 用于注册
 
     public static void open(Context context, String regiToken) {
         if (context == null) {
@@ -103,11 +103,21 @@ public class RhRegister2Activity extends AbsBaseLoadActivity {
             showError("请输入登录名");
             return;
         }
+        if (mBinding.editLoginName.getText().length() < 6 || mBinding.editLoginName.getText().length() > 16) {
+            showError("请输入正确的登录名");
+            return;
+        }
 
         if (TextUtils.isEmpty(mBinding.editLoginPassword.getText().toString())) {
             showError("请输入登录密码");
             return;
         }
+
+        if (mBinding.editLoginPassword.getText().length() < 6 || mBinding.editLoginPassword.getText().length() > 20) {
+            showError("请输入正确的登录名");
+            return;
+        }
+
         if (TextUtils.isEmpty(mBinding.editLoginPasswordReInput.getText().toString())) {
             showError("请确认登录密码");
             return;
@@ -123,13 +133,18 @@ public class RhRegister2Activity extends AbsBaseLoadActivity {
             return;
         }
 
-        if(TextUtils.isEmpty(tcId)){
+        if (TextUtils.isEmpty(tcId)) {
             showError("请先获取动态码");
             return;
         }
 
         if (TextUtils.isEmpty(mBinding.editCode.getText().toString())) {
             showError("请输入动态码");
+            return;
+        }
+
+        if (!TextUtils.isEmpty(mBinding.editEmail.getText().toString()) && !StringUtils.isEmail(mBinding.editEmail.getText().toString())) {
+            showError("请输入正确的电子邮箱");
             return;
         }
 

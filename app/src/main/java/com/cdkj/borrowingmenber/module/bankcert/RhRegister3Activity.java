@@ -2,10 +2,12 @@ package com.cdkj.borrowingmenber.module.bankcert;
 
 import android.content.Context;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.view.View;
 
 import com.cdkj.baselibrary.base.AbsBaseLoadActivity;
+import com.cdkj.borrowingmenber.R;
 import com.cdkj.borrowingmenber.databinding.ActivityRhRegiStep3Binding;
 
 /**
@@ -26,7 +28,8 @@ public class RhRegister3Activity extends AbsBaseLoadActivity {
 
     @Override
     public View addMainView() {
-        return null;
+        mBinding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.activity_rh_regi_step_3, null, false);
+        return mBinding.getRoot();
     }
 
     @Override
