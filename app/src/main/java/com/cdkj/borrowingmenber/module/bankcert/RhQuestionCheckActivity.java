@@ -141,4 +141,28 @@ public class RhQuestionCheckActivity extends AbsBaseLoadActivity {
         }
     }
 
+    /**
+     * 回答问题
+     */
+    public void submitQuestion() {
+        Map<String, String> map = new HashMap<>();
+
+        map.put("org.apache.struts.taglib.html.TOKEN", "");
+        map.put("method", "");//不用太提交
+        map.put("authtype", RhHelper.reportCheckType);
+        map.put("ApplicationOption", RhHelper.reportType);
+        map.put("kbaList[0].derivativecode", "");
+        map.put("kbaList[0].businesstype", "");
+        map.put("kbaList[0].questionno", "");
+        map.put("kbaList[0].kbanum", "");
+        map.put("kbaList[0].question", "");
+        map.put("kbaList[0].question1", "");
+        map.put("kbaList[0].question2", "");
+        map.put("kbaList[0].question3", "");
+        map.put("kbaList[0].question4", "");
+        map.put("kbaList[0].question5", "");
+        map.put("kbaList[0].answerresult", ""); //回答的答案
+        map.put("kbaList[0].options", "");
+    }
+
 }
