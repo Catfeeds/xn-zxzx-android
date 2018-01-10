@@ -34,4 +34,6 @@
     <string name="no_camera_permission">没有获取到权限，无法使用相机和相册功能</string>
     <string name="service_time">服务时间:</string>
     <string name="service_phone">服务电话:</string>
+    <string name="rh_no_report">您目前没有可供查看的报告，请进行认证后再进行查看。</string>
+    <string name="rh_report_checkinto">您的信用信息查询请求已提交，请在24小时后访问平台获取结果。为保障您的信息安全，您申请的信用信息将于7日后自动清理，请及时获取查询结果。</string>
 </resources>

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import com.cdkj.baselibrary.appmanager.SPUtilHelpr;
 import com.cdkj.baselibrary.base.BaseActivity;
 import com.cdkj.borrowingmenber.module.bankcert.RhLoginActivity;
+import com.cdkj.borrowingmenber.module.bankcert.RhQuestionCheckActivity;
 import com.cdkj.borrowingmenber.module.bankcert.RhRegister2Activity;
 import com.cdkj.borrowingmenber.module.bankcert.RhRegisterActivity;
 import com.cdkj.borrowingmenber.module.bankcert.RhReportLookCheckActivity;
@@ -47,8 +48,8 @@ public class WelcomeAcitivity extends BaseActivity {
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(aLong -> {//延迟两秒进行跳转
-//                    RhRegister2Activity.open(WelcomeAcitivity.this);
-                    startNext();
+                    RhQuestionCheckActivity.open(WelcomeAcitivity.this, "");
+//                    startNext();
                 }, Throwable::printStackTrace));
     }
 

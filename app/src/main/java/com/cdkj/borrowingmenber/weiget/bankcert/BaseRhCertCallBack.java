@@ -99,7 +99,7 @@ public abstract class BaseRhCertCallBack<T> implements Callback<ResponseBody> {
 
         if (TextUtils.isEmpty(strRe)) {
 
-            onReqFailure(NETERRORCODE4, "数据获取失败");
+            onReqFailure(NETERRORCODE4, "系统繁忙,请稍后再试");
 
             return;
 

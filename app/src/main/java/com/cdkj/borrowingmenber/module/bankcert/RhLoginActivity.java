@@ -16,6 +16,7 @@ import com.cdkj.borrowingmenber.R;
 import com.cdkj.borrowingmenber.databinding.ActivityRhLoginBinding;
 import com.cdkj.borrowingmenber.module.api.MyApiServer;
 import com.cdkj.borrowingmenber.weiget.bankcert.BaseRhCertCallBack;
+import com.cdkj.borrowingmenber.weiget.bankcert.RhHelper;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -311,7 +312,7 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
     }
 
     /**
-     * 获取登录成功后左菜单
+     * 获取登录成功后左菜单(查看报告界面)
      */
     public void getLeftMenuReportInfo() {
 
@@ -349,16 +350,12 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
                     return menuDoc;
                 }).subscribe(menuDoc -> {
 
-                    Elements input = menuDoc.getElementsByClass("regist_text span-14"); // 如果没有这个元素说明没有获取到菜单页面
-                    if (input == null) {
-                        showError();
-                        return;
-                    }
-                    if (!input.text().contains("身份验证码")) {
+                    if (!StringUtils.contains(menuDoc.text(), "身份验证码") || !StringUtils.contains(menuDoc.text(), "获取信用信息")) {
                         showError();
                         return;
                     }
 
+                    //TODO 判断有无报告单优化 判断下一步是否可以点击 id="nextstep" disabled="disabled" 目前只需要报告
                     Elements radio = menuDoc.select("[disabled]");// 获取带有disabled属性的元素 三个资信报告类型选择框
 
                     if (radio == null) {
@@ -389,7 +386,7 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
         for (Element element : radio) {
             if (element == null) continue;
 
-            if (TextUtils.equals(RhReportLookCheckActivity.reportType, element.attr("value"))) {  // 如果获取的元素里 有 value=21 说明个人信用报告被禁用
+            if (TextUtils.equals(RhHelper.reportType, element.attr("value"))) {  // 如果获取的元素里 有 value=21 说明个人信用报告被禁用
                 return true;
             }
         }

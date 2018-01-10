@@ -1,0 +1,501 @@
+                                                                                                                                                                                                                                                                                                                                                                                                                                    <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">var _BASEPATH_='https://ipcrs.pbccrc.org.cn/';</script>
+<script src="https://ipcrs.pbccrc.org.cn/js/pe.js" type="text/javascript"></script>
+
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=GBK" />
+		<title>中征信个人信用信息服务平台-KBA验证</title>
+		<link type="text/css" href="https://ipcrs.pbccrc.org.cn/css/public.css" rel="stylesheet" />
+		<link type="text/css" href="https://ipcrs.pbccrc.org.cn/css/page.css" rel="stylesheet" />
+		<link type="text/css" rel="stylesheet" href="https://ipcrs.pbccrc.org.cn/css/new.css" />
+		<script type="text/javascript" src="https://ipcrs.pbccrc.org.cn/js/jquery.js"></script>
+		<script type="text/javascript" src="https://ipcrs.pbccrc.org.cn/js/select.js"></script>
+	</head>
+	<body>
+		<form name="reportForm" method="post" action="/reportAction.do?method=submitKBA"><input type="hidden" name="org.apache.struts.taglib.html.TOKEN" value="721657932a69ca988911811a443e1f99">
+			<input type="hidden" name="method">
+			<input type="hidden" name="authtype" id='authtype'
+				value='2'>
+
+				<input type="hidden" id="ApplicationOption" name="ApplicationOption"
+					value="25" />
+
+				<input type="hidden" id="ApplicationOption" name="ApplicationOption"
+					value="24" />
+
+				<input type="hidden" id="ApplicationOption" name="ApplicationOption"
+					value="21" />
+
+
+			<!-- 主体部分 -->
+			<div class="con_right">
+			<div class="right_now">
+					&nbsp;&nbsp;
+					<span>当前位置：</span><span>信息服务</span><span> &gt; 申请信用信息</span>
+				</div>
+				<div class="title-2">
+					<span>申请信用信息</span>
+				</div>
+	     		<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">var _BASEPATH_='https://ipcrs.pbccrc.org.cn/';</script>
+<script src="https://ipcrs.pbccrc.org.cn/js/pe.js" type="text/javascript"></script>
+
+	<script type="text/javascript">
+		function setValue(no, obj) {
+			document.getElementsByName("kbaList[" + no + "].answerresult")[0].value = obj.value;
+		}
+
+		function checkKBAHasAnswered() {
+
+	            var result = document.getElementsByName("kbaList[0].answerresult")[0].value;
+	            if (result == null || result.length == 0) {
+	                $("#error").text("必须对所有的题作答！");
+	                return false;
+	            }
+
+	            var result = document.getElementsByName("kbaList[1].answerresult")[0].value;
+	            if (result == null || result.length == 0) {
+	                $("#error").text("必须对所有的题作答！");
+	                return false;
+	            }
+
+	            var result = document.getElementsByName("kbaList[2].answerresult")[0].value;
+	            if (result == null || result.length == 0) {
+	                $("#error").text("必须对所有的题作答！");
+	                return false;
+	            }
+
+	            var result = document.getElementsByName("kbaList[3].answerresult")[0].value;
+	            if (result == null || result.length == 0) {
+	                $("#error").text("必须对所有的题作答！");
+	                return false;
+	            }
+
+	            var result = document.getElementsByName("kbaList[4].answerresult")[0].value;
+	            if (result == null || result.length == 0) {
+	                $("#error").text("必须对所有的题作答！");
+	                return false;
+	            }
+
+	    	return true;
+    	}
+
+    	function kbaloginOff(){
+    		$.ajax({
+				cache:false,
+				type:"post",
+				async: false,
+				url:"login.do?num="+Math.random(),
+				data:{method:"loginOut"},
+				dataType:"text",
+				success:function(){
+					top.location.href="https://ipcrs.pbccrc.org.cn/";
+				}
+			});
+
+    	}
+	</script>
+
+	<div class="right_con"><br />
+		<div class="time_out">距离身份验证结束时间：<span id="limitTimeSpan"></span></div>
+		<div class="erro_div1" id="error"></div>
+
+	    <div class="qustion">
+		<ul>
+
+				<input type="hidden" name="kbaList[0].derivativecode"
+	                               value="WyoXO/h8djYGOT+nqylqdXOxBkY=">
+	            <input type="hidden" name="kbaList[0].businesstype"
+	                               value="07">
+	            <input type="hidden" name="kbaList[0].questionno"
+	                               value="5">
+	            <input type="hidden" name="kbaList[0].kbanum"
+	                               value="2936">
+	            <input type="hidden" name="kbaList[0].question"
+	                               value="您在2013年11月办理的贷款额度是多少？">
+	            <input type="hidden" name="kbaList[0].options1"
+	                               value="2501-3500">
+	            <input type="hidden" name="kbaList[0].options2"
+	                               value="3501-4500">
+	            <input type="hidden" name="kbaList[0].options3"
+	                               value="4501-5500">
+	            <input type="hidden" name="kbaList[0].options4"
+	                               value="5501-6500">
+	            <input type="hidden" name="kbaList[0].options5"
+	                               value="以上都不是">
+	            <input type="hidden" name="kbaList[0].answerresult"/>
+				<li>
+	                <p>问题<span>1：您在2013年11月办理的贷款额度是多少？</span></p><br />
+	                <p>
+
+	                  		<p>
+	                  		<input class="radio_type1" type="radio" name="kbaList[0].options" value="1"  onclick="setValue(0,this)" />
+							<span>2501-3500</span>
+							</p>
+
+
+
+	                  		<p>
+	                  		<input class="radio_type1" type="radio" name="kbaList[0].options" value="2"  onclick="setValue(0,this)" />
+	                  		<span>3501-4500</span>
+	                  		</p>
+
+
+
+	                  		<p>
+	                  		<input class="radio_type1" type="radio" name="kbaList[0].options" value="3"  onclick="setValue(0,this)" />
+	                  		<span>4501-5500</span>
+	                  		</p>
+
+
+
+	                  		<p>
+	                  		<input class="radio_type1" type="radio" name="kbaList[0].options" value="4"  onclick="setValue(0,this)" />
+	                  		<span>5501-6500</span>
+	                  		</p>
+
+
+
+	                  		<p>
+	                  		<input class="radio_type1" type="radio" name="kbaList[0].options" value="5"  onclick="setValue(0,this)" />
+	                  		<span>以上都不是</span>
+	                  		</p>
+
+	                </p>
+	              </li>
+
+				<input type="hidden" name="kbaList[1].derivativecode"
+	                               value="WyoXO/h8djYGOT+nqylqdXOxBkY=">
+	            <input type="hidden" name="kbaList[1].businesstype"
+	                               value="07">
+	            <input type="hidden" name="kbaList[1].questionno"
+	                               value="10">
+	            <input type="hidden" name="kbaList[1].kbanum"
+	                               value="2936">
+	            <input type="hidden" name="kbaList[1].question"
+	                               value="2014年01月至2017年07月期间，您办理的所有贷款中，最早办理的贷款是以下哪种类型？">
+	            <input type="hidden" name="kbaList[1].options1"
+	                               value="个人汽车贷款">
+	            <input type="hidden" name="kbaList[1].options2"
+	                               value="个人助学贷款">
+	            <input type="hidden" name="kbaList[1].options3"
+	                               value="个人经营性贷款">
+	            <input type="hidden" name="kbaList[1].options4"
+	                               value="个人住房贷款">
+	            <input type="hidden" name="kbaList[1].options5"
+	                               value="以上都不是">
+	            <input type="hidden" name="kbaList[1].answerresult"/>
+				<li>
+	                <p>问题<span>2：2014年01月至2017年07月期间，您办理的所有贷款中，最早办理的贷款是以下哪种类型？</span></p><br />
+	                <p>
+
+	                  		<p>
+	                  		<input class="radio_type1" type="radio" name="kbaList[1].options" value="1"  onclick="setValue(1,this)" />
+							<span>个人汽车贷款</span>
+							</p>
+
+
+
+	                  		<p>
+	                  		<input class="radio_type1" type="radio" name="kbaList[1].options" value="2"  onclick="setValue(1,this)" />
+	                  		<span>个人助学贷款</span>
+	                  		</p>
+
+
+
+	                  		<p>
+	                  		<input class="radio_type1" type="radio" name="kbaList[1].options" value="3"  onclick="setValue(1,this)" />
+	                  		<span>个人经营性贷款</span>
+	                  		</p>
+
+
+
+	                  		<p>
+	                  		<input class="radio_type1" type="radio" name="kbaList[1].options" value="4"  onclick="setValue(1,this)" />
+	                  		<span>个人住房贷款</span>
+	                  		</p>
+
+
+
+	                  		<p>
+	                  		<input class="radio_type1" type="radio" name="kbaList[1].options" value="5"  onclick="setValue(1,this)" />
+	                  		<span>以上都不是</span>
+	                  		</p>
+
+	                </p>
+	              </li>
+
+				<input type="hidden" name="kbaList[2].derivativecode"
+	                               value="WyoXO/h8djYGOT+nqylqdXOxBkY=">
+	            <input type="hidden" name="kbaList[2].businesstype"
+	                               value="07">
+	            <input type="hidden" name="kbaList[2].questionno"
+	                               value="4">
+	            <input type="hidden" name="kbaList[2].kbanum"
+	                               value="2936">
+	            <input type="hidden" name="kbaList[2].question"
+	                               value="您于2014年11月在何处办理过贷款？">
+	            <input type="hidden" name="kbaList[2].options1"
+	                               value="天津市">
+	            <input type="hidden" name="kbaList[2].options2"
+	                               value="贵州省贵阳市">
+	            <input type="hidden" name="kbaList[2].options3"
+	                               value="广东省揭阳市">
+	            <input type="hidden" name="kbaList[2].options4"
+	                               value="江西省景德镇市">
+	            <input type="hidden" name="kbaList[2].options5"
+	                               value="以上都不是">
+	            <input type="hidden" name="kbaList[2].answerresult"/>
+				<li>
+	                <p>问题<span>3：您于2014年11月在何处办理过贷款？</span></p><br />
+	                <p>
+
+	                  		<p>
+	                  		<input class="radio_type1" type="radio" name="kbaList[2].options" value="1"  onclick="setValue(2,this)" />
+							<span>天津市</span>
+							</p>
+
+
+
+	                  		<p>
+	                  		<input class="radio_type1" type="radio" name="kbaList[2].options" value="2"  onclick="setValue(2,this)" />
+	                  		<span>贵州省贵阳市</span>
+	                  		</p>
+
+
+
+	                  		<p>
+	                  		<input class="radio_type1" type="radio" name="kbaList[2].options" value="3"  onclick="setValue(2,this)" />
+	                  		<span>广东省揭阳市</span>
+	                  		</p>
+
+
+
+	                  		<p>
+	                  		<input class="radio_type1" type="radio" name="kbaList[2].options" value="4"  onclick="setValue(2,this)" />
+	                  		<span>江西省景德镇市</span>
+	                  		</p>
+
+
+
+	                  		<p>
+	                  		<input class="radio_type1" type="radio" name="kbaList[2].options" value="5"  onclick="setValue(2,this)" />
+	                  		<span>以上都不是</span>
+	                  		</p>
+
+	                </p>
+	              </li>
+
+				<input type="hidden" name="kbaList[3].derivativecode"
+	                               value="WyoXO/h8djYGOT+nqylqdXOxBkY=">
+	            <input type="hidden" name="kbaList[3].businesstype"
+	                               value="07">
+	            <input type="hidden" name="kbaList[3].questionno"
+	                               value="33">
+	            <input type="hidden" name="kbaList[3].kbanum"
+	                               value="2936">
+	            <input type="hidden" name="kbaList[3].question"
+	                               value="您2014年07月的学历是什么？">
+	            <input type="hidden" name="kbaList[3].options1"
+	                               value="技术学校">
+	            <input type="hidden" name="kbaList[3].options2"
+	                               value="大学专科和专科学校（简称&#034;大专&#034;）">
+	            <input type="hidden" name="kbaList[3].options3"
+	                               value="大学本科（简称&#034;大学&#034;）">
+	            <input type="hidden" name="kbaList[3].options4"
+	                               value="中等专业学校或中等技术学校">
+	            <input type="hidden" name="kbaList[3].options5"
+	                               value="以上都不是">
+	            <input type="hidden" name="kbaList[3].answerresult"/>
+				<li>
+	                <p>问题<span>4：您2014年07月的学历是什么？</span></p><br />
+	                <p>
+
+	                  		<p>
+	                  		<input class="radio_type1" type="radio" name="kbaList[3].options" value="1"  onclick="setValue(3,this)" />
+							<span>技术学校</span>
+							</p>
+
+
+
+	                  		<p>
+	                  		<input class="radio_type1" type="radio" name="kbaList[3].options" value="2"  onclick="setValue(3,this)" />
+	                  		<span>大学专科和专科学校（简称&#034;大专&#034;）</span>
+	                  		</p>
+
+
+
+	                  		<p>
+	                  		<input class="radio_type1" type="radio" name="kbaList[3].options" value="3"  onclick="setValue(3,this)" />
+	                  		<span>大学本科（简称&#034;大学&#034;）</span>
+	                  		</p>
+
+
+
+	                  		<p>
+	                  		<input class="radio_type1" type="radio" name="kbaList[3].options" value="4"  onclick="setValue(3,this)" />
+	                  		<span>中等专业学校或中等技术学校</span>
+	                  		</p>
+
+
+
+	                  		<p>
+	                  		<input class="radio_type1" type="radio" name="kbaList[3].options" value="5"  onclick="setValue(3,this)" />
+	                  		<span>以上都不是</span>
+	                  		</p>
+
+	                </p>
+	              </li>
+
+				<input type="hidden" name="kbaList[4].derivativecode"
+	                               value="WyoXO/h8djYGOT+nqylqdXOxBkY=">
+	            <input type="hidden" name="kbaList[4].businesstype"
+	                               value="07">
+	            <input type="hidden" name="kbaList[4].questionno"
+	                               value="36">
+	            <input type="hidden" name="kbaList[4].kbanum"
+	                               value="2936">
+	            <input type="hidden" name="kbaList[4].question"
+	                               value="您的初始身份证领取地是哪里？">
+	            <input type="hidden" name="kbaList[4].options1"
+	                               value="西藏自治区昌都地区">
+	            <input type="hidden" name="kbaList[4].options2"
+	                               value="贵州省黔西南布依族苗族自治州">
+	            <input type="hidden" name="kbaList[4].options3"
+	                               value="四川省巴中市">
+	            <input type="hidden" name="kbaList[4].options4"
+	                               value="河北省廊坊市">
+	            <input type="hidden" name="kbaList[4].options5"
+	                               value="以上都不是">
+	            <input type="hidden" name="kbaList[4].answerresult"/>
+				<li>
+	                <p>问题<span>5：您的初始身份证领取地是哪里？</span></p><br />
+	                <p>
+
+	                  		<p>
+	                  		<input class="radio_type1" type="radio" name="kbaList[4].options" value="1"  onclick="setValue(4,this)" />
+							<span>西藏自治区昌都地区</span>
+							</p>
+
+
+
+	                  		<p>
+	                  		<input class="radio_type1" type="radio" name="kbaList[4].options" value="2"  onclick="setValue(4,this)" />
+	                  		<span>贵州省黔西南布依族苗族自治州</span>
+	                  		</p>
+
+
+
+	                  		<p>
+	                  		<input class="radio_type1" type="radio" name="kbaList[4].options" value="3"  onclick="setValue(4,this)" />
+	                  		<span>四川省巴中市</span>
+	                  		</p>
+
+
+
+	                  		<p>
+	                  		<input class="radio_type1" type="radio" name="kbaList[4].options" value="4"  onclick="setValue(4,this)" />
+	                  		<span>河北省廊坊市</span>
+	                  		</p>
+
+
+
+	                  		<p>
+	                  		<input class="radio_type1" type="radio" name="kbaList[4].options" value="5"  onclick="setValue(4,this)" />
+	                  		<span>以上都不是</span>
+	                  		</p>
+
+	                </p>
+	              </li>
+
+			<li class="margin_top_20 margin_bot_50"  style="border: 1px #fff solid;">
+	             <input id="id_previous" name="" type="button" class="regist_btn-1 span-14 span-white" value="上一步"  />
+
+	             <!--新手导航显示 “下一步” 按钮 -->
+	             	<input id="id_next" name="" type="button" class="regist_btn span-14 span-white margin_left_15" value="下一步" />
+
+	        </li>
+	        <div class="con_50"></div>
+	    </ul>
+	    </div>
+
+    </div>
+    <script type="text/javascript">
+		function setLimitTime(id, min, sec) {
+			if (min <= 0 && sec <= 0) {
+				document.getElementById(id).innerHTML = "0秒";
+				alert("您回答问题的时间已超时，系统将自动退出!");
+				kbaloginOff();
+			} else if (min > 0 && sec >= 0) {
+				document.getElementById(id).innerHTML = min + "分" + sec + "秒";
+				sec = sec - 1;
+				window.setTimeout("setLimitTime('"+ id + "'," + min + "," + sec +")", 1000);
+			} else if (min > 0 && sec < 0) {
+				min = min - 1;
+				if(min == 0) {
+					document.getElementById(id).innerHTML = "59秒";
+				} else {
+					document.getElementById(id).innerHTML = min + "分59秒";
+				}
+				window.setTimeout("setLimitTime('"+ id + "'," + min + ",58)", 1000);
+			} else if (min == 0 && sec > 0) {
+				document.getElementById(id).innerHTML = sec + "秒";
+				sec = sec - 1
+				window.setTimeout("setLimitTime('"+ id + "',0," + sec +")", 1000);
+			} else {
+				alert("您回答问题的时间已超时，系统将自动退出!");
+				kbaloginOff();
+			}
+		}
+		setLimitTime("limitTimeSpan", 10, 0)
+	</script>
+
+			</div>
+		</form>
+	</body>
+</html>
+
+ <script type="text/javascript">
+	$(function(){
+		// 上一步
+		$('#id_previous').click(function() {
+		 	//$('input[name=method]').val("applicationReport");
+		 	//$('#reportForm').action='https://ipcrs.pbccrc.org.cn/reportAction.do?method=';
+			document.getElementsByTagName("form")[0].action='https://ipcrs.pbccrc.org.cn/reportAction.do?method=applicationReport';
+			document.getElementsByTagName("form")[0].submit();
+		});
+		// 下一步
+		$('#id_next').click(function() {
+			if(checkKBAHasAnswered()){
+				//$('input[name=method]').val("submitKBA");
+				//$('#reportForm').action='https://ipcrs.pbccrc.org.cn/reportAction.do?method';
+				//$('#reportForm').submit();
+				document.getElementsByTagName("form")[0].action='https://ipcrs.pbccrc.org.cn/reportAction.do?method=submitKBA';
+				document.getElementsByTagName("form")[0].submit();
+				//KBA提交后，将按钮隐藏
+
+			}
+		});
+	});
+</script>

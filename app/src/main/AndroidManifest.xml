@@ -151,6 +151,11 @@
             android:name=".module.bankcert.RhNoReportActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
+        <!--人行问题验证-->
+        <activity
+            android:name=".module.bankcert.RhQuestionCheckActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
         <!--人行开始-->
         <activity
             android:name=".module.bankcert.RhStartActivity"

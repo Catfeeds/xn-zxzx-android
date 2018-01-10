@@ -30,6 +30,48 @@ import retrofit2.http.Query;
  */
 
 public interface MyApiServer {
+
+
+    /**
+     * 获取验证问题
+     *
+     * @return
+     */
+    @Headers({
+            "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Accept-Encoding: gzip, deflate, br",
+            "Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2",
+            "Connection: Keep-Alive",
+            "Content-Type: application/x-www-form-urlencoded; charset=UTF-8",
+            "Host: ipcrs.pbccrc.org.cn",
+            "X-Requested-With: XMLHttpRequest",
+            "Upgrade-Insecure-Requests: 1",
+            "Referer: https://ipcrs.pbccrc.org.cn/reportAction.do?method=applicationReport"
+    })
+    @POST("https://ipcrs.pbccrc.org.cn/reportAction.do?method=checkishasreport")
+    Call<ResponseBody> getCheckRuestion(@FieldMap Map<String, String> map);
+
+
+    /**
+     * 检测是否在认证中
+     *
+     * @return
+     */
+    @Headers({
+            "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Accept-Encoding: gzip, deflate, br",
+            "Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2",
+            "Connection: Keep-Alive",
+            "Content-Type: application/x-www-form-urlencoded; charset=UTF-8",
+            "Host: ipcrs.pbccrc.org.cn",
+            "X-Requested-With: XMLHttpRequest",
+            "Upgrade-Insecure-Requests: 1",
+            "Referer: https://ipcrs.pbccrc.org.cn/menu.do"
+    })
+    @GET(" https://ipcrs.pbccrc.org.cn/reportAction.do?method=applicationReport")
+    Call<ResponseBody> rhReportIsChecking();
+
+
     /**
      * 人行注册第二步检测登录名是否已经使用
      *
@@ -47,7 +89,7 @@ public interface MyApiServer {
     })
     @FormUrlEncoded
     @POST("https://ipcrs.pbccrc.org.cn/userReg.do?")
-    Call<ResponseBody> rhCheckRegLoginnameHasUsed(@FieldMap Map<String,String> map ,@Query("num") String num);
+    Call<ResponseBody> rhCheckRegLoginnameHasUsed(@FieldMap Map<String, String> map, @Query("num") String num);
 
     /**
      * 人行注册第二步

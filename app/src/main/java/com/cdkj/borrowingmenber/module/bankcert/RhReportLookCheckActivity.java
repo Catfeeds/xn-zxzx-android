@@ -19,8 +19,8 @@ import com.cdkj.borrowingmenber.R;
 import com.cdkj.borrowingmenber.databinding.ActivityRhReportCheckBinding;
 import com.cdkj.borrowingmenber.module.api.MyApiServer;
 import com.cdkj.borrowingmenber.weiget.bankcert.BaseRhCertCallBack;
+import com.cdkj.borrowingmenber.weiget.bankcert.RhHelper;
 
-import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,8 +38,6 @@ public class RhReportLookCheckActivity extends AbsBaseLoadActivity {
     private ActivityRhReportCheckBinding mBinding;
 
     private WebView webView;
-
-    public static final String reportType = "21";  //21 个人信用报告  24 个人信用概要 25 个人信息提示
 
     public static void open(Context context) {
         if (context == null) {
@@ -99,7 +97,7 @@ public class RhReportLookCheckActivity extends AbsBaseLoadActivity {
         Map<String, String> map = new HashMap<>();
 
         map.put("method", "sendAgain");
-        map.put("reportformat", reportType); //21 个人信用报告  24 个人信用概要 25 个人信息提
+        map.put("reportformat", RhHelper.reportType); //21 个人信用报告  24 个人信用概要 25 个人信息提
 
         Call<ResponseBody> call = RetrofitUtils.createApi(MyApiServer.class).idCodeRequest(map, new Date().getTime() + "");
 
@@ -138,7 +136,7 @@ reportformat	21*/
 
         map.put("method", "checkTradeCode");
         map.put("code", mBinding.editCode.getText().toString());
-        map.put("reportformat", reportType); //21 个人信用报告  24 个人信用概要 25 个人信息提示
+        map.put("reportformat", RhHelper.reportType); //21 个人信用报告  24 个人信用概要 25 个人信息提示
 
         Call<ResponseBody> call = RetrofitUtils.createApi(MyApiServer.class).checklookRepory(map);
         showLoadingDialog();
@@ -172,7 +170,7 @@ tradeCode	tb4k7f*/
         Map<String, String> map = new HashMap<>();
         map.put("counttime", "1");    //发送验证码后 验证码倒计时剩余数字 1-60 TODO counttime应该由解析而得到
         map.put("tradeCode", mBinding.editCode.getText().toString());
-        map.put("reportformat", reportType); //21 个人信用报告  24 个人信用概要 25 个人信息提示
+        map.put("reportformat", RhHelper.reportType); //21 个人信用报告  24 个人信用概要 25 个人信息提示
 
         Call<ResponseBody> call = RetrofitUtils.createApi(MyApiServer.class).look(map);
 

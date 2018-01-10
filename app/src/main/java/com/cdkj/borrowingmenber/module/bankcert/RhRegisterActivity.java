@@ -21,6 +21,7 @@ import com.cdkj.borrowingmenber.databinding.ActivityRhRegiBinding;
 import com.cdkj.borrowingmenber.model.RhCardTypeModel;
 import com.cdkj.borrowingmenber.module.api.MyApiServer;
 import com.cdkj.borrowingmenber.weiget.bankcert.BaseRhCertCallBack;
+import com.cdkj.borrowingmenber.weiget.bankcert.RhHelper;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -261,7 +262,7 @@ public class RhRegisterActivity extends AbsBaseLoadActivity {
             @Override
             protected void onSuccess(Document doc) {
 
-                checkGetToken(doc);
+                regiToken=RhHelper.checkGetToken(doc);
 
                 checkRegiSuccess(doc);
 
@@ -301,7 +302,7 @@ public class RhRegisterActivity extends AbsBaseLoadActivity {
         Elements elements3 = doc.getElementsByClass("regist_text span-14");// 注册成功第二步 用于检测是否出现了第二步骤的元素 没出现说明登录失败
 
         if (elements3 != null && StringUtils.contains(elements3.text(), "登录名") || StringUtils.contains(elements3.text(), "确认密码")) {
-            checkGetToken(doc); //用于获取下一个页面的token
+            regiToken=RhHelper.checkGetToken(doc); //用于获取下一个页面的token
             RhRegister2Activity.open(RhRegisterActivity.this, regiToken);
             finish();
             return;
@@ -336,7 +337,7 @@ public class RhRegisterActivity extends AbsBaseLoadActivity {
 
             @Override
             protected void onSuccess(Document doc) {
-                checkGetToken(doc);
+                regiToken = RhHelper.checkGetToken(doc);
                 getRetiCodeImg(false);
             }
 
@@ -349,21 +350,5 @@ public class RhRegisterActivity extends AbsBaseLoadActivity {
 
     }
 
-    /**
-     * 检测获取token
-     *
-     * @param doc
-     */
-    private void checkGetToken(Document doc) {
-        Elements elements = doc.select("input[name]");
-        if (elements == null) return;
-        for (Element element : elements) {
-            if (TextUtils.equals("org.apache.struts.taglib.html.TOKEN", element.attr("name"))) {
-                regiToken = element.attr("value");
-                LogUtil.E("注册token" + regiToken);
-                break;
-            }
-        }
-    }
 
 }

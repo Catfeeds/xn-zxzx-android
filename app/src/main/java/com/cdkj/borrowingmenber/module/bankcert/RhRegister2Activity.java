@@ -22,6 +22,7 @@ import com.cdkj.borrowingmenber.databinding.ActivityRhRegiStep2Binding;
 import com.cdkj.borrowingmenber.model.RhCardTypeModel;
 import com.cdkj.borrowingmenber.module.api.MyApiServer;
 import com.cdkj.borrowingmenber.weiget.bankcert.BaseRhCertCallBack;
+import com.cdkj.borrowingmenber.weiget.bankcert.RhHelper;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -254,7 +255,7 @@ public class RhRegister2Activity extends AbsBaseLoadActivity {
             @Override
             protected void onSuccess(Document doc) {
 
-                checkGetToken(doc);
+                regiToken = RhHelper.checkGetToken(doc);
 
                 Element errorEl = doc.getElementById("_error_field_");//判断是否有错误提示 有说明登录失败
 
@@ -290,23 +291,6 @@ public class RhRegister2Activity extends AbsBaseLoadActivity {
 
     }
 
-
-    /**
-     * 检测获取token
-     *
-     * @param doc
-     */
-    private void checkGetToken(Document doc) {
-        Elements elements = doc.select("input[name]");
-        if (elements == null) return;
-        for (Element element : elements) {
-            if (TextUtils.equals("org.apache.struts.taglib.html.TOKEN", element.attr("name"))) {
-                regiToken = element.attr("value");
-                LogUtil.E("注册token   " + regiToken);
-                break;
-            }
-        }
-    }
 
     /**
      * 解析页面根据id获取标签value
