@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">借款员</string>
+    <string name="app_name">资信助手</string>
     <string name="upload_idcard_positive">上传身份证正面照片</string>
     <string name="upload_idcard_reverse">上传身份证反面照片</string>
     <string name="upload_idcard_people">上传手持身份证照片</string>

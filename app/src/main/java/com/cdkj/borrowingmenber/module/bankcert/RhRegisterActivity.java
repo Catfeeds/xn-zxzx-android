@@ -337,7 +337,7 @@ public class RhRegisterActivity extends AbsBaseLoadActivity {
             @Override
             protected void onSuccess(Document doc) {
                 checkGetToken(doc);
-//                getRetiCodeImg(false);
+                getRetiCodeImg(false);
             }
 
             @Override
