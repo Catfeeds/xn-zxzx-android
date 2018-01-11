@@ -203,14 +203,8 @@ public class RhQuestionCheckActivity extends AbsBaseLoadActivity {
                         finish();
                     });
                 })
-                .map(aLong -> {
-//                    Integer time = new Integer(600 - aLong);
-
-//                    Integer min = new Integer(Math.floor((600 - aLong) / 60));
-
-//                    Integer sec = new Integer((600 - aLong) % 60);
-
-                    return Math.floor((600 - aLong) / 60) + "分" + (600 - aLong) % 60 + "秒";
+                .map(aLong -> { //将剩余秒数转换为xx分xx秒
+                    return StringUtils.formatInteger(Math.floor((600 - aLong) / 60)) + "分" + StringUtils.frontCompWithZoreString((600 - aLong) % 60, 2) + "秒";
                 })
                 .subscribe(time -> {
                     setTopTime(time);

@@ -8,6 +8,9 @@ import android.widget.EditText;
 import com.alibaba.fastjson.JSON;
 import com.cdkj.baselibrary.appmanager.MyCdConfig;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -127,6 +130,16 @@ public class StringUtils {
         } catch (Exception e) {
             return sourceDate.toString();
         }
+    }
+    /**
+     * 计算要显示的折扣
+     *
+     * @return
+     */
+    public static String formatInteger(Double discount) {
+        if (discount == null) return "00";
+        NumberFormat nf = new DecimalFormat("#.##");
+        return nf.format(discount);
     }
 
     /**
