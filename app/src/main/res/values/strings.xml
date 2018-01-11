@@ -36,4 +36,7 @@
     <string name="service_phone">服务电话:</string>
     <string name="rh_no_report">您目前没有可供查看的报告，请进行认证后再进行查看。</string>
     <string name="rh_report_checkinto">您的信用信息查询请求已提交，请在24小时后访问平台获取结果。为保障您的信息安全，您申请的信用信息将于7日后自动清理，请及时获取查询结果。</string>
+    <string name="rh_report_no_pass">很抱歉，您提交的个人信息验证未通过，如需重新查看报告，请重新进行认证。</string>
+    <string name="rh_question_done1">1.您的查询申请已提交，若通过身份验证，会以短信形式将身份验证码发送到您预留手机上，请妥善保管，您可在24小时后访问平台获取结果。</string>
+    <string name="rh_question_done2">2.为保护您的信息安全，您申请的信用信息产品将在平台上保留7个自然日，过时平台会自动清理，请及时登录查看结果。</string>
 </resources>

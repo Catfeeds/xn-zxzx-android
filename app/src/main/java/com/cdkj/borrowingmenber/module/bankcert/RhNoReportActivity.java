@@ -9,6 +9,7 @@ import android.view.View;
 
 import com.cdkj.baselibrary.base.AbsBaseLoadActivity;
 import com.cdkj.baselibrary.nets.RetrofitUtils;
+import com.cdkj.baselibrary.utils.StringUtils;
 import com.cdkj.borrowingmenber.R;
 import com.cdkj.borrowingmenber.databinding.ActivityRhReportNoBinding;
 import com.cdkj.borrowingmenber.module.api.MyApiServer;
@@ -23,7 +24,7 @@ import retrofit2.Call;
 
 /**
  * 没有人行报告
- * Created by 李先俊 on 2017/12/28.
+ * Created by cdkj on 2017/12/28.
  */
 
 public class RhNoReportActivity extends AbsBaseLoadActivity {
@@ -69,14 +70,26 @@ public class RhNoReportActivity extends AbsBaseLoadActivity {
                     return;
                 }
 
+                Element radiome = doc.getElementById("ApplicationOption1");//获取个人报告按钮
+
                 if (checkRadioButtonDisabled(radio)) {          //认证中
                     mBinding.btnIKnow.setText("我知道了");
                     mBinding.tvReportInfo.setText(R.string.rh_report_checkinto);
                     mBinding.btnIKnow.setOnClickListener(v -> finish());
+                } else if (radiome != null && radiome.nextElementSibling() != null && StringUtils.contains(radiome.nextElementSibling().text(), "验证未通过")) { //验证未通过 根据按钮的同级文本判断
+                    mBinding.btnIKnow.setText("重新认证");
+                    mBinding.tvReportInfo.setText(R.string.rh_report_no_pass);
+                    mBinding.btnIKnow.setOnClickListener(v -> {
+                        RhQuestionCheckActivity.open(RhNoReportActivity.this, RhHelper.checkGetToken(doc));
+                        finish();
+                    });
                 } else {
                     mBinding.btnIKnow.setText("进行认证");
                     mBinding.tvReportInfo.setText(R.string.rh_no_report);
-                    mBinding.btnIKnow.setOnClickListener(v -> RhQuestionCheckActivity.open(RhNoReportActivity.this, RhHelper.checkGetToken(doc)));
+                    mBinding.btnIKnow.setOnClickListener(v -> {
+                        RhQuestionCheckActivity.open(RhNoReportActivity.this, RhHelper.checkGetToken(doc));
+                        finish();
+                    });
                 }
             }
 

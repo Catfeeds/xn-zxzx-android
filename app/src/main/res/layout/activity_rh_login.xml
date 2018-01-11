@@ -61,6 +61,17 @@
 
         </LinearLayout>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/gray"
+            android:paddingBottom="5dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="5dp"
+            android:text="提示：密码长度必须在6-20之间，可以使用数字、小写字母和大写字母，但必须同时包含数字和字母。"
+            android:textColor="@color/text_hint_color" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -91,6 +102,17 @@
 
 
         </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/gray"
+            android:paddingBottom="5dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="5dp"
+            android:text="提示：密码长度必须在6-20之间，可以使用数字、小写字母和大写字母，但必须同时包含数字和字母。"
+            android:textColor="@color/text_hint_color" />
 
         <LinearLayout
             android:layout_width="match_parent"

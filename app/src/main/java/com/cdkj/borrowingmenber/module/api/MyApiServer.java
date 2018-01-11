@@ -48,6 +48,7 @@ public interface MyApiServer {
             "Upgrade-Insecure-Requests: 1",
             "Referer: https://ipcrs.pbccrc.org.cn/reportAction.do?method=checkishasreport"
     })
+    @FormUrlEncoded
     @POST("https://ipcrs.pbccrc.org.cn/reportAction.do?method=submitKBAt")
     Call<ResponseBody> submitQuestion(@FieldMap Map<String, String> map);
 
@@ -67,6 +68,7 @@ public interface MyApiServer {
             "Upgrade-Insecure-Requests: 1",
             "Referer: https://ipcrs.pbccrc.org.cn/reportAction.do?method=applicationReport"
     })
+    @FormUrlEncoded
     @POST("https://ipcrs.pbccrc.org.cn/reportAction.do?method=checkishasreport")
     Call<ResponseBody> getCheckRuestion(@FieldMap Map<String, String> map);
 

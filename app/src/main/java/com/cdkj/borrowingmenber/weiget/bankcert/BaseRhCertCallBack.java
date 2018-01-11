@@ -76,7 +76,7 @@ public abstract class BaseRhCertCallBack<T> implements Callback<ResponseBody> {
             }
 
         } else {
-            onReqFailure(NETERRORCODE4, "网络请求失败");
+            onReqFailure(NETERRORCODE4, "系统繁忙,请稍后再试");
         }
 
     }

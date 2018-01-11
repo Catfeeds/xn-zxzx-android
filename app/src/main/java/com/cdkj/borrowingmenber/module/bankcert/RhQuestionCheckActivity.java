@@ -2,7 +2,10 @@ package com.cdkj.borrowingmenber.module.bankcert;
 
 import android.content.Context;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.view.View;
 
@@ -10,6 +13,12 @@ import com.cdkj.baselibrary.base.AbsBaseLoadActivity;
 import com.cdkj.baselibrary.nets.RetrofitUtils;
 import com.cdkj.baselibrary.utils.AppUtils;
 import com.cdkj.baselibrary.utils.LogUtil;
+import com.cdkj.baselibrary.utils.StringUtils;
+import com.cdkj.borrowingmenber.R;
+import com.cdkj.borrowingmenber.adapters.RhRuestionAdapter;
+import com.cdkj.borrowingmenber.databinding.ActivityRhQuestionCheckBinding;
+import com.cdkj.borrowingmenber.databinding.LayoutQuestionTopTimeBinding;
+import com.cdkj.borrowingmenber.model.RhRuestionModel;
 import com.cdkj.borrowingmenber.module.api.MyApiServer;
 import com.cdkj.borrowingmenber.weiget.bankcert.BaseRhCertCallBack;
 import com.cdkj.borrowingmenber.weiget.bankcert.RhHelper;
@@ -19,9 +28,15 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 
 /**
@@ -31,7 +46,11 @@ import retrofit2.Call;
 
 public class RhQuestionCheckActivity extends AbsBaseLoadActivity {
 
-    private String token;
+    private String mQuestionToken;//用于请求问题token
+    private String mSubmitQuestionToken = "";//用于提交token
+    private List<RhRuestionModel> mRuestionList;//问题列表
+    private RhRuestionAdapter rhRuestionAdapter;//问题适配器
+    private LayoutQuestionTopTimeBinding mTimeLayout;
 
     public static void open(Context context, String token) {
         if (context == null) {
@@ -42,20 +61,63 @@ public class RhQuestionCheckActivity extends AbsBaseLoadActivity {
         context.startActivity(intent);
     }
 
+    private ActivityRhQuestionCheckBinding mBinding;
 
     @Override
     public View addMainView() {
-        return null;
+        mBinding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.activity_rh_question_check, null, false);
+        return mBinding.getRoot();
     }
 
     @Override
     public void afterCreate(Bundle savedInstanceState) {
 
-        if (getIntent() != null) {
-            token = getIntent().getStringExtra("token");
-        }
-        parseQurestin();
+        mBaseBinding.titleView.setMidTitle("回答问题");
 
+        if (getIntent() != null) {
+            mQuestionToken = getIntent().getStringExtra("token");
+        }
+
+        mBinding.btnSubmit.setOnClickListener(v -> {
+            submitQuestion();
+        });
+        initAdapter();
+//        getRuestionRequest();
+
+        rxParseQuestion(null);
+
+
+    }
+
+    private boolean checkHasAnswered() {
+        for (RhRuestionModel rhRuestionModel : mRuestionList) {
+
+            if (rhRuestionModel == null) continue;
+
+            if (TextUtils.isEmpty(rhRuestionModel.getAnswerresult())) {
+                showToast("必须对所有的题作答！");
+                return false;
+            }
+            LogUtil.E("_______" + rhRuestionModel.getAnswerresult());
+        }
+        return true;
+    }
+
+    private void initAdapter() {
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        };
+
+        mBinding.recyclerQuestion.setLayoutManager(linearLayoutManager);
+        mRuestionList = new ArrayList<>();
+        rhRuestionAdapter = new RhRuestionAdapter(mRuestionList);
+        mTimeLayout = DataBindingUtil.inflate(getLayoutInflater(), R.layout.layout_question_top_time, null, false);
+        rhRuestionAdapter.addHeaderView(mTimeLayout.getRoot());
+        rhRuestionAdapter.setHeaderAndEmpty(true);
+        mBinding.recyclerQuestion.setAdapter(rhRuestionAdapter);
     }
 
 
@@ -64,14 +126,14 @@ public class RhQuestionCheckActivity extends AbsBaseLoadActivity {
      */
     public void getRuestionRequest() {
 
-        if (TextUtils.isEmpty(token)) {
-            showToast("获取问题失败");
+        if (TextUtils.isEmpty(mQuestionToken)) {
+            showToast("系统繁忙,请稍后再试");
             finish();
             return;
         }
         showLoadingDialog();
         Map<String, String> map = new HashMap<>();
-        map.put("org.apache.struts.taglib.html.TOKEN", token);
+        map.put("org.apache.struts.taglib.html.TOKEN", mQuestionToken);
         map.put("method", "checkishasreport");
         map.put("authtype", RhHelper.reportCheckType); //id radiobutton2 3 银行卡验证  id  radiobutton1 1 数字正式验证 id  radiobutton3 2 问题验证
         map.put("ApplicationOption", RhHelper.reportType);
@@ -83,7 +145,8 @@ public class RhQuestionCheckActivity extends AbsBaseLoadActivity {
         call.enqueue(new BaseRhCertCallBack(this, BaseRhCertCallBack.DOCTYPE) {
             @Override
             protected void onSuccess(Document doc) {
-                parseQurestin();
+                mSubmitQuestionToken = RhHelper.checkGetToken(doc);
+                rxParseQuestion(doc);
             }
 
             @Override
@@ -97,72 +160,231 @@ public class RhQuestionCheckActivity extends AbsBaseLoadActivity {
 
     /**
      * 解析问题
+     *
+     * @param doc
      */
-    private void parseQurestin() {
+    private void rxParseQuestion(Document doc) {
+        showLoadingDialog();
+
+        mSubscription.add(io.reactivex.Observable.just("")
+                .observeOn(Schedulers.newThread())
+                .map(s -> parseQuestion(doc))
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> {
+                    disMissLoading();
+                })
+                .subscribe(qus -> {
+                    mRuestionList.clear();
+                    mRuestionList.addAll(qus);
+                    rhRuestionAdapter.notifyDataSetChanged();
+                    startgetAnswerreTimer();
+                }, throwable -> {
+
+                }));
+    }
+
+    /**
+     * 设置倒计时显示
+     */
+    private void setTopTime(String str) {
+        mTimeLayout.tvTitle.setText("您需要回答以下问题，您还有" + str + "的答题时间");
+    }
+
+    /**
+     * 开启答题定时器
+     */
+    private void startgetAnswerreTimer() {
+
+        mSubscription.add(Observable.interval(1, TimeUnit.SECONDS, AndroidSchedulers.mainThread())    // 定时器 600秒（10分钟）后停止答题
+                .take(600)
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnComplete(() -> {
+                    showSureDialog("您的答题时间已经结束，请重新答题。", view -> {
+                        finish();
+                    });
+                })
+                .map(aLong -> {
+//                    Integer time = new Integer(600 - aLong);
+
+//                    Integer min = new Integer(Math.floor((600 - aLong) / 60));
+
+//                    Integer sec = new Integer((600 - aLong) % 60);
+
+                    return Math.floor((600 - aLong) / 60) + "分" + (600 - aLong) % 60 + "秒";
+                })
+                .subscribe(time -> {
+                    setTopTime(time);
+                }, throwable -> {
+                    LogUtil.E("sdfsdf" + throwable);
+                }));
+    }
+
+    /**
+     * 解析问题
+     */
+    private List<RhRuestionModel> parseQuestion(Document document) {
 
         String st = AppUtils.readAssetsTxt(this, "test.txt");
+        document = Jsoup.parse(st);
 
-        Document document = Jsoup.parse(st);
+        Elements liEls = document.select("ul > li"); //问题和回答是包含在li标签里的
 
-//        LogUtil.E(document.text());
+        ArrayList<RhRuestionModel> ruestionList = new ArrayList<>();
 
-        Elements d = document.select("ul > li");
+        for (int i = 0; i < liEls.size(); i++) {
 
-        int i = 0;
-        for (Element element : d) {
+            RhRuestionModel rhRuestionModel = new RhRuestionModel();
 
-            Elements elements = document.select("[name=kbaList[" + i + "].question]");
+            rhRuestionModel.setQuestion(parseInputValueByAttr(document, "[name=kbaList[" + i + "].question]"));//解析问题
 
-            for (Element element1 : elements) {
-
-                LogUtil.E("问题" + i + element1.attr("value"));
+            if (TextUtils.isEmpty(rhRuestionModel.getQuestion())) {   //如果没有解析到问题
+                continue;
             }
 
-            Elements elements2 = document.select("[name=kbaList[" + i + "].options]");
+            rhRuestionModel.setOptionsKey(parseOptionsKey(document, i));//解析问题key
 
-            for (Element element2 : elements2) {
+            rhRuestionModel.setOptions(parseOptions(document, rhRuestionModel.getOptionsKey().size(), i));//解析问题
 
-                LogUtil.E("值" + i + element2.attr("value"));
-            }
-            Elements an1 = document.select("[name=kbaList[" + i + "].options1]");
-            Elements an2 = document.select("[name=kbaList[" + i + "].options2]");
-            Elements an3 = document.select("[name=kbaList[" + i + "].options3]");
-            Elements an4 = document.select("[name=kbaList[" + i + "].options4]");
-            Elements an5 = document.select("[name=kbaList[" + i + "].options5]");
-
-            LogUtil.E("答案" + i + an1.attr("value"));
-            LogUtil.E("答案" + i + an2.attr("value"));
-            LogUtil.E("答案" + i + an3.attr("value"));
-            LogUtil.E("答案" + i + an4.attr("value"));
-            LogUtil.E("答案" + i + an5.attr("value"));
-
-            i++;
-
+            rhRuestionModel.setDerivativecode(parseInputValueByAttr(document, "[name=kbaList[" + i + "].derivativecode]")); //其它回传参数
+            rhRuestionModel.setBusinesstype(parseInputValueByAttr(document, "[name=kbaList[" + i + "].businesstype]"));
+            rhRuestionModel.setQuestionno(parseInputValueByAttr(document, "[name=kbaList[" + i + "].questionno]"));
+            rhRuestionModel.setKbanum(parseInputValueByAttr(document, "[name=kbaList[" + i + "].kbanum]"));
+            ruestionList.add(rhRuestionModel);
         }
+
+
+        return ruestionList;
     }
+
+    /**
+     * 解析问题
+     *
+     * @param document
+     * @param i
+     * @return
+     */
+    @NonNull
+    private List<String> parseOptions(Document document, int keySize, int i) {
+        List<String> arrays2 = new ArrayList<>();
+        for (int j = 0; j < keySize; j++) {
+            Elements optionsElements = document.select("[name=kbaList[" + i + "].options" + (j + 1) + "]");      //获取问题对应回答
+            arrays2.add(optionsElements.attr("value"));
+        }
+        return arrays2;
+    }
+
+    /**
+     * 解析问题key
+     *
+     * @param document
+     * @param i
+     * @return
+     */
+    @NonNull
+    private List<String> parseOptionsKey(Document document, int i) {
+        Elements elements2 = document.select("[name=kbaList[" + i + "].options]"); //获取问题对应回答key
+        List<String> arrays = new ArrayList<>();
+        for (Element element2 : elements2) {
+            arrays.add(element2.attr("value"));
+        }
+        return arrays;
+    }
+
+    /**
+     * 根据属性获取input标签的value
+     *
+     * @param document
+     * @param
+     */
+    private String parseInputValueByAttr(Document document, String attr) {
+        Elements questionElements = document.select(attr);
+
+        if (questionElements == null) {
+            return "";
+        }
+
+        for (Element qe : questionElements) {
+            return qe.attr("value");
+        }
+        return "";
+    }
+
 
     /**
      * 回答问题
      */
     public void submitQuestion() {
+
+        if (!checkHasAnswered()) {//检测所有问题是否回答
+            return;
+        }
+        if (TextUtils.isEmpty(mSubmitQuestionToken)) {
+            showToast("回答问题失败，请重试");
+            return;
+        }
+        showLoadingDialog();
+        mSubscription.add(io.reactivex.Observable.just("")
+                .observeOn(Schedulers.newThread())
+                .map(s -> getSubmitMap())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> {
+                    disMissLoading();
+                })
+                .subscribe(qus -> {
+
+                    Call call = RetrofitUtils.createApi(MyApiServer.class).submitQuestion(qus);
+
+                    addCall(call);
+
+                    call.enqueue(new BaseRhCertCallBack(this, BaseRhCertCallBack.DOCTYPE) {
+                        @Override
+                        protected void onSuccess(Document doc) {
+                            RhQuestionDoneActivity.open(RhQuestionCheckActivity.this);
+                            finish();
+                        }
+
+                        @Override
+                        protected void onFinish() {
+                            disMissLoading();
+                        }
+                    });
+
+                }, throwable -> {
+
+                }));
+    }
+
+    /**
+     * 获取组合的提交问题参数
+     *
+     * @return
+     */
+    private Map<String, String> getSubmitMap() {
         Map<String, String> map = new HashMap<>();
 
-        map.put("org.apache.struts.taglib.html.TOKEN", "");
-        map.put("method", "");//不用太提交
+        map.put("org.apache.struts.taglib.html.TOKEN", mSubmitQuestionToken);
+        map.put("method", "");//不用提交
         map.put("authtype", RhHelper.reportCheckType);
         map.put("ApplicationOption", RhHelper.reportType);
-        map.put("kbaList[0].derivativecode", "");
-        map.put("kbaList[0].businesstype", "");
-        map.put("kbaList[0].questionno", "");
-        map.put("kbaList[0].kbanum", "");
-        map.put("kbaList[0].question", "");
-        map.put("kbaList[0].question1", "");
-        map.put("kbaList[0].question2", "");
-        map.put("kbaList[0].question3", "");
-        map.put("kbaList[0].question4", "");
-        map.put("kbaList[0].question5", "");
-        map.put("kbaList[0].answerresult", ""); //回答的答案
-        map.put("kbaList[0].options", "");
+
+        for (int i = 0; i < mRuestionList.size(); i++) {
+
+            RhRuestionModel rhRuestionModel = mRuestionList.get(i);
+            if (rhRuestionModel == null) continue;
+            map.put("kbaList[" + i + "].derivativecode", rhRuestionModel.getDerivativecode());
+            map.put("kbaList[" + i + "].businesstype", rhRuestionModel.getBusinesstype());
+            map.put("kbaList[" + i + "].questionno", rhRuestionModel.getQuestionno());
+            map.put("kbaList[" + i + "].kbanum", rhRuestionModel.getKbanum());
+            map.put("kbaList[" + i + "].question", rhRuestionModel.getQuestion());
+            map.put("kbaList[" + i + "].answerresult", rhRuestionModel.getAnswerresult()); //回答的答案key
+            map.put("kbaList[" + i + "].options", rhRuestionModel.getAnswerresult());//回答的答案key
+            for (int j = 0; j < rhRuestionModel.getOptions().size(); j++) {
+                map.put("kbaList[" + i + "].options" + (j + 1), rhRuestionModel.getOptions().get(j)); //问题答案
+            }
+        }
+        return map;
     }
 
 }
+
+
