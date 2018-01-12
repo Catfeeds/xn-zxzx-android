@@ -49,7 +49,7 @@ public interface MyApiServer {
             "Referer: https://ipcrs.pbccrc.org.cn/reportAction.do?method=checkishasreport"
     })
     @FormUrlEncoded
-    @POST("https://ipcrs.pbccrc.org.cn/reportAction.do?method=submitKBAt")
+    @POST("https://ipcrs.pbccrc.org.cn/reportAction.do?method=submitKBA")
     Call<ResponseBody> submitQuestion(@FieldMap Map<String, String> map);
 
     /**

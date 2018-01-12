@@ -156,10 +156,8 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
         Map<String, String> map = new HashMap<>();
         map.put("_@IMGRC@_", mbinding.editCode.getText().toString());
         map.put("date", new Date().getTime() + "");
-
         map.put("loginname", mbinding.editLoginName.getText().toString());
         map.put("password", mbinding.editLoginPassword.getText().toString());
-
         map.put("method", "login");
 //            map.put("org.apache.struts.taglib.html.TOKEN", "083f89e3c71eedf1ac40a7fc771c95a583d2fd765cbd92fa5a4316f4");
 

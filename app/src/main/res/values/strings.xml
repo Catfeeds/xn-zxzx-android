@@ -39,4 +39,13 @@
     <string name="rh_report_no_pass">很抱歉，您提交的个人信息验证未通过，如需重新查看报告，请重新进行认证。</string>
     <string name="rh_question_done1">1.您的查询申请已提交，若通过身份验证，会以短信形式将身份验证码发送到您预留手机上，请妥善保管，您可在24小时后访问平台获取结果。</string>
     <string name="rh_question_done2">2.为保护您的信息安全，您申请的信用信息产品将在平台上保留7个自然日，过时平台会自动清理，请及时登录查看结果。</string>
+    <string name="rh_question_check_1">您的查询申请已提交</string>
+    <string name="rh_question_check_2">您可在24小时后访问平台获取结果</string>
+    <string name="rh_question_check_3">请及时登录查看结果</string>
+    <string name="rh_anw_question_error">回答问题失败，请重试</string>
+    <string name="rh_question_time_out">您的答题时间已经结束，请重新答题。</string>
+    <string name="i_see">我知道了</string>
+    <string name="rh_re_check">重新认证</string>
+    <string name="rh_to_check">进行认证</string>
+    <string name="rh_regi_tips">如果您没有办理过贷款或正在使用的信用卡，那么只能登录到中国人民银行征信中学选择“数字证书验证”方式验证身份注册。\n\n征信中心地址：https://ipcrs.pbccrc.org.cn/</string>
 </resources>

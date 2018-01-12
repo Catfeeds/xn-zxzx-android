@@ -32,6 +32,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -43,7 +44,7 @@ import retrofit2.Call;
  * 人行注册页面
  * Created by cdkj on 2018/1/4.
  */
-
+//TODO 请求后状态判断检查
 public class RhRegisterActivity extends AbsBaseLoadActivity {
 
     private List<RhCardTypeModel> rhCardTypeModels;
@@ -124,7 +125,7 @@ public class RhRegisterActivity extends AbsBaseLoadActivity {
         }
 
         if (!mBinding.checkboxRead.isChecked()) {
-            showToast("请阅读并同意服务协议");
+            showToast("请认真阅读并勾选同意服务协议");
             return;
         }
         rhRegiRequest();
@@ -191,9 +192,9 @@ public class RhRegisterActivity extends AbsBaseLoadActivity {
         Call<ResponseBody> call = null;
         if (!istouch) {
             if (i == 0) {
-                call = RetrofitUtils.createApi(MyApiServer.class).rhRegiCode1("0." + new Date().getTime() + "314");
+                call = RetrofitUtils.createApi(MyApiServer.class).rhRegiCode1("0." + new Date().getTime() + getRquestCodeRandom());
             } else {
-                call = RetrofitUtils.createApi(MyApiServer.class).rhRegiCode("0." + new Date().getTime() + "314");
+                call = RetrofitUtils.createApi(MyApiServer.class).rhRegiCode("0." + new Date().getTime() + getRquestCodeRandom());
             }
 
         } else {
@@ -226,6 +227,17 @@ public class RhRegisterActivity extends AbsBaseLoadActivity {
                 disMissLoading();
             }
         });
+    }
+
+    /**
+     * 生产获取验证码随机数
+     *
+     * @return
+     */
+    public int getRquestCodeRandom() {
+        Random rnd = new Random();
+        int num = 100 + rnd.nextInt(900);
+        return num;
     }
 
     /**
@@ -262,7 +274,7 @@ public class RhRegisterActivity extends AbsBaseLoadActivity {
             @Override
             protected void onSuccess(Document doc) {
 
-                regiToken=RhHelper.checkGetToken(doc);
+                regiToken = RhHelper.checkGetToken(doc);
 
                 checkRegiSuccess(doc);
 
@@ -302,7 +314,7 @@ public class RhRegisterActivity extends AbsBaseLoadActivity {
         Elements elements3 = doc.getElementsByClass("regist_text span-14");// 注册成功第二步 用于检测是否出现了第二步骤的元素 没出现说明登录失败
 
         if (elements3 != null && StringUtils.contains(elements3.text(), "登录名") || StringUtils.contains(elements3.text(), "确认密码")) {
-            regiToken=RhHelper.checkGetToken(doc); //用于获取下一个页面的token
+            regiToken = RhHelper.checkGetToken(doc); //用于获取下一个页面的token
             RhRegister2Activity.open(RhRegisterActivity.this, regiToken);
             finish();
             return;

@@ -18,7 +18,7 @@
             android:text="@string/rh_question_done1" />
 
         <TextView
-            android:id="@+id/tv_report_info"
+            android:id="@+id/tv_report_info2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -30,7 +30,7 @@
             android:id="@+id/btn_i_know"
             style="@style/common_button"
             android:layout_marginTop="10dp"
-            tools:text="我知道了" />
+            android:text="我知道了" />
 
     </LinearLayout>
 </layout>

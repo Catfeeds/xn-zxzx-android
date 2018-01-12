@@ -6,6 +6,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
 
@@ -23,7 +24,6 @@ import com.cdkj.borrowingmenber.module.api.MyApiServer;
 import com.cdkj.borrowingmenber.weiget.bankcert.BaseRhCertCallBack;
 import com.cdkj.borrowingmenber.weiget.bankcert.RhHelper;
 
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -51,6 +51,7 @@ public class RhQuestionCheckActivity extends AbsBaseLoadActivity {
     private List<RhRuestionModel> mRuestionList;//问题列表
     private RhRuestionAdapter rhRuestionAdapter;//问题适配器
     private LayoutQuestionTopTimeBinding mTimeLayout;
+    private int mOutTime;
 
     public static void open(Context context, String token) {
         if (context == null) {
@@ -82,9 +83,9 @@ public class RhQuestionCheckActivity extends AbsBaseLoadActivity {
             submitQuestion();
         });
         initAdapter();
-//        getRuestionRequest();
+        getRuestionRequest();
 
-        rxParseQuestion(null);
+//        rxParseQuestion(null);
 
 
     }
@@ -186,8 +187,9 @@ public class RhQuestionCheckActivity extends AbsBaseLoadActivity {
     /**
      * 设置倒计时显示
      */
-    private void setTopTime(String str) {
-        mTimeLayout.tvTitle.setText("您需要回答以下问题，您还有" + str + "的答题时间");
+    private void setTopTime(String time) {
+        String str = "您需要回答以下" + mRuestionList.size() + "个问题，您还有<font color='#FF0000'><big> " + time + "</big> </font>的答题时间";
+        mTimeLayout.tvTitle.setText(Html.fromHtml(str));
     }
 
     /**
@@ -195,21 +197,28 @@ public class RhQuestionCheckActivity extends AbsBaseLoadActivity {
      */
     private void startgetAnswerreTimer() {
 
-        mSubscription.add(Observable.interval(1, TimeUnit.SECONDS, AndroidSchedulers.mainThread())    // 定时器 600秒（10分钟）后停止答题
-                .take(600)
+        mOutTime = 600;
+        mSubscription.add(Observable.interval(0, 1, TimeUnit.SECONDS, AndroidSchedulers.mainThread())    // 定时器 600秒（10分钟）后停止答题
+                .take(mOutTime)
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnComplete(() -> {
-                    showSureDialog("您的答题时间已经结束，请重新答题。", view -> {
+                    if (!AppUtils.isActivityExist(this)) { //如果界面已经销毁
+                        return;
+                    }
+                    mBinding.btnSubmit.setEnabled(false);//禁用提交按钮
+                    mBinding.btnSubmit.setVisibility(View.GONE);
+                    showSureDialog(getString(R.string.rh_question_time_out), view -> {
                         finish();
                     });
                 })
+                .map(aLong -> mOutTime - aLong) //获取剩余秒数
                 .map(aLong -> { //将剩余秒数转换为xx分xx秒
-                    return StringUtils.formatInteger(Math.floor((600 - aLong) / 60)) + "分" + StringUtils.frontCompWithZoreString((600 - aLong) % 60, 2) + "秒";
+                    return StringUtils.formatInteger(Math.floor(aLong / 60)) + "分" + StringUtils.frontCompWithZoreString(aLong % 60, 2) + "秒";
                 })
                 .subscribe(time -> {
                     setTopTime(time);
                 }, throwable -> {
-                    LogUtil.E("sdfsdf" + throwable);
+                    LogUtil.E("" + throwable);
                 }));
     }
 
@@ -218,8 +227,8 @@ public class RhQuestionCheckActivity extends AbsBaseLoadActivity {
      */
     private List<RhRuestionModel> parseQuestion(Document document) {
 
-        String st = AppUtils.readAssetsTxt(this, "test.txt");
-        document = Jsoup.parse(st);
+//        String st = AppUtils.readAssetsTxt(this, "test.txt");
+//        document = Jsoup.parse(st);
 
         Elements liEls = document.select("ul > li"); //问题和回答是包含在li标签里的
 
@@ -313,7 +322,7 @@ public class RhQuestionCheckActivity extends AbsBaseLoadActivity {
             return;
         }
         if (TextUtils.isEmpty(mSubmitQuestionToken)) {
-            showToast("回答问题失败，请重试");
+            showToast(getString(R.string.rh_anw_question_error));
             return;
         }
         showLoadingDialog();
@@ -333,8 +342,17 @@ public class RhQuestionCheckActivity extends AbsBaseLoadActivity {
                     call.enqueue(new BaseRhCertCallBack(this, BaseRhCertCallBack.DOCTYPE) {
                         @Override
                         protected void onSuccess(Document doc) {
-                            RhQuestionDoneActivity.open(RhQuestionCheckActivity.this);
-                            finish();
+                            if (StringUtils.contains(doc.text(), getString(R.string.rh_question_check_1))
+                                    || StringUtils.contains(doc.text(), getString(R.string.rh_question_check_2))
+                                    || StringUtils.contains(doc.text(), getString(R.string.rh_question_check_3))
+                                    ) {
+                                RhQuestionDoneActivity.open(RhQuestionCheckActivity.this);
+                                finish();
+                            } else {
+                                LogUtil.E("人行问题回答失败");
+                                showToast(getString(R.string.rh_anw_question_error));
+                            }
+
                         }
 
                         @Override
@@ -376,6 +394,9 @@ public class RhQuestionCheckActivity extends AbsBaseLoadActivity {
                 map.put("kbaList[" + i + "].options" + (j + 1), rhRuestionModel.getOptions().get(j)); //问题答案
             }
         }
+
+        LogUtil.E(StringUtils.getJsonToString(map));
+
         return map;
     }
 

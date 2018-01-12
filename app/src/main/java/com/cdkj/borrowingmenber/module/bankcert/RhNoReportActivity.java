@@ -9,6 +9,7 @@ import android.view.View;
 
 import com.cdkj.baselibrary.base.AbsBaseLoadActivity;
 import com.cdkj.baselibrary.nets.RetrofitUtils;
+import com.cdkj.baselibrary.utils.LogUtil;
 import com.cdkj.baselibrary.utils.StringUtils;
 import com.cdkj.borrowingmenber.R;
 import com.cdkj.borrowingmenber.databinding.ActivityRhReportNoBinding;
@@ -18,6 +19,7 @@ import com.cdkj.borrowingmenber.weiget.bankcert.RhHelper;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 
 import retrofit2.Call;
@@ -73,18 +75,18 @@ public class RhNoReportActivity extends AbsBaseLoadActivity {
                 Element radiome = doc.getElementById("ApplicationOption1");//获取个人报告按钮
 
                 if (checkRadioButtonDisabled(radio)) {          //认证中
-                    mBinding.btnIKnow.setText("我知道了");
+                    mBinding.btnIKnow.setText(R.string.i_see);
                     mBinding.tvReportInfo.setText(R.string.rh_report_checkinto);
                     mBinding.btnIKnow.setOnClickListener(v -> finish());
-                } else if (radiome != null && radiome.nextElementSibling() != null && StringUtils.contains(radiome.nextElementSibling().text(), "验证未通过")) { //验证未通过 根据按钮的同级文本判断
-                    mBinding.btnIKnow.setText("重新认证");
+                } else if (checkIsPass(radiome)) { //验证未通过 根据按钮的同级文本判断
+                    mBinding.btnIKnow.setText(R.string.rh_re_check);
                     mBinding.tvReportInfo.setText(R.string.rh_report_no_pass);
                     mBinding.btnIKnow.setOnClickListener(v -> {
                         RhQuestionCheckActivity.open(RhNoReportActivity.this, RhHelper.checkGetToken(doc));
                         finish();
                     });
                 } else {
-                    mBinding.btnIKnow.setText("进行认证");
+                    mBinding.btnIKnow.setText(R.string.rh_to_check);
                     mBinding.tvReportInfo.setText(R.string.rh_no_report);
                     mBinding.btnIKnow.setOnClickListener(v -> {
                         RhQuestionCheckActivity.open(RhNoReportActivity.this, RhHelper.checkGetToken(doc));
@@ -99,6 +101,27 @@ public class RhNoReportActivity extends AbsBaseLoadActivity {
             }
         });
 
+    }
+
+
+    /**
+     * 验证是否通过 根据按钮的同级文本判断
+     *
+     * @param radiome
+     * @return
+     */
+    private boolean checkIsPass(Element radiome) {
+        if (radiome == null) return false;
+
+        Element next1 = radiome.nextElementSibling(); //获取下一个节点
+
+        if (next1 == null) return false;
+
+        Element next2 = next1.nextElementSibling();//获取下一个节点的节点
+
+        if (next2 == null) return false;
+
+        return StringUtils.contains(next2.text(), "验证未通过");
     }
 
     /**
