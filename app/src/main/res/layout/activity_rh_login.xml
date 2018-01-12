@@ -28,6 +28,7 @@
             android:layout_marginTop="10dp"
             android:textColor="@color/dialog_tips_negative_btn_txt_red"
             android:textSize="12sp"
+            android:visibility="gone"
             tools:text="中国人民银行征信中心登录" />
 
         <LinearLayout
@@ -68,7 +69,7 @@
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
             android:paddingTop="5dp"
-            android:text="提示：密码长度必须在6-20之间，可以使用数字、小写字母和大写字母，但必须同时包含数字和字母。"
+            android:text="@string/rh_loginname_tips"
             android:textColor="@color/text_hint_color" />
 
         <LinearLayout
@@ -110,7 +111,7 @@
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
             android:paddingTop="5dp"
-            android:text="提示：密码长度必须在6-20之间，可以使用数字、小写字母和大写字母，但必须同时包含数字和字母。"
+            android:text="@string/rh_loginpassword_tips"
             android:textColor="@color/text_hint_color" />
 
         <LinearLayout

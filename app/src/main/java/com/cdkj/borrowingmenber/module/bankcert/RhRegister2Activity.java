@@ -264,10 +264,10 @@ public class RhRegister2Activity extends AbsBaseLoadActivity {
                     return;
                 }
 
-                Elements elemenRegi2 = doc.getElementsByClass("regist_text span-14");// 注册成功第二步 用于检测是否出现了第二步骤的元素 出现说明登录失败
+//                Elements elemenRegi2 = doc.getElementsByClass("regist_text span-14");// 注册成功第二步 用于检测是否出现了第二步骤的元素 出现说明登录失败
 
-                if (elemenRegi2 != null && StringUtils.contains(elemenRegi2.text(), "登录名") || StringUtils.contains(elemenRegi2.text(), "确认密码")) {
-                    showError("注册失败,请重试");
+                if (doc != null && StringUtils.contains(doc.text(), getString(R.string.rh_regi2_check1)) && StringUtils.contains(doc.text(), getString(R.string.rh_regi2_check2)) && StringUtils.contains(doc.text(), getString(R.string.rh_regi2_check3))) {
+                    showError(getString(R.string.rh_regi_error));
                     return;
                 }
 
@@ -279,7 +279,7 @@ public class RhRegister2Activity extends AbsBaseLoadActivity {
                     return;
                 }
 
-                showError("注册失败,请重试");
+                showError(getString(R.string.rh_regi_error));
             }
 
             @Override

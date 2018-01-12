@@ -99,7 +99,8 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
                 showToast("请输入密码");
                 return;
             }
-
+            mbinding.errorInfo.setText("");
+            mbinding.errorInfo.setVisibility(View.GONE);
             login();
         });
     }
@@ -217,6 +218,7 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
         Elements element = doc.getElementsByClass("erro_div3"); //获取登录错误提醒 如果有 说明登录没成功
 
         if (element != null && !TextUtils.isEmpty(element.text())) {
+            mbinding.errorInfo.setVisibility(View.VISIBLE);
             mbinding.errorInfo.setText(element.text());
             showToast(element.text());
             return false;

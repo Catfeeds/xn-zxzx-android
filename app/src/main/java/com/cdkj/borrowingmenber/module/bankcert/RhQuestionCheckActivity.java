@@ -24,6 +24,7 @@ import com.cdkj.borrowingmenber.module.api.MyApiServer;
 import com.cdkj.borrowingmenber.weiget.bankcert.BaseRhCertCallBack;
 import com.cdkj.borrowingmenber.weiget.bankcert.RhHelper;
 
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -51,7 +52,6 @@ public class RhQuestionCheckActivity extends AbsBaseLoadActivity {
     private List<RhRuestionModel> mRuestionList;//问题列表
     private RhRuestionAdapter rhRuestionAdapter;//问题适配器
     private LayoutQuestionTopTimeBinding mTimeLayout;
-    private int mOutTime;
 
     public static void open(Context context, String token) {
         if (context == null) {
@@ -83,11 +83,8 @@ public class RhQuestionCheckActivity extends AbsBaseLoadActivity {
             submitQuestion();
         });
         initAdapter();
-        getRuestionRequest();
-
-//        rxParseQuestion(null);
-
-
+//        getRuestionRequest();
+        rxParseQuestion(null);
     }
 
     private boolean checkHasAnswered() {
@@ -184,20 +181,14 @@ public class RhQuestionCheckActivity extends AbsBaseLoadActivity {
                 }));
     }
 
-    /**
-     * 设置倒计时显示
-     */
-    private void setTopTime(String time) {
-        String str = "您需要回答以下" + mRuestionList.size() + "个问题，您还有<font color='#FF0000'><big> " + time + "</big> </font>的答题时间";
-        mTimeLayout.tvTitle.setText(Html.fromHtml(str));
-    }
 
     /**
      * 开启答题定时器
      */
     private void startgetAnswerreTimer() {
 
-        mOutTime = 600;
+        int mOutTime = 600;
+
         mSubscription.add(Observable.interval(0, 1, TimeUnit.SECONDS, AndroidSchedulers.mainThread())    // 定时器 600秒（10分钟）后停止答题
                 .take(mOutTime)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -216,7 +207,9 @@ public class RhQuestionCheckActivity extends AbsBaseLoadActivity {
                     return StringUtils.formatInteger(Math.floor(aLong / 60)) + "分" + StringUtils.frontCompWithZoreString(aLong % 60, 2) + "秒";
                 })
                 .subscribe(time -> {
-                    setTopTime(time);
+                    //显示剩余时间
+                    mTimeLayout.tvTitle.setText(Html.fromHtml(String.format(getString(R.string.rh_question_time_) + "<font color='#FF0000'>%s</font>" + getString(R.string.rh_question_time_2), mRuestionList.size(), time)));
+
                 }, throwable -> {
                     LogUtil.E("" + throwable);
                 }));
@@ -227,8 +220,8 @@ public class RhQuestionCheckActivity extends AbsBaseLoadActivity {
      */
     private List<RhRuestionModel> parseQuestion(Document document) {
 
-//        String st = AppUtils.readAssetsTxt(this, "test.txt");
-//        document = Jsoup.parse(st);
+        String st = AppUtils.readAssetsTxt(this, "test.txt");
+        document = Jsoup.parse(st);
 
         Elements liEls = document.select("ul > li"); //问题和回答是包含在li标签里的
 

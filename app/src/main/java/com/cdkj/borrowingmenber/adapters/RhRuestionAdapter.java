@@ -27,7 +27,7 @@ public class RhRuestionAdapter extends BaseQuickAdapter<RhRuestionModel, BaseVie
 
     @Override
     protected void convert(BaseViewHolder helper, RhRuestionModel item) {
-
+        LogUtil.E(""+helper.getLayoutPosition());
         if (item == null) {
             return;
         }

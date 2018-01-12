@@ -178,8 +178,6 @@ public class RhRegisterActivity extends AbsBaseLoadActivity {
 
             rhCardTypeModel.setTypeString(StringUtils.subString(type, 0, type.length() - 1));//截取类型名称
 
-            LogUtil.E("证件类型" + rhCardTypeModel.getTypeString() + " __" + rhCardTypeModel.getTypeCode());
-
             rhCardTypeModels.add(rhCardTypeModel);
         }
         return rhCardTypeModels;
@@ -298,29 +296,29 @@ public class RhRegisterActivity extends AbsBaseLoadActivity {
     private void checkRegiSuccess(Document doc) {
 
 
-        Elements element = doc.getElementsByClass("erro_div1"); //获取注册错误提醒 如果有 说明登录没成功
+        Elements element = doc.getElementsByClass("erro_div1"); //获取注册错误提醒 如果有 说明注册没成功
         if (element != null && !TextUtils.isEmpty(element.text())) {
             showError(element.text());
             getRetiCodeImg(true);
             return;
         }
-        Elements element2 = doc.getElementsByClass("span-grey2"); //如果有 说明登录没成功
-        if (element2 != null && StringUtils.contains(element2.text(), "我已阅读并同意")) {
-            showError("注册失败，请重试");
+
+        if (StringUtils.contains(doc.text(), getString(R.string.rh_card_num)) || StringUtils.contains(doc.text(), getString(R.string.rh_i_see_regi_page))) {
+            showError(getString(R.string.rh_regi_error));
             getRetiCodeImg(true);
             return;
         }
 
-        Elements elements3 = doc.getElementsByClass("regist_text span-14");// 注册成功第二步 用于检测是否出现了第二步骤的元素 没出现说明登录失败
+//        Elements elements3 = doc.getElementsByClass("regist_text span-14");// 注册成功第二步 用于检测是否出现了第二步骤的元素 没出现说明注册失败
 
-        if (elements3 != null && StringUtils.contains(elements3.text(), "登录名") || StringUtils.contains(elements3.text(), "确认密码")) {
+        if (doc != null && StringUtils.contains(doc.text(), getString(R.string.rh_regi2_check1)) && StringUtils.contains(doc.text(), getString(R.string.rh_regi2_check2)) && StringUtils.contains(doc.text(), getString(R.string.rh_regi2_check3))) {
             regiToken = RhHelper.checkGetToken(doc); //用于获取下一个页面的token
             RhRegister2Activity.open(RhRegisterActivity.this, regiToken);
             finish();
             return;
         }
         getRetiCodeImg(true);
-        showError("注册失败，请重试");
+        showError(getString(R.string.rh_regi_error));
     }
 
     private void showError(String text) {
