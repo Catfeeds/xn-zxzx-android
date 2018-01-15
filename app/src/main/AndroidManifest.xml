@@ -156,6 +156,24 @@
             android:name=".module.bankcert.RhQuestionCheckActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
+
+        <!--人行问题动态码验证-->
+        <activity
+            android:name=".module.bankcert.RhQuestionCodeCheckActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+
+        <!--找回登录名-->
+        <activity
+            android:name=".module.bankcert.RhFindLoginNameActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <!--找回登录密码-->
+        <activity
+            android:name=".module.bankcert.RhFindPwdActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+
         <!--问题回答完成-->
         <activity
             android:name=".module.bankcert.RhQuestionDoneActivity"

@@ -8,23 +8,14 @@
         android:background="@color/white"
         android:orientation="vertical">
 
-        <!--<TextView-->
-        <!--android:id="@+id/tv_top"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="center"-->
-
-        <!--android:layout_marginRight="10dp"-->
-        <!--android:layout_marginTop="15dp"-->
-        <!--android:text="中国人民银行征信中心登录"-->
-        <!--android:textColor="@color/text_black_cd" />-->
-
         <TextView
             android:id="@+id/error_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginBottom="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             android:layout_marginTop="10dp"
             android:textColor="@color/dialog_tips_negative_btn_txt_red"
             android:textSize="12sp"
@@ -45,7 +36,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
-                android:text="登录名:"
+                android:text="姓名:"
                 android:textColor="@color/text_black_cd" />
 
             <EditText
@@ -53,24 +44,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:background="@drawable/gray_line_input_edtext"
-                android:hint="请输入登录名"
+                android:hint="请输入姓名"
                 android:paddingLeft="10dp"
                 android:textColorHint="@color/text_hint_color"
                 android:textSize="14sp" />
 
 
         </LinearLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/gray"
-            android:paddingBottom="5dp"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:paddingTop="5dp"
-            android:text="@string/rh_loginname_tips"
-            android:textColor="@color/text_hint_color" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -86,33 +66,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
-                android:text="密   码:"
+                android:text="身份证号码:"
                 android:textColor="@color/text_black_cd" />
 
             <EditText
-                android:id="@+id/edit_login_password"
+                android:id="@+id/edit_id_num"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:background="@drawable/gray_line_input_edtext"
-                android:hint="请输入密码"
-                android:inputType="textPassword"
+                android:hint="请输入身份证号码"
                 android:paddingLeft="10dp"
                 android:textColorHint="@color/text_hint_color"
                 android:textSize="14sp" />
 
 
         </LinearLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/gray"
-            android:paddingBottom="5dp"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:paddingTop="5dp"
-            android:text="@string/rh_loginpassword_tips"
-            android:textColor="@color/text_hint_color" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -151,6 +119,7 @@
                 android:scaleType="fitXY"
                 tools:src="@drawable/address_book" />
 
+
         </LinearLayout>
 
         <TextView
@@ -159,41 +128,16 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
             android:text="看不清楚？换一个"
             android:textColor="@color/text_black_cd" />
 
+
         <Button
-            android:id="@+id/btn_login"
+            android:id="@+id/btn_next"
             style="@style/common_button"
-            android:text="登录" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp">
-
-            <TextView
-                android:id="@+id/tv_find_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:text="找回登录名" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-
-            <TextView
-                android:id="@+id/tv_find_pwd_rh"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
-                android:text="找回密码" />
-
-
-        </LinearLayout>
-
+            android:layout_marginTop="20dp"
+            android:text="提交" />
 
     </LinearLayout>
 </layout>

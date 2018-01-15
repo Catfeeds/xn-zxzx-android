@@ -257,7 +257,7 @@ public class RhRegister2Activity extends AbsBaseLoadActivity {
 
                 regiToken = RhHelper.checkGetToken(doc);
 
-                Element errorEl = doc.getElementById("_error_field_");//判断是否有错误提示 有说明登录失败
+                Element errorEl = doc.getElementById("error");//判断是否有错误提示 有说明登录失败
 
                 if (errorEl != null && !TextUtils.isEmpty(errorEl.text())) {
                     showError(errorEl.text());

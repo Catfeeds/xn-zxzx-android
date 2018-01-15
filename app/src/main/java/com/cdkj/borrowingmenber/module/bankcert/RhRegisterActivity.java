@@ -204,7 +204,6 @@ public class RhRegisterActivity extends AbsBaseLoadActivity {
 
         }
 
-
         addCall(call);
         showLoadingDialog();
         call.enqueue(new BaseRhCertCallBack<ResponseBody>(this, BaseRhCertCallBack.RESPONSETYPE) {

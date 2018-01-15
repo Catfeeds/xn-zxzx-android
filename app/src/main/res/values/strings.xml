@@ -58,5 +58,7 @@
     <string name="rh_i_see_regi_page">我已阅读并同意</string>
     <string name="rh_loginname_tips">提示：登录名由6-16位数字、字母组成，不能有中文或特殊字符。</string>
     <string name="rh_loginpassword_tips">提示：密码长度必须在6-20之间，可以使用数字、小写字母和大写字母，但必须同时包含数字和字母。</string>
+    <string name="rh_noreport_code_1">手机动态码</string>
+    <string name="rh_noreport_code_2">获取动态码</string>
 
 </resources>

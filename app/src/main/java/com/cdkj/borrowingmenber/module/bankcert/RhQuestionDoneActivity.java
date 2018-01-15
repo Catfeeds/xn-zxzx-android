@@ -48,7 +48,7 @@ public class RhQuestionDoneActivity extends AbsBaseLoadActivity {
 
     @Override
     public void afterCreate(Bundle savedInstanceState) {
-        mBaseBinding.titleView.setMidTitle("问题回答");
+        mBaseBinding.titleView.setMidTitle("完成验证");
         mBinding.btnIKnow.setOnClickListener(v -> finish());
     }
 

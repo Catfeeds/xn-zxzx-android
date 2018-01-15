@@ -84,25 +84,10 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
 
         mbinding.tvChangeCode.setOnClickListener(v -> getLoginCode());
         mbinding.imgCode.setOnClickListener(v -> getLoginCode());
-        mbinding.btnLogin.setOnClickListener(v -> {
-            if (TextUtils.isEmpty(mbinding.editCode.getText().toString())) {
-                showToast("请输入验证码");
-                return;
-            }
+        mbinding.btnLogin.setOnClickListener(v -> login());
 
-            if (TextUtils.isEmpty(mbinding.editLoginName.getText().toString())) {
-                showToast("请输入登录名");
-                return;
-            }
-
-            if (TextUtils.isEmpty(mbinding.editCode.getText().toString())) {
-                showToast("请输入密码");
-                return;
-            }
-            mbinding.errorInfo.setText("");
-            mbinding.errorInfo.setVisibility(View.GONE);
-            login();
-        });
+        mbinding.tvFindName.setOnClickListener(v -> RhFindLoginNameActivity.open(this));
+        mbinding.tvFindPwdRh.setOnClickListener(v -> RhFindLoginNameActivity.open(this));
     }
 
     /**
@@ -136,6 +121,22 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
 
 
     private void login() {
+        if (TextUtils.isEmpty(mbinding.editCode.getText().toString())) {
+            showToast("请输入验证码");
+            return;
+        }
+
+        if (TextUtils.isEmpty(mbinding.editLoginName.getText().toString())) {
+            showToast("请输入登录名");
+            return;
+        }
+
+        if (TextUtils.isEmpty(mbinding.editCode.getText().toString())) {
+            showToast("请输入密码");
+            return;
+        }
+        mbinding.errorInfo.setText("");
+        mbinding.errorInfo.setVisibility(View.GONE);
     /*
        _@IMGRC@_: 123456
 
@@ -160,7 +161,6 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
         map.put("loginname", mbinding.editLoginName.getText().toString());
         map.put("password", mbinding.editLoginPassword.getText().toString());
         map.put("method", "login");
-//            map.put("org.apache.struts.taglib.html.TOKEN", "083f89e3c71eedf1ac40a7fc771c95a583d2fd765cbd92fa5a4316f4");
 
         Call<ResponseBody> call = RetrofitUtils.createApi(MyApiServer.class).rhLogin(map);
         showLoadingDialog();

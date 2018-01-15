@@ -33,6 +33,125 @@ public interface MyApiServer {
 
 
     /**
+     * 找回密码 验证码
+     *
+     * @return
+     */
+    @Headers({
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate, br",
+            "Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2",
+            "Connection: Keep-Alive",
+            "Content-Type: application/x-www-form-urlencoded; charset=UTF-8",
+            "Host: ipcrs.pbccrc.org.cn",
+            "Referer: https://ipcrs.pbccrc.org.cn/resetPassword.do?method=init"
+    })
+    @GET("https://ipcrs.pbccrc.org.cn/imgrc.do")
+    Call<ResponseBody> rhFindPwdCode(@Query("") String num);
+
+
+
+    /**
+     * 找回登录名
+     *
+     * @return
+     */
+    @Headers({
+            "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Accept-Encoding: gzip, deflate, br",
+            "Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2",
+            "Connection: Keep-Alive",
+            "Content-Type: application/x-www-form-urlencoded; charset=UTF-8",
+            "Host: ipcrs.pbccrc.org.cn",
+            "Upgrade-Insecure-Requests: 1",
+            "Referer: https://ipcrs.pbccrc.org.cn/findLoginName.do?method=init"
+    })
+    @FormUrlEncoded
+    @POST("https://ipcrs.pbccrc.org.cn/findLoginName.do")
+    Call<ResponseBody> rhFindNameRequest(@FieldMap Map<String, String> map);
+
+
+    /**
+     * 找回登录名 验证码
+     *
+     * @return
+     */
+    @Headers({
+            "Accept: */*",
+            "Accept-Encoding: gzip, deflate, br",
+            "Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2",
+            "Connection: Keep-Alive",
+            "Content-Type: application/x-www-form-urlencoded; charset=UTF-8",
+            "Host: ipcrs.pbccrc.org.cn",
+            "Referer: https://ipcrs.pbccrc.org.cn/findLoginName.do?method=init"
+    })
+    @GET("https://ipcrs.pbccrc.org.cn/imgrc.do")
+    Call<ResponseBody> rhFindNameCode(@Query("") String num);
+
+
+    /**
+     * 重新获取报告
+     *
+     * @return
+     */
+    @Headers({
+            "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Accept-Encoding: gzip, deflate, br",
+            "Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2",
+            "Connection: Keep-Alive",
+            "Content-Type: application/x-www-form-urlencoded; charset=UTF-8",
+            "Host: ipcrs.pbccrc.org.cn",
+            "Upgrade-Insecure-Requests: 1",
+            "Referer: https://ipcrs.pbccrc.org.cn/reportAction.do?method=submitQS"
+    })
+    @FormUrlEncoded
+    @POST("https://ipcrs.pbccrc.org.cn/reportAction.do")
+    Call<ResponseBody> reGetReport(@FieldMap Map<String, String> map);
+
+
+    /**
+     * 验证回答问题验证动态码
+     *
+     * @return
+     */
+    @Headers({
+            "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Accept-Encoding: gzip, deflate, br",
+            "Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2",
+            "Connection: Keep-Alive",
+            "Content-Type: application/x-www-form-urlencoded; charset=UTF-8",
+            "Host: ipcrs.pbccrc.org.cn",
+            "Upgrade-Insecure-Requests: 1",
+            "Referer: https://ipcrs.pbccrc.org.cn/reportAction.do?method=applicationReport"
+    })
+    @FormUrlEncoded
+    @POST("https://ipcrs.pbccrc.org.cn/reportAction.do?method=submitQS")
+    Call<ResponseBody> questionCodeCheck(@FieldMap Map<String, String> map);
+
+
+    /**
+     * 获取回答问题验证动态码
+     *
+     * @return
+     */
+    @Headers({
+            "Accept: text/plain, */*; q=0.01",
+            "Accept-Encoding: gzip, deflate, br",
+            "Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2",
+            "Connection: Keep-Alive",
+            "Content-Type: application/x-www-form-urlencoded; charset=UTF-8",
+            "Host: ipcrs.pbccrc.org.cn",
+            "X-Requested-With: XMLHttpRequest",
+            "Upgrade-Insecure-Requests: 1",
+            "X-Requested-With: XMLHttpRequest",
+            "Referer: https://ipcrs.pbccrc.org.cn/reportAction.do?method=applicationReport"
+    })
+    @FormUrlEncoded
+    @POST("https://ipcrs.pbccrc.org.cn/reportAction.do?")
+    Call<ResponseBody> questionCode(@FieldMap Map<String, String> map, @Query("num") String num);
+
+
+    /**
      * 回答问题
      *
      * @return
@@ -182,7 +301,6 @@ public interface MyApiServer {
             "Connection: Keep-Alive",
             "Cache-Control: no-cache",
             "Host: ipcrs.pbccrc.org.cn",
-            "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:57.0) Gecko/20100101 Firefox/57.0",
             "Referer: https://ipcrs.pbccrc.org.cn/userReg.do"
     })
     @GET("https://ipcrs.pbccrc.org.cn/imgrc.do")

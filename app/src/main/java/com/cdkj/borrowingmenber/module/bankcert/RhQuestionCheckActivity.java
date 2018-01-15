@@ -10,6 +10,7 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
 
+import com.cdkj.baselibrary.appmanager.EventTags;
 import com.cdkj.baselibrary.base.AbsBaseLoadActivity;
 import com.cdkj.baselibrary.nets.RetrofitUtils;
 import com.cdkj.baselibrary.utils.AppUtils;
@@ -24,6 +25,7 @@ import com.cdkj.borrowingmenber.module.api.MyApiServer;
 import com.cdkj.borrowingmenber.weiget.bankcert.BaseRhCertCallBack;
 import com.cdkj.borrowingmenber.weiget.bankcert.RhHelper;
 
+import org.greenrobot.eventbus.EventBus;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -83,10 +85,15 @@ public class RhQuestionCheckActivity extends AbsBaseLoadActivity {
             submitQuestion();
         });
         initAdapter();
-//        getRuestionRequest();
-        rxParseQuestion(null);
+        getRuestionRequest();
+//        rxParseQuestion(null);
     }
 
+    /**
+     * 判断用户是否登录
+     *
+     * @return
+     */
     private boolean checkHasAnswered() {
         for (RhRuestionModel rhRuestionModel : mRuestionList) {
 
@@ -335,10 +342,12 @@ public class RhQuestionCheckActivity extends AbsBaseLoadActivity {
                     call.enqueue(new BaseRhCertCallBack(this, BaseRhCertCallBack.DOCTYPE) {
                         @Override
                         protected void onSuccess(Document doc) {
+
                             if (StringUtils.contains(doc.text(), getString(R.string.rh_question_check_1))
                                     || StringUtils.contains(doc.text(), getString(R.string.rh_question_check_2))
                                     || StringUtils.contains(doc.text(), getString(R.string.rh_question_check_3))
                                     ) {
+                                EventBus.getDefault().post(EventTags.RhQUESTIONFINISH); //结束上一页
                                 RhQuestionDoneActivity.open(RhQuestionCheckActivity.this);
                                 finish();
                             } else {
@@ -388,11 +397,11 @@ public class RhQuestionCheckActivity extends AbsBaseLoadActivity {
             }
         }
 
-        LogUtil.E(StringUtils.getJsonToString(map));
-
         return map;
     }
 
 }
+
+
 
 

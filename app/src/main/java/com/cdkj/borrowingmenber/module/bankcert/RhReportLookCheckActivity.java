@@ -112,7 +112,7 @@ public class RhReportLookCheckActivity extends AbsBaseLoadActivity {
                 } else if (TextUtils.equals("noTradeCode", str)) { //系统异常
                     showToast("系统异常，请重试");
                 } else { //获取错误
-                    showToast("身份验证码已经失败，请重试");
+                    showToast("身份验证码发送失败，请重试");
                 }
             }
 

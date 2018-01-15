@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 
+import com.cdkj.baselibrary.appmanager.EventTags;
 import com.cdkj.baselibrary.base.AbsBaseLoadActivity;
 import com.cdkj.baselibrary.nets.RetrofitUtils;
 import com.cdkj.baselibrary.utils.LogUtil;
@@ -17,6 +18,7 @@ import com.cdkj.borrowingmenber.module.api.MyApiServer;
 import com.cdkj.borrowingmenber.weiget.bankcert.BaseRhCertCallBack;
 import com.cdkj.borrowingmenber.weiget.bankcert.RhHelper;
 
+import org.greenrobot.eventbus.Subscribe;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
@@ -51,6 +53,11 @@ public class RhNoReportActivity extends AbsBaseLoadActivity {
     @Override
     public void afterCreate(Bundle savedInstanceState) {
         mBaseBinding.titleView.setMidTitle("资信报告");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         rhReportIsChecking();
     }
 
@@ -82,15 +89,13 @@ public class RhNoReportActivity extends AbsBaseLoadActivity {
                     mBinding.btnIKnow.setText(R.string.rh_re_check);
                     mBinding.tvReportInfo.setText(R.string.rh_report_no_pass);
                     mBinding.btnIKnow.setOnClickListener(v -> {
-                        RhQuestionCheckActivity.open(RhNoReportActivity.this, RhHelper.checkGetToken(doc));
-                        finish();
+                        checkHasCode(doc);
                     });
                 } else {
                     mBinding.btnIKnow.setText(R.string.rh_to_check);
                     mBinding.tvReportInfo.setText(R.string.rh_no_report);
                     mBinding.btnIKnow.setOnClickListener(v -> {
-                        RhQuestionCheckActivity.open(RhNoReportActivity.this, RhHelper.checkGetToken(doc));
-                        finish();
+                        checkHasCode(doc);
                     });
                 }
             }
@@ -101,6 +106,39 @@ public class RhNoReportActivity extends AbsBaseLoadActivity {
             }
         });
 
+    }
+
+    /**
+     * 检查是否需要答题 （分为答题获取 和 验证码获取）
+     *
+     * @param doc
+     */
+    private void checkHasCode(Document doc) {
+
+        if (StringUtils.contains(doc.text(), getString(R.string.rh_noreport_code_1)) || StringUtils.contains(doc.text(), getString(R.string.rh_noreport_code_2))) {
+            RhQuestionCodeCheckActivity.open(RhNoReportActivity.this, RhHelper.checkGetToken(doc), getAuthtype(doc));
+        } else {
+            RhQuestionCheckActivity.open(RhNoReportActivity.this, RhHelper.checkGetToken(doc));
+        }
+
+    }
+
+    /**
+     * authtype
+     *
+     * @param doc
+     */
+    public static String getAuthtype(Document doc) {
+        Element element = doc.getElementById("authtype");
+        if (element == null) return "5";                           //查看页面固定是5 为了保险还是从页面获取
+        return element.attr("value");
+    }
+
+    @Subscribe
+    public void events(String tag) {
+        if (TextUtils.equals(tag, EventTags.RhQUESTIONFINISH)) { //答题完成结束当前界面
+            finish();
+        }
     }
 
 
