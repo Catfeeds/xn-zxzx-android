@@ -151,7 +151,7 @@ public class RhFindPwdActivity extends AbsBaseLoadActivity {
             protected void onSuccess(ResponseBody responseBody) {
 
                 try {
-                    ImgUtils.loadImg(RhFindPwdActivity.this, responseBody.bytes(), mBinding.imgCode);
+                    Glide.with(RhFindPwdActivity.this).load(responseBody.bytes()).error(com.cdkj.baselibrary.R.drawable.default_pic).into(mBinding.imgCode);
                 } catch (Exception e) {
                     LogUtil.E("加载" + e);
                 }

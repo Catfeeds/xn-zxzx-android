@@ -10,7 +10,6 @@ import android.view.View;
 import com.bumptech.glide.Glide;
 import com.cdkj.baselibrary.base.AbsBaseLoadActivity;
 import com.cdkj.baselibrary.nets.RetrofitUtils;
-import com.cdkj.baselibrary.utils.ImgUtils;
 import com.cdkj.baselibrary.utils.LogUtil;
 import com.cdkj.baselibrary.utils.StringUtils;
 import com.cdkj.borrowingmenber.R;
@@ -146,7 +145,7 @@ public class RhFindLoginNameActivity extends AbsBaseLoadActivity {
             @Override
             protected void onSuccess(ResponseBody responseBody) {
                 try {
-                    ImgUtils.loadImg(RhFindLoginNameActivity.this, responseBody.bytes(), mBinding.imgCode);
+                    Glide.with(RhFindLoginNameActivity.this).load(responseBody.bytes()).error(com.cdkj.baselibrary.R.drawable.default_pic).into(mBinding.imgCode);
                 } catch (Exception e) {
                     LogUtil.E("加载" + e);
                 }

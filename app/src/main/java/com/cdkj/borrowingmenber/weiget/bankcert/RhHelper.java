@@ -2,7 +2,9 @@ package com.cdkj.borrowingmenber.weiget.bankcert;
 
 import android.text.TextUtils;
 
+import com.bumptech.glide.Glide;
 import com.cdkj.baselibrary.utils.LogUtil;
+import com.cdkj.borrowingmenber.module.bankcert.RhFindPwdActivity;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -35,6 +37,7 @@ public class RhHelper {
         }
         return token;
     }
+
 
 
 }

@@ -207,11 +207,13 @@ public class RhRegisterActivity extends AbsBaseLoadActivity {
         call.enqueue(new BaseRhCertCallBack<ResponseBody>(this, BaseRhCertCallBack.RESPONSETYPE) {
             @Override
             protected void onSuccess(ResponseBody responseBody) {
+
                 try {
-                    ImgUtils.loadImg(RhRegisterActivity.this, responseBody.bytes(), mBinding.imgCode);
+                    Glide.with(RhRegisterActivity.this).load(responseBody.bytes()).error(com.cdkj.baselibrary.R.drawable.default_pic).into(mBinding.imgCode);
                 } catch (Exception e) {
                     LogUtil.E("加载" + e);
                 }
+
                 LogUtil.E("请求验证码成功");
             }
 

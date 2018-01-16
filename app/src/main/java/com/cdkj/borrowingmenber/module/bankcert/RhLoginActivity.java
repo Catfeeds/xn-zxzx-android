@@ -103,7 +103,7 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
             @Override
             protected void onSuccess(ResponseBody responseBody) {
                 try {
-                    ImgUtils.loadImg(RhLoginActivity.this, responseBody.bytes(), mbinding.imgCode);
+                    Glide.with(RhLoginActivity.this).load(responseBody.bytes()).error(com.cdkj.baselibrary.R.drawable.default_pic).into(mbinding.imgCode);
                 } catch (Exception e) {
                     LogUtil.E("加载" + e);
                 }
