@@ -49,7 +49,8 @@
     <string name="i_see">我知道了</string>
     <string name="rh_re_check">重新认证</string>
     <string name="rh_to_check">进行认证</string>
-    <string name="rh_regi_tips">如果您没有办理过贷款或正在使用的信用卡，那么只能登录到中国人民银行征信中学选择“数字证书验证”方式验证身份注册。\n\n征信中心地址：https://ipcrs.pbccrc.org.cn/</string>
+    <string name="rh_regi_tips">如果您没有办理过贷款或正在使用的信用卡，那么只能登录到中国人民银行征信中心选择“数字证书验证”方式验证身份注册。\n\n征信中心地址：https://ipcrs.pbccrc.org.cn/</string>
+    <string name="rh_findpwd_tips">如果您安全等级过高，那么只能登录到中国人民银行征信中心进行修改。\n\n征信中心地址：https://ipcrs.pbccrc.org.cn/</string>
     <string name="rh_regi2_check1">登录名</string>
     <string name="rh_regi2_check2">确认密码</string>
     <string name="rh_regi2_check3">动态码</string>
@@ -60,5 +61,8 @@
     <string name="rh_loginpassword_tips">提示：密码长度必须在6-20之间，可以使用数字、小写字母和大写字母，但必须同时包含数字和字母。</string>
     <string name="rh_noreport_code_1">手机动态码</string>
     <string name="rh_noreport_code_2">获取动态码</string>
+    <string name="rh_code_change">看不清楚？换一个</string>
+    <string name="rh_find_pwd_check">您的重置密码申请已提交</string>
+    <string name="rh_find_pwd_done">您的重置密码申请已提交，系统会对您的相关信息进行审核，审核结果将于24小时后反馈到您的手机，请注意查收。</string>
 
 </resources>

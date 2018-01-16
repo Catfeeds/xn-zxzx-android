@@ -173,6 +173,16 @@
             android:name=".module.bankcert.RhFindPwdActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
+        <!--找回登录密码2-->
+        <activity
+            android:name=".module.bankcert.RhFindPwd2Activity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <!--找回登录密码2-->
+        <activity
+            android:name=".module.bankcert.RhFindPwdQuestionCheckActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
 
         <!--问题回答完成-->
         <activity

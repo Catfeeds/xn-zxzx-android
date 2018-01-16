@@ -87,7 +87,7 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
         mbinding.btnLogin.setOnClickListener(v -> login());
 
         mbinding.tvFindName.setOnClickListener(v -> RhFindLoginNameActivity.open(this));
-        mbinding.tvFindPwdRh.setOnClickListener(v -> RhFindLoginNameActivity.open(this));
+        mbinding.tvFindPwdRh.setOnClickListener(v -> RhFindPwdActivity.open(this));
     }
 
     /**

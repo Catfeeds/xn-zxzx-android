@@ -65,11 +65,11 @@ public class RhFindPwdActivity extends AbsBaseLoadActivity {
 
         mBinding.tvChangeCode.setOnClickListener(v -> getCode());
 
-        mBinding.btnNext.setOnClickListener(v -> findName());
+        mBinding.btnNext.setOnClickListener(v -> findPwd());
 
     }
 
-    private void findName() {
+    private void findPwd() {
 
         mBinding.errorInfo.setVisibility(View.GONE);
         if (TextUtils.isEmpty(mBinding.editLoginName.getText().toString())) {
@@ -99,7 +99,7 @@ public class RhFindPwdActivity extends AbsBaseLoadActivity {
         map.put("certNo", mBinding.editIdNum.getText().toString());
         map.put("_@IMGRC@_", mBinding.editCode.getText().toString());
 
-        Call call = RetrofitUtils.createApi(MyApiServer.class).rhFindNameRequest(map);
+        Call call = RetrofitUtils.createApi(MyApiServer.class).rhFindPWD1(map);
 
         addCall(call);
 
@@ -117,15 +117,14 @@ public class RhFindPwdActivity extends AbsBaseLoadActivity {
                     getCode();
                     return;
                 }
-                if (StringUtils.contains(doc.text(), "姓名")) {
+                if (StringUtils.contains(doc.text(), "姓名") && StringUtils.contains(doc.text(), "验证码")) {
                     showToast("找回密码失败，请重试");
                     getCode();
                     return;
                 }
 
-                showSureDialog("您的登录名已短信发送至平台预留的手机号码，请查收。", view -> {
-                    finish();
-                });
+                RhFindPwd2Activity.open(RhFindPwdActivity.this);
+                finish();
 
             }
 

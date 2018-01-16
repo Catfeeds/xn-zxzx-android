@@ -16,10 +16,8 @@ import com.cdkj.borrowingmenber.R;
 import com.cdkj.borrowingmenber.databinding.ActivityRhFindLoginnameBinding;
 import com.cdkj.borrowingmenber.module.api.MyApiServer;
 import com.cdkj.borrowingmenber.weiget.bankcert.BaseRhCertCallBack;
-import com.cdkj.borrowingmenber.weiget.bankcert.RhHelper;
 
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.Date;
@@ -115,7 +113,7 @@ public class RhFindLoginNameActivity extends AbsBaseLoadActivity {
                     return;
                 }
                 if (StringUtils.contains(doc.text(), "姓名")) {
-                    showToast("找回密码失败，请重试");
+                    showToast("找回登录失败，请重试");
                     getCode();
                     return;
                 }

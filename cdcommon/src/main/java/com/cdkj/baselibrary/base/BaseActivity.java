@@ -155,7 +155,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         CommonDialog commonDialog = new CommonDialog(this).builder()
                 .setTitle("提示").setContentMsg(str)
                 .setPositiveBtn("确定", onPositiveListener);
-        commonDialog.getContentView().setGravity(Gravity.CENTER);
+//        commonDialog.getContentView().setGravity(Gravity.CENTER);
 
         commonDialog.show();
     }

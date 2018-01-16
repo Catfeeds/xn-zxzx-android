@@ -12,7 +12,6 @@ import com.bigkoo.pickerview.OptionsPickerView;
 import com.bumptech.glide.Glide;
 import com.cdkj.baselibrary.activitys.WebViewActivity;
 import com.cdkj.baselibrary.base.AbsBaseLoadActivity;
-import com.cdkj.baselibrary.nets.PersistentCookieStore;
 import com.cdkj.baselibrary.nets.RetrofitUtils;
 import com.cdkj.baselibrary.utils.LogUtil;
 import com.cdkj.baselibrary.utils.StringUtils;
@@ -24,7 +23,6 @@ import com.cdkj.borrowingmenber.weiget.bankcert.BaseRhCertCallBack;
 import com.cdkj.borrowingmenber.weiget.bankcert.RhHelper;
 
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
@@ -32,7 +30,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -190,9 +187,9 @@ public class RhRegisterActivity extends AbsBaseLoadActivity {
         Call<ResponseBody> call = null;
         if (!istouch) {
             if (i == 0) {
-                call = RetrofitUtils.createApi(MyApiServer.class).rhRegiCode1("0." + new Date().getTime() + getRquestCodeRandom());
+                call = RetrofitUtils.createApi(MyApiServer.class).rhRegiCode1( Math.random()+"");
             } else {
-                call = RetrofitUtils.createApi(MyApiServer.class).rhRegiCode("0." + new Date().getTime() + getRquestCodeRandom());
+                call = RetrofitUtils.createApi(MyApiServer.class).rhRegiCode(Math.random()+"");
             }
 
         } else {
@@ -226,16 +223,6 @@ public class RhRegisterActivity extends AbsBaseLoadActivity {
         });
     }
 
-    /**
-     * 生产获取验证码随机数
-     *
-     * @return
-     */
-    public int getRquestCodeRandom() {
-        Random rnd = new Random();
-        int num = 100 + rnd.nextInt(900);
-        return num;
-    }
 
     /**
      * 注册请求

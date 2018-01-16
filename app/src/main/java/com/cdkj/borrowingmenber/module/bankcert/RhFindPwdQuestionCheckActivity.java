@@ -43,14 +43,13 @@ import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 
 /**
- * 人行问题验证
+ * 人行找回密码问题验证
  * Created by cdkj on 2018/1/10.
  */
 
-public class RhQuestionCheckActivity extends AbsBaseLoadActivity {
+public class RhFindPwdQuestionCheckActivity extends AbsBaseLoadActivity {
 
     private String mQuestionToken;//用于请求问题token
-    private String mSubmitQuestionToken = "";//用于提交token
     private List<RhRuestionModel> mRuestionList;//问题列表
     private RhRuestionAdapter rhRuestionAdapter;//问题适配器
     private LayoutQuestionTopTimeBinding mTimeLayout;
@@ -59,7 +58,7 @@ public class RhQuestionCheckActivity extends AbsBaseLoadActivity {
         if (context == null) {
             return;
         }
-        Intent intent = new Intent(context, RhQuestionCheckActivity.class);
+        Intent intent = new Intent(context, RhFindPwdQuestionCheckActivity.class);
         intent.putExtra("token", token);
         context.startActivity(intent);
     }
@@ -139,9 +138,8 @@ public class RhQuestionCheckActivity extends AbsBaseLoadActivity {
         showLoadingDialog();
         Map<String, String> map = new HashMap<>();
         map.put("org.apache.struts.taglib.html.TOKEN", mQuestionToken);
-        map.put("method", "checkishasreport");
+        map.put("method", "chooseCertify");
         map.put("authtype", RhHelper.reportCheckType); //id radiobutton2 3 银行卡验证  id  radiobutton1 1 数字正式验证 id  radiobutton3 2 问题验证
-        map.put("ApplicationOption", RhHelper.reportType);
 
         Call call = RetrofitUtils.createApi(MyApiServer.class).getCheckRuestion(map);
 
@@ -150,7 +148,6 @@ public class RhQuestionCheckActivity extends AbsBaseLoadActivity {
         call.enqueue(new BaseRhCertCallBack(this, BaseRhCertCallBack.DOCTYPE) {
             @Override
             protected void onSuccess(Document doc) {
-                mSubmitQuestionToken = RhHelper.checkGetToken(doc);
                 rxParseQuestion(doc);
             }
 
@@ -171,7 +168,7 @@ public class RhQuestionCheckActivity extends AbsBaseLoadActivity {
     private void rxParseQuestion(Document doc) {
         showLoadingDialog();
 
-        mSubscription.add(io.reactivex.Observable.just("")
+        mSubscription.add(Observable.just("")
                 .observeOn(Schedulers.newThread())
                 .map(s -> parseQuestion(doc))
                 .observeOn(AndroidSchedulers.mainThread())
@@ -318,12 +315,9 @@ public class RhQuestionCheckActivity extends AbsBaseLoadActivity {
         if (!checkHasAnswered()) {//检测所有问题是否回答
             return;
         }
-        if (TextUtils.isEmpty(mSubmitQuestionToken)) {
-            showToast(getString(R.string.rh_anw_question_error));
-            return;
-        }
+
         showLoadingDialog();
-        mSubscription.add(io.reactivex.Observable.just("")
+        mSubscription.add(Observable.just("")
                 .observeOn(Schedulers.newThread())
                 .map(s -> getSubmitMap())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -340,15 +334,13 @@ public class RhQuestionCheckActivity extends AbsBaseLoadActivity {
                         @Override
                         protected void onSuccess(Document doc) {
 
-                            if (StringUtils.contains(doc.text(), getString(R.string.rh_question_check_1))
-                                    || StringUtils.contains(doc.text(), getString(R.string.rh_question_check_2))
-                                    || StringUtils.contains(doc.text(), getString(R.string.rh_question_check_3))
-                                    ) {
-                                EventBus.getDefault().post(EventTags.RhQUESTIONFINISH); //结束上一页
-                                RhQuestionDoneActivity.open(RhQuestionCheckActivity.this);
-                                finish();
+                            if (StringUtils.contains(doc.text(), getString(R.string.rh_find_pwd_check))) {
+
+                                showSureDialog(getString(R.string.rh_find_pwd_done), view -> {
+                                    finish();
+                                });
+
                             } else {
-                                LogUtil.E("人行问题回答失败");
                                 showToast(getString(R.string.rh_anw_question_error));
                             }
 
@@ -373,10 +365,8 @@ public class RhQuestionCheckActivity extends AbsBaseLoadActivity {
     private Map<String, String> getSubmitMap() {
         Map<String, String> map = new HashMap<>();
 
-        map.put("org.apache.struts.taglib.html.TOKEN", mSubmitQuestionToken);
-        map.put("method", "");//不用提交
-        map.put("authtype", RhHelper.reportCheckType);
-        map.put("ApplicationOption", RhHelper.reportType);
+        map.put("org.apache.struts.taglib.html.TOKEN", mQuestionToken);
+        map.put("method", "saveKbaApply");
 
         for (int i = 0; i < mRuestionList.size(); i++) {
 
