@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.cdkj.baselibrary.activitys.WebViewActivity;
 import com.cdkj.baselibrary.base.AbsBaseLoadActivity;
 import com.cdkj.baselibrary.nets.RetrofitUtils;
+import com.cdkj.baselibrary.utils.ImgUtils;
 import com.cdkj.baselibrary.utils.LogUtil;
 import com.cdkj.baselibrary.utils.StringUtils;
 import com.cdkj.borrowingmenber.R;
@@ -187,9 +188,9 @@ public class RhRegisterActivity extends AbsBaseLoadActivity {
         Call<ResponseBody> call = null;
         if (!istouch) {
             if (i == 0) {
-                call = RetrofitUtils.createApi(MyApiServer.class).rhRegiCode1( Math.random()+"");
+                call = RetrofitUtils.createApi(MyApiServer.class).rhRegiCode1(Math.random() + "");
             } else {
-                call = RetrofitUtils.createApi(MyApiServer.class).rhRegiCode(Math.random()+"");
+                call = RetrofitUtils.createApi(MyApiServer.class).rhRegiCode(Math.random() + "");
             }
 
         } else {
@@ -206,13 +207,11 @@ public class RhRegisterActivity extends AbsBaseLoadActivity {
         call.enqueue(new BaseRhCertCallBack<ResponseBody>(this, BaseRhCertCallBack.RESPONSETYPE) {
             @Override
             protected void onSuccess(ResponseBody responseBody) {
-
                 try {
-                    Glide.with(RhRegisterActivity.this).load(responseBody.bytes()).error(com.cdkj.baselibrary.R.drawable.default_pic).into(mBinding.imgCode);
+                    ImgUtils.loadImg(RhRegisterActivity.this, responseBody.bytes(), mBinding.imgCode);
                 } catch (Exception e) {
                     LogUtil.E("加载" + e);
                 }
-
                 LogUtil.E("请求验证码成功");
             }
 

@@ -10,6 +10,7 @@ import android.view.View;
 import com.bumptech.glide.Glide;
 import com.cdkj.baselibrary.base.AbsBaseLoadActivity;
 import com.cdkj.baselibrary.nets.RetrofitUtils;
+import com.cdkj.baselibrary.utils.ImgUtils;
 import com.cdkj.baselibrary.utils.LogUtil;
 import com.cdkj.baselibrary.utils.StringUtils;
 import com.cdkj.borrowingmenber.R;
@@ -148,8 +149,9 @@ public class RhFindPwdActivity extends AbsBaseLoadActivity {
         call.enqueue(new BaseRhCertCallBack(this, BaseRhCertCallBack.RESPONSETYPE) {
             @Override
             protected void onSuccess(ResponseBody responseBody) {
+
                 try {
-                    Glide.with(RhFindPwdActivity.this).load(responseBody.bytes()).error(com.cdkj.baselibrary.R.drawable.default_pic).into(mBinding.imgCode);
+                    ImgUtils.loadImg(RhFindPwdActivity.this, responseBody.bytes(), mBinding.imgCode);
                 } catch (Exception e) {
                     LogUtil.E("加载" + e);
                 }

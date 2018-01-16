@@ -24,7 +24,7 @@ public class ImgUtils {
 
         LogUtil.E("图片" + imgid);
 
-        if (imgid instanceof Integer || imgid instanceof String) {
+        if (imgid instanceof Integer || imgid instanceof String || imgid instanceof byte[]) {
 
             if (obj instanceof Context) {
                 try {
@@ -184,6 +184,7 @@ public class ImgUtils {
 
     /**
      * 用于判断链接是否添加了七牛
+     *
      * @param url
      * @return
      */

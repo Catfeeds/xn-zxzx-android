@@ -51,9 +51,9 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="5dp"
                     android:background="@drawable/selector_btn_round"
-                    android:text="获取动他码"
+                    android:text="获取动态码"
                     android:textColor="@color/white"
-                    android:textSize="14sp" />
+                    android:textSize="12sp" />
 
             </LinearLayout>
 
