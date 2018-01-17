@@ -10,7 +10,6 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
 
-import com.cdkj.baselibrary.appmanager.EventTags;
 import com.cdkj.baselibrary.base.AbsBaseLoadActivity;
 import com.cdkj.baselibrary.nets.RetrofitUtils;
 import com.cdkj.baselibrary.utils.AppUtils;
@@ -25,8 +24,6 @@ import com.cdkj.borrowingmenber.module.api.MyApiServer;
 import com.cdkj.borrowingmenber.weiget.bankcert.BaseRhCertCallBack;
 import com.cdkj.borrowingmenber.weiget.bankcert.RhHelper;
 
-import org.greenrobot.eventbus.EventBus;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -74,7 +71,7 @@ public class RhFindPwdQuestionCheckActivity extends AbsBaseLoadActivity {
     @Override
     public void afterCreate(Bundle savedInstanceState) {
 
-        mBaseBinding.titleView.setMidTitle("回答问题");
+        mBaseBinding.titleView.setMidTitle("验证身份");
 
         if (getIntent() != null) {
             mQuestionToken = getIntent().getStringExtra("token");
@@ -85,7 +82,6 @@ public class RhFindPwdQuestionCheckActivity extends AbsBaseLoadActivity {
         });
         initAdapter();
         getRuestionRequest();
-//        rxParseQuestion(null);
     }
 
     /**
@@ -326,6 +322,8 @@ public class RhFindPwdQuestionCheckActivity extends AbsBaseLoadActivity {
                 })
                 .subscribe(qus -> {
 
+                    showLoadingDialog();
+
                     Call call = RetrofitUtils.createApi(MyApiServer.class).submitFindPwdQuestion(qus);
 
                     addCall(call);
@@ -335,7 +333,7 @@ public class RhFindPwdQuestionCheckActivity extends AbsBaseLoadActivity {
                         protected void onSuccess(Document doc) {
 
                             if (StringUtils.contains(doc.text(), getString(R.string.rh_find_pwd_check))) {
-                                mSubscription.clear();
+                                mSubscription.clear();      //停止定时器
                                 showSureDialog(getString(R.string.rh_find_pwd_done), view -> {
                                     finish();
                                 });

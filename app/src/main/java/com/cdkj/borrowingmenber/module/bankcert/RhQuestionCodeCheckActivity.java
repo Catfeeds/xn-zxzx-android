@@ -65,6 +65,8 @@ public class RhQuestionCodeCheckActivity extends AbsBaseLoadActivity {
     @Override
     public void afterCreate(Bundle savedInstanceState) {
 
+        mBaseBinding.titleView.setMidTitle("验证身份");
+
         if (getIntent() != null) {
             checkQuestionToekn = getIntent().getStringExtra("token");
             authtype = getIntent().getStringExtra("authtype");
@@ -105,8 +107,8 @@ public class RhQuestionCodeCheckActivity extends AbsBaseLoadActivity {
             @Override
             protected void onSuccess(Document doc) {
                 if (StringUtils.contains(doc.text(), "您的信用信息查询请求已提交")) {
-                    RhQuestionDoneActivity.open(RhQuestionCodeCheckActivity.this);
                     EventBus.getDefault().post(EventTags.RhQUESTIONFINISH); //结束上一页
+                    RhQuestionDoneActivity.open(RhQuestionCodeCheckActivity.this);
                     finish();
                 } else {
                     showToast("申请报告失败，请重试");

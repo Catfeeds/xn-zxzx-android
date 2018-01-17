@@ -86,7 +86,7 @@ public class RhQuestionCheckActivity extends AbsBaseLoadActivity {
         });
         initAdapter();
         getRuestionRequest();
-//        rxParseQuestion(null);
+
     }
 
     /**
@@ -331,6 +331,8 @@ public class RhQuestionCheckActivity extends AbsBaseLoadActivity {
                     disMissLoading();
                 })
                 .subscribe(qus -> {
+
+                    showLoadingDialog();
 
                     Call call = RetrofitUtils.createApi(MyApiServer.class).submitQuestion(qus);
 

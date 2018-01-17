@@ -116,9 +116,8 @@ public abstract class BaseRhCertCallBack<T> implements Callback<ResponseBody> {
                 return;
             }
 
-            Elements elements = document.getElementsByClass("error");
 
-            if (elements != null && elements.size() > 0) {
+            if (document.body() == null || document.body().children() == null || document.body().children().size() == 0) {
                 onReqFailure(NETERRORCODE4, "系统繁忙,请稍后再试");
                 return;
             }

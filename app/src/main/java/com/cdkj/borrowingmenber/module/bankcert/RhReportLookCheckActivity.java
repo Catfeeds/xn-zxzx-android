@@ -180,9 +180,9 @@ tradeCode	tb4k7f*/
             @Override
             protected void onSuccess(String str) {
                 LogUtil.E("查看成功");
+                webView.loadData(str, "text/html;charset=UTF-8", "UTF-8");
                 webView.setVisibility(View.VISIBLE);
                 mBinding.linTopInput.setVisibility(View.GONE);
-                webView.loadData(str, "text/html;charset=UTF-8", "UTF-8");
             }
 
             @Override
