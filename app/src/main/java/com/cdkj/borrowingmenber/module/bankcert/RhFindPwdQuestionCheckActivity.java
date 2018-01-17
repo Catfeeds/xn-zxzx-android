@@ -141,7 +141,7 @@ public class RhFindPwdQuestionCheckActivity extends AbsBaseLoadActivity {
         map.put("method", "chooseCertify");
         map.put("authtype", RhHelper.reportCheckType); //id radiobutton2 3 银行卡验证  id  radiobutton1 1 数字正式验证 id  radiobutton3 2 问题验证
 
-        Call call = RetrofitUtils.createApi(MyApiServer.class).getCheckRuestion(map);
+        Call call = RetrofitUtils.createApi(MyApiServer.class).getCheckFindPwdQuestion(map);
 
         addCall(call);
 
@@ -326,7 +326,7 @@ public class RhFindPwdQuestionCheckActivity extends AbsBaseLoadActivity {
                 })
                 .subscribe(qus -> {
 
-                    Call call = RetrofitUtils.createApi(MyApiServer.class).submitQuestion(qus);
+                    Call call = RetrofitUtils.createApi(MyApiServer.class).submitFindPwdQuestion(qus);
 
                     addCall(call);
 
@@ -335,7 +335,7 @@ public class RhFindPwdQuestionCheckActivity extends AbsBaseLoadActivity {
                         protected void onSuccess(Document doc) {
 
                             if (StringUtils.contains(doc.text(), getString(R.string.rh_find_pwd_check))) {
-
+                                mSubscription.clear();
                                 showSureDialog(getString(R.string.rh_find_pwd_done), view -> {
                                     finish();
                                 });

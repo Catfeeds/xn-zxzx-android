@@ -49,6 +49,7 @@
                     android:layout_height="40dp"
                     android:background="@drawable/gray_line_input_edtext"
                     android:hint="请输入登录"
+                    android:text="lixianjun_1995"
                     android:paddingLeft="10dp"
                     android:textColorHint="@color/text_hint_color"
                     android:textSize="14sp" />
@@ -79,6 +80,7 @@
                     android:layout_height="40dp"
                     android:background="@drawable/gray_line_input_edtext"
                     android:hint="请输入姓名"
+                    android:text="李先俊"
                     android:paddingLeft="10dp"
                     android:textColorHint="@color/text_hint_color"
                     android:textSize="14sp" />
@@ -104,6 +106,7 @@
                     android:textColor="@color/text_black_cd" />
 
                 <EditText
+                    android:text="522321199509111655"
                     android:id="@+id/edit_id_num"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"

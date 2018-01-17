@@ -31,6 +31,28 @@ import retrofit2.http.Query;
 
 public interface MyApiServer {
 
+
+    /**
+     * 回答问题获取验证问题
+     *
+     * @return
+     */
+    @Headers({
+            "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Accept-Encoding: gzip, deflate, br",
+            "Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2",
+            "Connection: Keep-Alive",
+            "Content-Type: application/x-www-form-urlencoded; charset=UTF-8",
+            "Host: ipcrs.pbccrc.org.cn",
+            "X-Requested-With: XMLHttpRequest",
+            "Upgrade-Insecure-Requests: 1",
+            "Referer: https://ipcrs.pbccrc.org.cn/resetPassword.do"
+    })
+    @FormUrlEncoded
+    @POST("https://ipcrs.pbccrc.org.cn/resetPassword.do")
+    Call<ResponseBody> getCheckFindPwdQuestion(@FieldMap Map<String, String> map);
+
+
     /**
      * 找回密码 回答问题
      *
@@ -50,6 +72,8 @@ public interface MyApiServer {
     @FormUrlEncoded
     @POST("https://ipcrs.pbccrc.org.cn/resetPassword.do")
     Call<ResponseBody> submitFindPwdQuestion(@FieldMap Map<String, String> map);
+
+
     /**
      * 找回密码 动态码
      *
@@ -68,7 +92,7 @@ public interface MyApiServer {
     })
     @FormUrlEncoded
     @POST("https://ipcrs.pbccrc.org.cn/resetPassword.do")
-    Call<ResponseBody> rhFindPWDGetPhoneCode(@FieldMap Map<String,String> map,@Query("num") String num);
+    Call<ResponseBody> rhFindPWDGetPhoneCode(@FieldMap Map<String, String> map, @Query("num") String num);
 
     /**
      * 找回密码
