@@ -10,12 +10,14 @@ import android.view.View;
 import com.bumptech.glide.Glide;
 import com.cdkj.baselibrary.base.AbsBaseLoadActivity;
 import com.cdkj.baselibrary.nets.RetrofitUtils;
+import com.cdkj.baselibrary.utils.ImgUtils;
 import com.cdkj.baselibrary.utils.LogUtil;
 import com.cdkj.baselibrary.utils.StringUtils;
 import com.cdkj.borrowingmenber.R;
 import com.cdkj.borrowingmenber.databinding.ActivityRhLoginBinding;
 import com.cdkj.borrowingmenber.module.api.MyApiServer;
 import com.cdkj.borrowingmenber.weiget.bankcert.BaseRhCertCallBack;
+import com.cdkj.borrowingmenber.weiget.bankcert.RhHelper;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -83,24 +85,10 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
 
         mbinding.tvChangeCode.setOnClickListener(v -> getLoginCode());
         mbinding.imgCode.setOnClickListener(v -> getLoginCode());
-        mbinding.btnLogin.setOnClickListener(v -> {
-            if (TextUtils.isEmpty(mbinding.editCode.getText().toString())) {
-                showToast("请输入验证码");
-                return;
-            }
+        mbinding.btnLogin.setOnClickListener(v -> login());
 
-            if (TextUtils.isEmpty(mbinding.editLoginName.getText().toString())) {
-                showToast("请输入登录名");
-                return;
-            }
-
-            if (TextUtils.isEmpty(mbinding.editCode.getText().toString())) {
-                showToast("请输入密码");
-                return;
-            }
-
-            login();
-        });
+        mbinding.tvFindName.setOnClickListener(v -> RhFindLoginNameActivity.open(this));
+        mbinding.tvFindPwdRh.setOnClickListener(v -> RhFindPwdActivity.open(this));
     }
 
     /**
@@ -114,7 +102,6 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
         call.enqueue(new BaseRhCertCallBack<ResponseBody>(this, BaseRhCertCallBack.RESPONSETYPE) {
             @Override
             protected void onSuccess(ResponseBody responseBody) {
-
                 try {
                     Glide.with(RhLoginActivity.this).load(responseBody.bytes()).error(com.cdkj.baselibrary.R.drawable.default_pic).into(mbinding.imgCode);
                 } catch (Exception e) {
@@ -134,6 +121,22 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
 
 
     private void login() {
+        if (TextUtils.isEmpty(mbinding.editCode.getText().toString())) {
+            showToast("请输入验证码");
+            return;
+        }
+
+        if (TextUtils.isEmpty(mbinding.editLoginName.getText().toString())) {
+            showToast("请输入登录名");
+            return;
+        }
+
+        if (TextUtils.isEmpty(mbinding.editCode.getText().toString())) {
+            showToast("请输入密码");
+            return;
+        }
+        mbinding.errorInfo.setText("");
+        mbinding.errorInfo.setVisibility(View.GONE);
     /*
        _@IMGRC@_: 123456
 
@@ -155,12 +158,9 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
         Map<String, String> map = new HashMap<>();
         map.put("_@IMGRC@_", mbinding.editCode.getText().toString());
         map.put("date", new Date().getTime() + "");
-
         map.put("loginname", mbinding.editLoginName.getText().toString());
         map.put("password", mbinding.editLoginPassword.getText().toString());
-
         map.put("method", "login");
-//            map.put("org.apache.struts.taglib.html.TOKEN", "083f89e3c71eedf1ac40a7fc771c95a583d2fd765cbd92fa5a4316f4");
 
         Call<ResponseBody> call = RetrofitUtils.createApi(MyApiServer.class).rhLogin(map);
         showLoadingDialog();
@@ -218,6 +218,7 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
         Elements element = doc.getElementsByClass("erro_div3"); //获取登录错误提醒 如果有 说明登录没成功
 
         if (element != null && !TextUtils.isEmpty(element.text())) {
+            mbinding.errorInfo.setVisibility(View.VISIBLE);
             mbinding.errorInfo.setText(element.text());
             showToast(element.text());
             return false;
@@ -311,7 +312,7 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
     }
 
     /**
-     * 获取登录成功后左菜单
+     * 获取登录成功后左菜单(查看报告界面)
      */
     public void getLeftMenuReportInfo() {
 
@@ -349,16 +350,12 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
                     return menuDoc;
                 }).subscribe(menuDoc -> {
 
-                    Elements input = menuDoc.getElementsByClass("regist_text span-14"); // 如果没有这个元素说明没有获取到菜单页面
-                    if (input == null) {
-                        showError();
-                        return;
-                    }
-                    if (!input.text().contains("身份验证码")) {
+                    if (!StringUtils.contains(menuDoc.text(), "身份验证码") || !StringUtils.contains(menuDoc.text(), "获取信用信息")) {
                         showError();
                         return;
                     }
 
+                    //TODO 判断有无报告单优化 判断下一步是否可以点击 id="nextstep" disabled="disabled" 目前只需要报告
                     Elements radio = menuDoc.select("[disabled]");// 获取带有disabled属性的元素 三个资信报告类型选择框
 
                     if (radio == null) {
@@ -389,7 +386,7 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
         for (Element element : radio) {
             if (element == null) continue;
 
-            if (TextUtils.equals(RhReportLookCheckActivity.reportType, element.attr("value"))) {  // 如果获取的元素里 有 value=21 说明个人信用报告被禁用
+            if (TextUtils.equals(RhHelper.reportType, element.attr("value"))) {  // 如果获取的元素里 有 value=21 说明个人信用报告被禁用
                 return true;
             }
         }

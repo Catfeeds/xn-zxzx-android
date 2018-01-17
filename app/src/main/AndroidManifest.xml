@@ -151,6 +151,44 @@
             android:name=".module.bankcert.RhNoReportActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
+        <!--人行问题验证-->
+        <activity
+            android:name=".module.bankcert.RhQuestionCheckActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+
+        <!--人行问题动态码验证-->
+        <activity
+            android:name=".module.bankcert.RhQuestionCodeCheckActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+
+        <!--找回登录名-->
+        <activity
+            android:name=".module.bankcert.RhFindLoginNameActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <!--找回登录密码-->
+        <activity
+            android:name=".module.bankcert.RhFindPwdActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <!--找回登录密码2-->
+        <activity
+            android:name=".module.bankcert.RhFindPwd2Activity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <!--找回登录密码2-->
+        <activity
+            android:name=".module.bankcert.RhFindPwdQuestionCheckActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+
+        <!--问题回答完成-->
+        <activity
+            android:name=".module.bankcert.RhQuestionDoneActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
         <!--人行开始-->
         <activity
             android:name=".module.bankcert.RhStartActivity"
@@ -159,6 +197,17 @@
         <!--人行注册-->
         <activity
             android:name=".module.bankcert.RhRegisterActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+
+        <!--人行注册 2-->
+        <activity
+            android:name=".module.bankcert.RhRegister2Activity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <!--人行注册 3-->
+        <activity
+            android:name=".module.bankcert.RhRegister3Activity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
 

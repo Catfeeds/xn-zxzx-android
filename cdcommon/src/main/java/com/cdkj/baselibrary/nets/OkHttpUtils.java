@@ -50,7 +50,7 @@ public class OkHttpUtils {
                     .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)
                     .retryOnConnectionFailure(true)//允许失败重试
                     .cookieJar(new CookiesManager())  //cookie 管理
-                    .sslSocketFactory(createSSLSocketFactory())            //ssh
+                    .sslSocketFactory(createSSLSocketFactory(), new TrustAllCerts())            //ssh
                     .addInterceptor(getInterceptor(LogUtil.isDeBug))    //网络日志
                     .build();
         }
@@ -108,6 +108,7 @@ public class OkHttpUtils {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
             @Override
             public void log(String message) {
+                LogUtil.I("okhttp:1__ " + message); //post请求FormUrlEncoded注解 unicode 转码
                 try {
                     LogUtil.I("okhttp: " + URLDecoder.decode(message, "utf-8")); //post请求FormUrlEncoded注解 unicode 转码
                 } catch (Exception e) {

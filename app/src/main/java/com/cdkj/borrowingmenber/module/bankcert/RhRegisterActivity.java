@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.cdkj.baselibrary.activitys.WebViewActivity;
 import com.cdkj.baselibrary.base.AbsBaseLoadActivity;
 import com.cdkj.baselibrary.nets.RetrofitUtils;
+import com.cdkj.baselibrary.utils.ImgUtils;
 import com.cdkj.baselibrary.utils.LogUtil;
 import com.cdkj.baselibrary.utils.StringUtils;
 import com.cdkj.borrowingmenber.R;
@@ -20,6 +21,7 @@ import com.cdkj.borrowingmenber.databinding.ActivityRhRegiBinding;
 import com.cdkj.borrowingmenber.model.RhCardTypeModel;
 import com.cdkj.borrowingmenber.module.api.MyApiServer;
 import com.cdkj.borrowingmenber.weiget.bankcert.BaseRhCertCallBack;
+import com.cdkj.borrowingmenber.weiget.bankcert.RhHelper;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -40,12 +42,16 @@ import retrofit2.Call;
  * 人行注册页面
  * Created by cdkj on 2018/1/4.
  */
-
+//TODO 请求后状态判断检查
 public class RhRegisterActivity extends AbsBaseLoadActivity {
 
     private List<RhCardTypeModel> rhCardTypeModels;
 
     private String mCardTpyeCode = "0";//选择的证件类型Code  默认为身份证
+
+    private String regiToken = "";//用于注册请求
+
+    private int i = 0;
 
     public static void open(Context context) {
         if (context == null) {
@@ -71,31 +77,31 @@ public class RhRegisterActivity extends AbsBaseLoadActivity {
 
         mBaseBinding.titleView.setMidTitle("填写身份信息");
 
-        initCardTypePicker();
+//        initCardTypePicker();
 
         initListener();
-
-//        getRetiCodeImg();
+        rhRegiRequestInit();
 
     }
 
     private void initListener() {
 
         //证件类型
-        mBinding.linCardType.setOnClickListener(v -> {
-            if (mCardTypePicker != null) mCardTypePicker.show();
-        });
+//        mBinding.linCardType.setOnClickListener(v -> {
+//            if (mCardTypePicker != null) mCardTypePicker.show();
+//        });
         //服务协议
         mBinding.tvRead1.setOnClickListener(v -> {
             WebViewActivity.openURL(this, "服务协议", "https://ipcrs.pbccrc.org.cn/html/servearticle.html");
         });
         //注册下一步
         mBinding.btnRegi1.setOnClickListener(v -> {
+            hideError();
             regiNext();
         });
         //获取验证码
-        mBinding.tvChangeCode.setOnClickListener(v -> getRetiCodeImg());
-        mBinding.imgCode.setOnClickListener(v -> getRetiCodeImg());
+        mBinding.tvChangeCode.setOnClickListener(v -> getRetiCodeImg(true));
+        mBinding.imgCode.setOnClickListener(v -> getRetiCodeImg(true));
     }
 
     /**
@@ -103,23 +109,23 @@ public class RhRegisterActivity extends AbsBaseLoadActivity {
      */
     private void regiNext() {
 
-//        if (TextUtils.isEmpty(mBinding.editRegiName.getText().toString())) {
-//            showToast("请输入姓名");
-//            return;
-//        }
-//        if (TextUtils.isEmpty(mBinding.editCardNum.getText().toString())) {
-//            showToast("请输入证件号码");
-//            return;
-//        }
-//        if (TextUtils.isEmpty(mBinding.editCode.getText().toString())) {
-//            showToast("请输入验证码");
-//            return;
-//        }
-//
-//        if (!mBinding.checkboxRead.isChecked()) {
-//            showToast("请阅读并同意服务协议");
-//            return;
-//        }
+        if (TextUtils.isEmpty(mBinding.editRegiName.getText().toString())) {
+            showToast("请输入姓名");
+            return;
+        }
+        if (TextUtils.isEmpty(mBinding.editCardNum.getText().toString())) {
+            showToast("请输入证件号码");
+            return;
+        }
+        if (TextUtils.isEmpty(mBinding.editCode.getText().toString())) {
+            showToast("请输入验证码");
+            return;
+        }
+
+        if (!mBinding.checkboxRead.isChecked()) {
+            showToast("请认真阅读并勾选同意服务协议");
+            return;
+        }
         rhRegiRequest();
     }
 
@@ -170,8 +176,6 @@ public class RhRegisterActivity extends AbsBaseLoadActivity {
 
             rhCardTypeModel.setTypeString(StringUtils.subString(type, 0, type.length() - 1));//截取类型名称
 
-            LogUtil.E("证件类型" + rhCardTypeModel.getTypeString() + " __" + rhCardTypeModel.getTypeCode());
-
             rhCardTypeModels.add(rhCardTypeModel);
         }
         return rhCardTypeModels;
@@ -180,8 +184,23 @@ public class RhRegisterActivity extends AbsBaseLoadActivity {
     /**
      * 获取注册验证码图片
      */
-    private void getRetiCodeImg() {
-        Call<ResponseBody> call = RetrofitUtils.createApi(MyApiServer.class).rhRegiCode(new Date().getTime() + "");
+    private void getRetiCodeImg(boolean istouch) {
+        Call<ResponseBody> call = null;
+        if (!istouch) {
+            if (i == 0) {
+                call = RetrofitUtils.createApi(MyApiServer.class).rhRegiCode1(Math.random() + "");
+            } else {
+                call = RetrofitUtils.createApi(MyApiServer.class).rhRegiCode(Math.random() + "");
+            }
+
+        } else {
+            if (i == 0) {
+                call = RetrofitUtils.createApi(MyApiServer.class).rhRegiCode1("" + new Date().getTime());
+            } else {
+                call = RetrofitUtils.createApi(MyApiServer.class).rhRegiCode("" + new Date().getTime());
+            }
+
+        }
 
         addCall(call);
         showLoadingDialog();
@@ -205,6 +224,7 @@ public class RhRegisterActivity extends AbsBaseLoadActivity {
         });
     }
 
+
     /**
      * 注册请求
      */
@@ -213,13 +233,22 @@ public class RhRegisterActivity extends AbsBaseLoadActivity {
         Map<String, String> map = new HashMap<>();
         map.put("1", "on");
         map.put("method", "checkIdentity");
-        map.put("org.apache.struts.taglib.html.TOKEN", "7dc93b932ad82457edaefb95da16732a");
-        map.put("name", mBinding.editRegiName.getText().toString());
-        map.put("certType", mCardTpyeCode);
-        map.put("certNo", mBinding.editCardNum.getText().toString());
-        map.put("_@IMGRC@_", mBinding.editCode.getText().toString());
+        map.put("org.apache.struts.taglib.html.TOKEN", regiToken);  //解析页面的得到的token
+        map.put("userInfoVO.name", mBinding.editRegiName.getText().toString());
+        map.put("userInfoVO.certType", mCardTpyeCode);                          //证件类型
+        map.put("userInfoVO.certNo", mBinding.editCardNum.getText().toString());
+        map.put("_@IMGRC@_", mBinding.editCode.getText().toString());     //验证码
 
-        Call call = RetrofitUtils.createApi(MyApiServer.class).rhRegiRequest(map);
+        Call call = null;
+
+        if (i == 0) {
+            call = RetrofitUtils.createApi(MyApiServer.class).rhRegiRequest1(map);
+        } else {
+            call = RetrofitUtils.createApi(MyApiServer.class).rhRegiRequest(map);
+        }
+
+        i++;
+
 
         addCall(call);
 
@@ -229,18 +258,11 @@ public class RhRegisterActivity extends AbsBaseLoadActivity {
 
             @Override
             protected void onSuccess(Document doc) {
-                Elements element = doc.getElementsByClass("erro_div1"); //获取登录错误提醒 如果有 说明登录没成功
-                if (element != null && !TextUtils.isEmpty(element.text())) {
-                    mBinding.errorInfo.setText(element.text());
-                    showToast(element.text());
-                    return;
-                }
-                Elements element2 = doc.getElementsByClass("span-grey2"); //获取登录错误提醒 如果有 说明登录没成功
-                if (element2 != null && StringUtils.contains(element2.text(), "我已阅读并同意")) {
-                    mBinding.errorInfo.setText("注册失败，请重试");
-                    showToast("注册失败，请重试");
-                    return;
-                }
+
+                regiToken = RhHelper.checkGetToken(doc);
+
+                checkRegiSuccess(doc);
+
 
             }
 
@@ -252,5 +274,78 @@ public class RhRegisterActivity extends AbsBaseLoadActivity {
         });
 
     }
+
+    /**
+     * 检测注册是否成功
+     *
+     * @param doc
+     */
+    private void checkRegiSuccess(Document doc) {
+
+
+        Elements element = doc.getElementsByClass("erro_div1"); //获取注册错误提醒 如果有 说明注册没成功
+        if (element != null && !TextUtils.isEmpty(element.text())) {
+            showError(element.text());
+            getRetiCodeImg(true);
+            return;
+        }
+
+        if (StringUtils.contains(doc.text(), getString(R.string.rh_card_num)) || StringUtils.contains(doc.text(), getString(R.string.rh_i_see_regi_page))) {
+            showError(getString(R.string.rh_regi_error));
+            getRetiCodeImg(true);
+            return;
+        }
+
+//        Elements elements3 = doc.getElementsByClass("regist_text span-14");// 注册成功第二步 用于检测是否出现了第二步骤的元素 没出现说明注册失败
+
+        if (doc != null && StringUtils.contains(doc.text(), getString(R.string.rh_regi2_check1)) && StringUtils.contains(doc.text(), getString(R.string.rh_regi2_check2)) && StringUtils.contains(doc.text(), getString(R.string.rh_regi2_check3))) {
+            regiToken = RhHelper.checkGetToken(doc); //用于获取下一个页面的token
+            RhRegister2Activity.open(RhRegisterActivity.this, regiToken);
+            finish();
+            return;
+        }
+        getRetiCodeImg(true);
+        showError(getString(R.string.rh_regi_error));
+    }
+
+    private void showError(String text) {
+        mBinding.errorInfo.setText(text);
+        mBinding.errorInfo.setVisibility(View.VISIBLE);
+        showToast(text);
+    }
+
+    private void hideError() {
+        mBinding.errorInfo.setText("");
+        mBinding.errorInfo.setVisibility(View.GONE);
+    }
+
+    /**
+     * 注册请求 用户获取token
+     */
+    private void rhRegiRequestInit() {
+
+        Call call = RetrofitUtils.createApi(MyApiServer.class).rhRegiRequestInit();
+
+        addCall(call);
+
+        showLoadingDialog();
+
+        call.enqueue(new BaseRhCertCallBack(this, BaseRhCertCallBack.DOCTYPE) {
+
+            @Override
+            protected void onSuccess(Document doc) {
+                regiToken = RhHelper.checkGetToken(doc);
+                getRetiCodeImg(false);
+            }
+
+            @Override
+            protected void onFinish() {
+                disMissLoading();
+            }
+
+        });
+
+    }
+
 
 }
