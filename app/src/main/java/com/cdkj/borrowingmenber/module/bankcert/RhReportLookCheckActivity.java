@@ -29,7 +29,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 
 /**
- * 人行报告查看验证
+ * 人行报告查看验证  查看报告
  * Created by cdkj on 2017/12/28.
  */
 

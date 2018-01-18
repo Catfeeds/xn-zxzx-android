@@ -100,7 +100,7 @@ public class RhQuestionCheckActivity extends AbsBaseLoadActivity {
             if (rhRuestionModel == null) continue;
 
             if (TextUtils.isEmpty(rhRuestionModel.getAnswerresult())) {
-                showToast("必须对所有的题作答！");
+                showToast(getString(R.string.rh_check_question_no_pass));
                 return false;
             }
             LogUtil.E("_______" + rhRuestionModel.getAnswerresult());

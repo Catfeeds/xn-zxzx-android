@@ -64,5 +64,29 @@
     <string name="rh_code_change">看不清楚？换一个</string>
     <string name="rh_find_pwd_check">您的重置密码申请已提交</string>
     <string name="rh_find_pwd_done">您的重置密码申请已提交，系统会对您的相关信息进行审核，审核结果将于24小时后反馈到您的手机，请注意查收。</string>
+    <string name="rh_register_done_title">完成注册</string>
+    <string name="rh_find_name_done">您的登录名已短信发送至平台预留的手机号码，请查收。</string>
+    <string name="rh_find_name_error">找回登录失败，请重试</string>
+    <string name="rh_find_name">找回登录名</string>
+    <string name="rh_find_pwd_title">找回密码</string>
+    <string name="rh_check_question_no_pass">必须对所有的题作答！</string>
+    <string name="rh_bank_name">中国人民银行征信中心</string>
+    <string name="please_input_phone_code">请输入验证码</string>
+    <string name="rh_check_question">验证身份</string>
+    <string name="please_input_login_name">请输入登录名</string>
+    <string name="name">姓名</string>
+    <string name="pass_code">验证码</string>
+    <string name="rh_find_pwd_error">找回密码失败，请重试</string>
+    <string name="rh_reset_pwd">设置新密码</string>
+    <string name="rh_please_input_new_pwd">请确认新密码</string>
+    <string name="rh_check_new_pwd">请确认新密码</string>
+    <string name="rh_check_pwd_no_pass">两次密码输入不一致</string>
+    <string name="rh_please_input_phone_code_2">请输入动态码</string>
+    <string name="rh_cant_use">您安全等级过高，无法使用此功能。请自行前往官网修改。  官网地址：https://ipcrs.pbccrc.org.cn/</string>
+    <string name="rh_new_pwd">新密码</string>
+    <string name="rh_phone_code">手机动态码</string>
+    <string name="rh_question_check">问题验证</string>
+    <string name="please_input_pwd">请输入密码</string>
+    <string name="rh_report">资信报告</string>
 
 </resources>

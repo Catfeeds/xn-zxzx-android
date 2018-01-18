@@ -28,7 +28,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 
 /**
- * 找回登录密码
+ * 找回登录名
  * Created by cdkj on 2018/1/15.
  */
 
@@ -53,7 +53,7 @@ public class RhFindLoginNameActivity extends AbsBaseLoadActivity {
 
     @Override
     public void afterCreate(Bundle savedInstanceState) {
-        mBaseBinding.titleView.setMidTitle("找回登录名");
+        mBaseBinding.titleView.setMidTitle(getString(R.string.rh_find_name));
 
         initListener();
 
@@ -73,15 +73,15 @@ public class RhFindLoginNameActivity extends AbsBaseLoadActivity {
         mBinding.errorInfo.setVisibility(View.GONE);
 
         if (TextUtils.isEmpty(mBinding.editLoginName.getText().toString())) {
-            showToast("请输入姓名");
+            showToast(getString(R.string.please_input_name));
             return;
         }
         if (TextUtils.isEmpty(mBinding.editIdNum.getText().toString())) {
-            showToast("请输入身份证号码");
+            showToast(getString(R.string.please_input_idcard_num));
             return;
         }
         if (TextUtils.isEmpty(mBinding.editCode.getText().toString())) {
-            showToast("请输入验证码");
+            showToast(getString(R.string.please_input_phone_code));
             return;
         }
 
@@ -113,12 +113,12 @@ public class RhFindLoginNameActivity extends AbsBaseLoadActivity {
                     return;
                 }
                 if (StringUtils.contains(doc.text(), "姓名")) {
-                    showToast("找回登录失败，请重试");
+                    showToast(getString(R.string.rh_find_name_error));
                     getCode();
                     return;
                 }
 
-                showSureDialog("您的登录名已短信发送至平台预留的手机号码，请查收。", view -> {
+                showSureDialog(getString(R.string.rh_find_name_done), view -> {
                     finish();
                 });
 

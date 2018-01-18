@@ -11,16 +11,17 @@ import com.cdkj.borrowingmenber.R;
 import com.cdkj.borrowingmenber.databinding.ActivityRhRegiStep3Binding;
 
 /**
+ * 人行注册第三步
  * Created by cdkj on 2018/1/9.
  */
 
-public class RhRegister3Activity extends AbsBaseLoadActivity {
+public class RhRegisterStpe3Activity extends AbsBaseLoadActivity {
 
     public static void open(Context context) {
         if (context == null) {
             return;
         }
-        Intent intent = new Intent(context, RhRegister3Activity.class);
+        Intent intent = new Intent(context, RhRegisterStpe3Activity.class);
         context.startActivity(intent);
     }
 
@@ -34,7 +35,7 @@ public class RhRegister3Activity extends AbsBaseLoadActivity {
 
     @Override
     public void afterCreate(Bundle savedInstanceState) {
-        mBaseBinding.titleView.setMidTitle("完成注册");
+        mBaseBinding.titleView.setMidTitle(getString(R.string.rh_register_done_title));
 
         mBinding.btnGoLogin.setOnClickListener(v -> {
             RhLoginActivity.open(this);

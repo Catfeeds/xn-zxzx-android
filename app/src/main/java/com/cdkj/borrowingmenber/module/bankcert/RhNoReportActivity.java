@@ -52,7 +52,7 @@ public class RhNoReportActivity extends AbsBaseLoadActivity {
 
     @Override
     public void afterCreate(Bundle savedInstanceState) {
-        mBaseBinding.titleView.setMidTitle("资信报告");
+        mBaseBinding.titleView.setMidTitle(getString(R.string.rh_report));
     }
 
     @Override

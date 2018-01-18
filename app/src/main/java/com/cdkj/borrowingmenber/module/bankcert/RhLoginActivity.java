@@ -10,7 +10,6 @@ import android.view.View;
 import com.bumptech.glide.Glide;
 import com.cdkj.baselibrary.base.AbsBaseLoadActivity;
 import com.cdkj.baselibrary.nets.RetrofitUtils;
-import com.cdkj.baselibrary.utils.ImgUtils;
 import com.cdkj.baselibrary.utils.LogUtil;
 import com.cdkj.baselibrary.utils.StringUtils;
 import com.cdkj.borrowingmenber.R;
@@ -88,7 +87,7 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
         mbinding.btnLogin.setOnClickListener(v -> login());
 
         mbinding.tvFindName.setOnClickListener(v -> RhFindLoginNameActivity.open(this));
-        mbinding.tvFindPwdRh.setOnClickListener(v -> RhFindPwdActivity.open(this));
+        mbinding.tvFindPwdRh.setOnClickListener(v -> RhFindPwdStep1Activity.open(this));
     }
 
     /**
@@ -122,17 +121,17 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
 
     private void login() {
         if (TextUtils.isEmpty(mbinding.editCode.getText().toString())) {
-            showToast("请输入验证码");
+            showToast(getString(R.string.please_input_phone_code));
             return;
         }
 
         if (TextUtils.isEmpty(mbinding.editLoginName.getText().toString())) {
-            showToast("请输入登录名");
+            showToast(getString(R.string.please_input_login_name));
             return;
         }
 
         if (TextUtils.isEmpty(mbinding.editCode.getText().toString())) {
-            showToast("请输入密码");
+            showToast(getString(R.string.please_input_pwd));
             return;
         }
         mbinding.errorInfo.setText("");

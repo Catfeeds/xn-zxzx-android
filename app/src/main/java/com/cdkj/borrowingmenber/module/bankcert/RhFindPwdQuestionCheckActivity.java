@@ -51,12 +51,14 @@ public class RhFindPwdQuestionCheckActivity extends AbsBaseLoadActivity {
     private RhRuestionAdapter rhRuestionAdapter;//问题适配器
     private LayoutQuestionTopTimeBinding mTimeLayout;
 
+    private final static String TOKENSIGN = "token";//用于获取token
+
     public static void open(Context context, String token) {
         if (context == null) {
             return;
         }
         Intent intent = new Intent(context, RhFindPwdQuestionCheckActivity.class);
-        intent.putExtra("token", token);
+        intent.putExtra(TOKENSIGN, token);
         context.startActivity(intent);
     }
 
@@ -71,10 +73,10 @@ public class RhFindPwdQuestionCheckActivity extends AbsBaseLoadActivity {
     @Override
     public void afterCreate(Bundle savedInstanceState) {
 
-        mBaseBinding.titleView.setMidTitle("验证身份");
+        mBaseBinding.titleView.setMidTitle(getString(R.string.rh_check_question));
 
         if (getIntent() != null) {
-            mQuestionToken = getIntent().getStringExtra("token");
+            mQuestionToken = getIntent().getStringExtra(TOKENSIGN);
         }
 
         mBinding.btnSubmit.setOnClickListener(v -> {
@@ -85,7 +87,7 @@ public class RhFindPwdQuestionCheckActivity extends AbsBaseLoadActivity {
     }
 
     /**
-     * 判断用户是否登录
+     * 判断用户是否回答了问题
      *
      * @return
      */
@@ -95,7 +97,7 @@ public class RhFindPwdQuestionCheckActivity extends AbsBaseLoadActivity {
             if (rhRuestionModel == null) continue;
 
             if (TextUtils.isEmpty(rhRuestionModel.getAnswerresult())) {
-                showToast("必须对所有的题作答！");
+                showToast(getString(R.string.rh_check_question_no_pass));
                 return false;
             }
             LogUtil.E("_______" + rhRuestionModel.getAnswerresult());
