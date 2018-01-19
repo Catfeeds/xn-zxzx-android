@@ -41,7 +41,7 @@ import retrofit2.Call;
  * 人行注册页面
  * Created by cdkj on 2018/1/4.
  */
-//TODO 请求后状态判断检查
+
 public class RhRegisterStep1Activity extends AbsBaseLoadActivity {
 
     private List<RhCardTypeModel> rhCardTypeModels;
@@ -109,20 +109,20 @@ public class RhRegisterStep1Activity extends AbsBaseLoadActivity {
     private void regiNext() {
 
         if (TextUtils.isEmpty(mBinding.editRegiName.getText().toString())) {
-            showToast("请输入姓名");
+            showToast(getString(R.string.please_input_name));
             return;
         }
         if (TextUtils.isEmpty(mBinding.editCardNum.getText().toString())) {
-            showToast("请输入证件号码");
+            showToast(getString(R.string.please_input_idcard_num));
             return;
         }
         if (TextUtils.isEmpty(mBinding.editCode.getText().toString())) {
-            showToast("请输入验证码");
+            showToast(getString(R.string.please_input_phone_code));
             return;
         }
 
         if (!mBinding.checkboxRead.isChecked()) {
-            showToast("请认真阅读并勾选同意服务协议");
+            showToast(getString(R.string.rh_please_read_txt));
             return;
         }
         rhRegiRequest();

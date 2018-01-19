@@ -43,9 +43,7 @@ public class WelcomeAcitivity extends BaseActivity {
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(aLong -> {//延迟两秒进行跳转
-//                    RhQuestionCheckActivity.open(WelcomeAcitivity.this, "");
                     startNext();
-//                    RhFindPwdActivity.open(this);
                 }, Throwable::printStackTrace));
     }
 

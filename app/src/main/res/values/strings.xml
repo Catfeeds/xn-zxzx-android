@@ -88,5 +88,7 @@
     <string name="rh_question_check">问题验证</string>
     <string name="please_input_pwd">请输入密码</string>
     <string name="rh_report">资信报告</string>
+    <string name="rh_please_read_txt">请认真阅读并勾选同意服务协议</string>
+    <string name="no_my_report">您目前没有资信报告</string>
 
 </resources>

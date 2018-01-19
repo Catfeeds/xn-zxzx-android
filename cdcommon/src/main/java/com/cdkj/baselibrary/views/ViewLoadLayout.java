@@ -89,9 +89,12 @@ public class ViewLoadLayout extends FrameLayout {
 
     public void setShowImage(@DrawableRes int img) {
         showEmptyFra(img != 0);
-        mEmptyTextView.setVisibility(img != 0 ? VISIBLE : GONE);
+        showContent(img == 0);
+        mEmptyImageView.setVisibility(img != 0 ? VISIBLE : GONE);
         if (img <= 0) {
             mEmptyImageView.setImageResource(R.drawable.default_pic);
+        }else{
+            mEmptyImageView.setImageResource(img);
         }
     }
 

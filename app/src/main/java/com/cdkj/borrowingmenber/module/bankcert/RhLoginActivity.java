@@ -62,10 +62,8 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
     @Override
     public void afterCreate(Bundle savedInstanceState) {
         mBaseBinding.titleView.setMidTitle("登录");
-
         initListener();
-        getLoginCode();
-
+        getLoginCode(true);
     }
 
     private void initListener() {
@@ -82,8 +80,8 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
 //            isMe = !isMe;
 //        });
 
-        mbinding.tvChangeCode.setOnClickListener(v -> getLoginCode());
-        mbinding.imgCode.setOnClickListener(v -> getLoginCode());
+        mbinding.tvChangeCode.setOnClickListener(v -> getLoginCode(false));
+        mbinding.imgCode.setOnClickListener(v -> getLoginCode(false));
         mbinding.btnLogin.setOnClickListener(v -> login());
 
         mbinding.tvFindName.setOnClickListener(v -> RhFindLoginNameActivity.open(this));
@@ -92,8 +90,10 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
 
     /**
      * 获取登录验证码
+     *
+     * @param isFirst 是否第一次申请
      */
-    private void getLoginCode() {
+    private void getLoginCode(boolean isFirst) {
 
         Call<ResponseBody> call = RetrofitUtils.createApi(MyApiServer.class).rhLoginCode(new Date().getTime() + "");
 
@@ -102,7 +102,11 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
             @Override
             protected void onSuccess(ResponseBody responseBody) {
                 try {
-                    Glide.with(RhLoginActivity.this).load(responseBody.bytes()).error(com.cdkj.baselibrary.R.drawable.default_pic).into(mbinding.imgCode);
+                    if (isFirst) {    //第一次申请时用于获取token
+                        getLoginCode(false);
+                    } else {
+                        Glide.with(RhLoginActivity.this).load(responseBody.bytes()).error(com.cdkj.baselibrary.R.drawable.default_pic).into(mbinding.imgCode);
+                    }
                 } catch (Exception e) {
                     LogUtil.E("加载" + e);
                 }
@@ -196,7 +200,7 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
                         getWelcomePage();
 //                        checkIsHasReport();
                     } else {
-                        getLoginCode();   //登录失败重新获取验证码
+                        getLoginCode(false);   //登录失败重新获取验证码
                     }
 
                 }, throwable -> {

@@ -136,7 +136,6 @@ public abstract class BaseCertStepActivity extends AbsBaseLoadActivity {
      *
      * @return
      */
-        /*"{"isSuccess":false,"idNo":"522321199509111655","realName":"李先俊"}"*/
     public IdAndNameModel getIdAndName() {
         if (mReportModel == null || TextUtils.isEmpty(mReportModel.getF2())) {
             return null;

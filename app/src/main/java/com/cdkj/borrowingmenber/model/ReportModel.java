@@ -17,7 +17,7 @@ public class ReportModel implements Parcelable {
      * salesUser : U201712041609378539778
      * searchCode : DC2017123441214404065
      * F1 : {"mobile":"13110992819"}
-     * F2 : {"isSuccess":false,"idNo":"522321199509111655","realName":"李先俊"}
+     * F2 : {"isSuccess":false,"idNo":"","realName":""}
      * F3 : {"education":"0","marriage":"0","childrenNum":"3333","provinceCity":"北京市 北京市 昌平区","address":"eifwiefiewfiwe ","liveTime":"0","qq":"333333","email":"1111@111.com","occupation":"0","income":"0","company":"2332332","companyProvinceCity":"北京市 北京市 昌平区","companyAddress":"323232","phone":"3232233232","familyRelation":"0","familyName":"2333","familyMobile":"17777777777","societyRelation":"0","societyName":"rerererre","societyMobile":"15555555555"}
      * intact : 0.00
      * status : 1

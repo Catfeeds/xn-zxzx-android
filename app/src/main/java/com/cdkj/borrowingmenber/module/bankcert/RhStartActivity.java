@@ -39,11 +39,9 @@ public class RhStartActivity extends AbsBaseLoadActivity {
         mBaseBinding.titleView.setMidTitle(getString(R.string.rh_bank_name));
         mBinding.btnRhLogin.setOnClickListener(v -> {
             RhLoginActivity.open(this);
-            finish();
         });
         mBinding.btnRhRegister.setOnClickListener(v -> {
             RhRegisterStep1Activity.open(this);
-            finish();
         });
     }
 }

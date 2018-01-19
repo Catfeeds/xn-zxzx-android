@@ -353,6 +353,9 @@ public class MyReportActivity extends AbsBaseLoadActivity {
                 }
             }
 
+        } else {
+            mBaseBinding.contentView.setShowImage(R.drawable.no_report);
+            mBaseBinding.contentView.setShowText(getString(R.string.no_my_report));
         }
     }
 
