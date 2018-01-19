@@ -42,6 +42,8 @@ public class WebViewActivity extends AbsBaseLoadActivity {
     private ActivityWebviewBinding mBinding;
     private WebView webView;
 
+    private boolean isZoom;//webview是否支持缩放
+
     /**
      * 加载activity
      *
@@ -55,6 +57,7 @@ public class WebViewActivity extends AbsBaseLoadActivity {
         Intent intent = new Intent(activity, WebViewActivity.class);
         intent.putExtra("code", code);
         intent.putExtra("title", title);
+        intent.putExtra("iszoom", false);
         activity.startActivity(intent);
 
     }
@@ -72,6 +75,7 @@ public class WebViewActivity extends AbsBaseLoadActivity {
         Intent intent = new Intent(activity, WebViewActivity.class);
         intent.putExtra("url", url);
         intent.putExtra("title", title);
+        intent.putExtra("iszoom", true);
         activity.startActivity(intent);
 
     }
@@ -85,6 +89,9 @@ public class WebViewActivity extends AbsBaseLoadActivity {
 
     @Override
     public void afterCreate(Bundle savedInstanceState) {
+        if (getIntent() != null) {
+            isZoom = getIntent().getBooleanExtra("iszoom", false);
+        }
         initLayout();
         initData();
     }
@@ -102,12 +109,15 @@ public class WebViewActivity extends AbsBaseLoadActivity {
         if (webSettings != null) {
             webSettings.setJavaScriptEnabled(true);//js
             webSettings.setDefaultTextEncodingName("UTF-8");
-            webSettings.setSupportZoom(true);   //// 支持缩放
-            webSettings.setBuiltInZoomControls(true);//// 支持缩放
-            webSettings.setDomStorageEnabled(true);//开启DOM
-            webSettings.setLoadWithOverviewMode(true);//// 缩放至屏幕的大小
-            webSettings.setUseWideViewPort(true);//将图片调整到适合webview的大小
-            webSettings.setLoadsImagesAutomatically(true);//支持自动加载图片
+
+            if (isZoom) {
+                webSettings.setSupportZoom(true);   //// 支持缩放
+                webSettings.setBuiltInZoomControls(true);//// 支持缩放
+                webSettings.setDomStorageEnabled(true);//开启DOM
+                webSettings.setLoadWithOverviewMode(true);//// 缩放至屏幕的大小
+                webSettings.setUseWideViewPort(true);//将图片调整到适合webview的大小
+                webSettings.setLoadsImagesAutomatically(true);//支持自动加载图片
+            }
         }
 
         webView.setWebChromeClient(new MyWebViewClient1());
