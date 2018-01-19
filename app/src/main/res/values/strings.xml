@@ -13,7 +13,7 @@
     <string name="id_check_tips">请如实填写本人信息，否则将影响测评</string>
     <string name="certification">认证</string>
     <string name="setting">设置</string>
-    <string name="no_cert_list">暂无调查</string>
+    <string name="no_cert_list">暂无调查单</string>
     <string name="start_certification">\t向你发起调查</string>
     <string name="my_report_page">我的资信报告</string>
     <string name="certification_done">(已认证)</string>
