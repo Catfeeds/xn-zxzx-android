@@ -82,7 +82,8 @@
     <string name="rh_check_new_pwd">请确认新密码</string>
     <string name="rh_check_pwd_no_pass">两次密码输入不一致</string>
     <string name="rh_please_input_phone_code_2">请输入动态码</string>
-    <string name="rh_cant_use">您安全等级过高，无法使用此功能。请自行前往官网修改。  官网地址：https://ipcrs.pbccrc.org.cn/</string>
+    <string name="rh_cant_use">您安全等级过高，无法使用此功能。请自行前往官网修改。 /n 官网地址：https://ipcrs.pbccrc.org.cn/</string>
+    <string name="rh_cant_use_question">您安全等级过高，无法进行问题验证。请前往官网进行验证。/n  官网地址：https://ipcrs.pbccrc.org.cn/</string>
     <string name="rh_new_pwd">新密码</string>
     <string name="rh_phone_code">手机动态码</string>
     <string name="rh_question_check">问题验证</string>
