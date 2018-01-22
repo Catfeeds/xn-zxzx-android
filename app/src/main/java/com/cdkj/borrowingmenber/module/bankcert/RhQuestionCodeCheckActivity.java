@@ -38,6 +38,9 @@ public class RhQuestionCodeCheckActivity extends AbsBaseLoadActivity {
     private String checkQuestionToekn;//用于请求申请报告
     private String authtype;//用于请求申请报告
 
+    private static final String INGENTTOKEN = "token";  //请求参数
+    private static final String INGENTAUTHTYPE = "authtype";//请求参数
+
     /**
      * @param context
      * @param token   用于请求的token
@@ -47,8 +50,8 @@ public class RhQuestionCodeCheckActivity extends AbsBaseLoadActivity {
             return;
         }
         Intent intent = new Intent(context, RhQuestionCodeCheckActivity.class);
-        intent.putExtra("token", token);
-        intent.putExtra("authtype", token);
+        intent.putExtra(INGENTTOKEN, token);
+        intent.putExtra(INGENTAUTHTYPE, authtype);
         context.startActivity(intent);
     }
 
@@ -65,9 +68,11 @@ public class RhQuestionCodeCheckActivity extends AbsBaseLoadActivity {
     @Override
     public void afterCreate(Bundle savedInstanceState) {
 
+        mBaseBinding.titleView.setMidTitle("验证身份");
+
         if (getIntent() != null) {
-            checkQuestionToekn = getIntent().getStringExtra("token");
-            authtype = getIntent().getStringExtra("authtype");
+            checkQuestionToekn = getIntent().getStringExtra(INGENTTOKEN);
+            authtype = getIntent().getStringExtra(INGENTAUTHTYPE);
         }
 
         mBinding.btnGetcode.setOnClickListener(v -> getCode());
@@ -87,6 +92,9 @@ public class RhQuestionCodeCheckActivity extends AbsBaseLoadActivity {
 
     }
 
+    /**
+     * 获取报告
+     */
     public void getReport() {
         Map<String, String> map = new HashMap<>();
 
@@ -105,8 +113,8 @@ public class RhQuestionCodeCheckActivity extends AbsBaseLoadActivity {
             @Override
             protected void onSuccess(Document doc) {
                 if (StringUtils.contains(doc.text(), "您的信用信息查询请求已提交")) {
-                    RhQuestionDoneActivity.open(RhQuestionCodeCheckActivity.this);
                     EventBus.getDefault().post(EventTags.RhQUESTIONFINISH); //结束上一页
+                    RhQuestionDoneActivity.open(RhQuestionCodeCheckActivity.this);
                     finish();
                 } else {
                     showToast("申请报告失败，请重试");

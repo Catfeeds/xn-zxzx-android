@@ -62,12 +62,48 @@
                 android:layout_height="wrap_content"
                 app:txt_title="个人设置" />
 
-
-            <com.cdkj.baselibrary.views.RowMoreInfoLayout
+            <LinearLayout
                 android:id="@+id/row_about_us"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:txt_title="关于我们" />
+                android:layout_marginTop="1dp"
+                android:background="@drawable/selector_gray"
+                android:orientation="horizontal"
+                android:paddingBottom="15dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingTop="15dp">
+
+                <TextView
+                    android:id="@+id/tv_left"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="关于我们"
+                    android:textColor="@color/text_color"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:gravity="right"
+                    android:id="@+id/tv_version"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:textColor="#838383"
+                    android:textColorHint="@color/text_hint_color"
+                    android:textSize="13sp"
+                    tools:text="版本号: V  1.1.1" />
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/more_right" />
+
+            </LinearLayout>
 
 
             <TextView
@@ -91,15 +127,6 @@
                 android:textColor="@color/text_color"
                 tools:text="服务时间:9:30-18:00" />
 
-            <TextView
-                android:id="@+id/tv_version"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/bg_gray"
-                android:gravity="center|top"
-                android:paddingTop="40dp"
-                android:textColor="@color/text_color"
-                tools:text="V  1.1.1" />
 
         </LinearLayout>
     </ScrollView>

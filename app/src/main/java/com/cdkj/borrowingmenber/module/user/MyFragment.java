@@ -76,7 +76,7 @@ public class MyFragment extends BaseLazyFragment {
         getServiceTime();
         getServiceTelephone();
 
-        mBinding.tvVersion.setText("V " + AppUtils.getAppVersionName(mActivity));
+        mBinding.tvVersion.setText("当前版本: v" + AppUtils.getAppVersionName(mActivity));
 
         return mBinding.getRoot();
 
@@ -144,7 +144,7 @@ public class MyFragment extends BaseLazyFragment {
         });
         //关于我们
         mBinding.rowAboutUs.setOnClickListener(v -> {
-            WebViewActivity.openkey(mActivity, "关于我们", "aboutUs ");
+            WebViewActivity.openkey(mActivity, "关于我们", "aboutUs");
         });
         //拨打电话
         mBinding.tvServicePhone.setOnClickListener(v -> {

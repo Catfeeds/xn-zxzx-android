@@ -7,16 +7,12 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 
-import com.bumptech.glide.Glide;
 import com.cdkj.baselibrary.base.AbsBaseLoadActivity;
-import com.cdkj.baselibrary.interfaces.RefreshHelper;
 import com.cdkj.baselibrary.nets.RetrofitUtils;
 import com.cdkj.baselibrary.utils.AppUtils;
-import com.cdkj.baselibrary.utils.LogUtil;
 import com.cdkj.baselibrary.utils.StringUtils;
 import com.cdkj.borrowingmenber.R;
 import com.cdkj.borrowingmenber.databinding.ActivityRhFindPwd2Binding;
-import com.cdkj.borrowingmenber.databinding.ActivityRhFindPwdBinding;
 import com.cdkj.borrowingmenber.module.api.MyApiServer;
 import com.cdkj.borrowingmenber.weiget.bankcert.BaseRhCertCallBack;
 import com.cdkj.borrowingmenber.weiget.bankcert.RhHelper;
@@ -25,11 +21,9 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 
 /**
@@ -37,13 +31,13 @@ import retrofit2.Call;
  * Created by cdkj on 2018/1/15.
  */
 
-public class RhFindPwd2Activity extends AbsBaseLoadActivity {
+public class RhFindPwdStep2Activity extends AbsBaseLoadActivity {
 
     public static void open(Context context) {
         if (context == null) {
             return;
         }
-        Intent intent = new Intent(context, RhFindPwd2Activity.class);
+        Intent intent = new Intent(context, RhFindPwdStep2Activity.class);
         context.startActivity(intent);
     }
 
@@ -58,7 +52,7 @@ public class RhFindPwd2Activity extends AbsBaseLoadActivity {
 
     @Override
     public void afterCreate(Bundle savedInstanceState) {
-        mBaseBinding.titleView.setMidTitle("设置新密码");
+        mBaseBinding.titleView.setMidTitle(getString(R.string.rh_reset_pwd));
         initListener();
     }
 
@@ -74,19 +68,19 @@ public class RhFindPwd2Activity extends AbsBaseLoadActivity {
 
         mBinding.errorInfo.setVisibility(View.GONE);
         if (TextUtils.isEmpty(mBinding.editNewPwd.getText().toString())) {
-            showToast("请输入新");
+            showToast(getString(R.string.rh_please_input_new_pwd));
             return;
         }
         if (TextUtils.isEmpty(mBinding.editConfirmPwd.getText().toString())) {
-            showToast("请确认新姓名");
+            showToast(getString(R.string.rh_check_new_pwd));
             return;
         }
         if (!TextUtils.equals(mBinding.editConfirmPwd.getText().toString(), mBinding.editNewPwd.getText().toString())) {
-            showToast("两次密码输入不一致");
+            showToast(getString(R.string.rh_check_pwd_no_pass));
             return;
         }
         if (TextUtils.isEmpty(mBinding.editCode.getText().toString())) {
-            showToast("请输入动态码");
+            showToast(getString(R.string.rh_please_input_phone_code_2));
             return;
         }
 
@@ -116,16 +110,17 @@ public class RhFindPwd2Activity extends AbsBaseLoadActivity {
                     mBinding.errorInfo.setText(error.text());
                     return;
                 }
-                if (StringUtils.contains(doc.text(), "新密码") && StringUtils.contains(doc.text(), "手机动态码")) {
-                    showToast("找回密码失败，请重试");
+                if (StringUtils.contains(doc.text(), getString(R.string.rh_new_pwd)) && StringUtils.contains(doc.text(), getString(R.string.rh_phone_code)
+                )) {
+                    showToast(getString(R.string.rh_find_pwd_error));
                     return;
                 }
 
                 if (checkUserLevel(doc)) {
-                    RhFindPwdQuestionCheckActivity.open(RhFindPwd2Activity.this, RhHelper.checkGetToken(doc));
+                    RhFindPwdQuestionCheckActivity.open(RhFindPwdStep2Activity.this, RhHelper.checkGetToken(doc));
                     finish();
                 } else {
-                    showSureDialog("您安全等级过高，无法使用此功能。请自行前往官网修改。\n 官网地址：https://ipcrs.pbccrc.org.cn/", view -> {
+                    showSureDialog(getString(R.string.rh_cant_use), view -> {
                         finish();
                     });
                 }
@@ -155,7 +150,7 @@ public class RhFindPwd2Activity extends AbsBaseLoadActivity {
 
         Element radiobutton3_label = document.getElementById("radiobutton3_label");
 
-        if (radiobutton3_label == null || !TextUtils.equals(radiobutton3_label.text(), "问题验证")) {
+        if (radiobutton3_label == null || !TextUtils.equals(radiobutton3_label.text(), getString(R.string.rh_question_check))) {
             return false;
         }
 

@@ -273,10 +273,7 @@ public class BasicInfoCertActivity extends BaseCertStepActivity {
             UITipDialog.showInfo(this, "请选择学历");
             return false;
         }
-        if (TextUtils.isEmpty(mBinding.editSchool.getText().toString())) {
-            UITipDialog.showInfo(this, "请输入毕业院校");
-            return false;
-        }
+
         if (TextUtils.isEmpty(mMarriagesCode)) {
             UITipDialog.showInfo(this, "请选择婚姻状况");
             return false;
@@ -413,7 +410,7 @@ public class BasicInfoCertActivity extends BaseCertStepActivity {
     }
 
     private void showMarriagesicker() {
-        if (mMarriages == null || mMarriages == null) return;
+        if (mMarriages == null || mMarriagesPicker == null) return;
         if (mMarriages.isEmpty()) {
             getMarriagesData();
             return;

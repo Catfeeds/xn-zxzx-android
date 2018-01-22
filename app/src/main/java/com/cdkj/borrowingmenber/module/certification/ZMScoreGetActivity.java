@@ -46,7 +46,6 @@ public class ZMScoreGetActivity extends BaseZmPermissionsCheckActivity {
     }
 
 
-    /*"{"isSuccess":false,"idNo":"522321199509111655","realName":"李先俊"}"*/
     private void setShowData() {
         IdAndNameModel idAndNameModel = getIdAndName();
         if (idAndNameModel == null) return;

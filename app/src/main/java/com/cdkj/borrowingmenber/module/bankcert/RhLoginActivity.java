@@ -10,7 +10,6 @@ import android.view.View;
 import com.bumptech.glide.Glide;
 import com.cdkj.baselibrary.base.AbsBaseLoadActivity;
 import com.cdkj.baselibrary.nets.RetrofitUtils;
-import com.cdkj.baselibrary.utils.ImgUtils;
 import com.cdkj.baselibrary.utils.LogUtil;
 import com.cdkj.baselibrary.utils.StringUtils;
 import com.cdkj.borrowingmenber.R;
@@ -41,8 +40,6 @@ import retrofit2.Call;
 
 public class RhLoginActivity extends AbsBaseLoadActivity {
 
-//    private boolean isMe;//研发测试使用
-
     public static void open(Context context) {
         if (context == null) {
             return;
@@ -63,38 +60,26 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
     @Override
     public void afterCreate(Bundle savedInstanceState) {
         mBaseBinding.titleView.setMidTitle("登录");
-
         initListener();
-        getLoginCode();
-
+        getLoginCode(true);
     }
 
     private void initListener() {
 
-//        isMe = true;
-//        mbinding.tvTop.setOnClickListener(v -> {
-//            if (isMe) {
-//                mbinding.editLoginName.setText("lixianjun_1995");
-//                mbinding.editLoginPassword.setText("lxjzx123456");
-//            } else {
-//                mbinding.editLoginName.setText("chenshan2819");
-//                mbinding.editLoginPassword.setText("q1i1a1n1");
-//            }
-//            isMe = !isMe;
-//        });
-
-        mbinding.tvChangeCode.setOnClickListener(v -> getLoginCode());
-        mbinding.imgCode.setOnClickListener(v -> getLoginCode());
+        mbinding.tvChangeCode.setOnClickListener(v -> getLoginCode(false));
+        mbinding.imgCode.setOnClickListener(v -> getLoginCode(false));
         mbinding.btnLogin.setOnClickListener(v -> login());
 
         mbinding.tvFindName.setOnClickListener(v -> RhFindLoginNameActivity.open(this));
-        mbinding.tvFindPwdRh.setOnClickListener(v -> RhFindPwdActivity.open(this));
+        mbinding.tvFindPwdRh.setOnClickListener(v -> RhFindPwdStep1Activity.open(this));
     }
 
     /**
      * 获取登录验证码
+     *
+     * @param isFirst 是否第一次申请
      */
-    private void getLoginCode() {
+    private void getLoginCode(boolean isFirst) {
 
         Call<ResponseBody> call = RetrofitUtils.createApi(MyApiServer.class).rhLoginCode(new Date().getTime() + "");
 
@@ -103,7 +88,11 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
             @Override
             protected void onSuccess(ResponseBody responseBody) {
                 try {
-                    Glide.with(RhLoginActivity.this).load(responseBody.bytes()).error(com.cdkj.baselibrary.R.drawable.default_pic).into(mbinding.imgCode);
+                    if (isFirst) {    //第一次申请时用于获取token
+                        getLoginCode(false);
+                    } else {
+                        Glide.with(RhLoginActivity.this).load(responseBody.bytes()).error(com.cdkj.baselibrary.R.drawable.default_pic).into(mbinding.imgCode);
+                    }
                 } catch (Exception e) {
                     LogUtil.E("加载" + e);
                 }
@@ -122,17 +111,17 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
 
     private void login() {
         if (TextUtils.isEmpty(mbinding.editCode.getText().toString())) {
-            showToast("请输入验证码");
+            showToast(getString(R.string.please_input_phone_code));
             return;
         }
 
         if (TextUtils.isEmpty(mbinding.editLoginName.getText().toString())) {
-            showToast("请输入登录名");
+            showToast(getString(R.string.please_input_login_name));
             return;
         }
 
         if (TextUtils.isEmpty(mbinding.editCode.getText().toString())) {
-            showToast("请输入密码");
+            showToast(getString(R.string.please_input_pwd));
             return;
         }
         mbinding.errorInfo.setText("");
@@ -197,7 +186,7 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
                         getWelcomePage();
 //                        checkIsHasReport();
                     } else {
-                        getLoginCode();   //登录失败重新获取验证码
+                        getLoginCode(false);   //登录失败重新获取验证码
                     }
 
                 }, throwable -> {
@@ -296,7 +285,7 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
         call.enqueue(new BaseRhCertCallBack<ResponseBody>(this, BaseRhCertCallBack.DOCTYPE) {
             @Override
             protected void onSuccess(Document document) {
-                if (document != null && StringUtils.contains(document.text(), "欢迎登录个人信用信息服务平台") || StringUtils.contains(document.text(), "上次访问时间")) { //如果没获取到说明登录失败
+                if (StringUtils.contains(document.text(), "欢迎登录个人信用信息服务平台") || StringUtils.contains(document.text(), "上次访问时间")) { //如果没获取到说明登录失败
                     getLeftMenuReportInfo();
                 } else {
                     showError();

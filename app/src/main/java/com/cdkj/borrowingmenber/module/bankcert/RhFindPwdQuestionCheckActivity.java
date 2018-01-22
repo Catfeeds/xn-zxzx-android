@@ -10,7 +10,6 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
 
-import com.cdkj.baselibrary.appmanager.EventTags;
 import com.cdkj.baselibrary.base.AbsBaseLoadActivity;
 import com.cdkj.baselibrary.nets.RetrofitUtils;
 import com.cdkj.baselibrary.utils.AppUtils;
@@ -25,8 +24,6 @@ import com.cdkj.borrowingmenber.module.api.MyApiServer;
 import com.cdkj.borrowingmenber.weiget.bankcert.BaseRhCertCallBack;
 import com.cdkj.borrowingmenber.weiget.bankcert.RhHelper;
 
-import org.greenrobot.eventbus.EventBus;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -54,12 +51,14 @@ public class RhFindPwdQuestionCheckActivity extends AbsBaseLoadActivity {
     private RhRuestionAdapter rhRuestionAdapter;//问题适配器
     private LayoutQuestionTopTimeBinding mTimeLayout;
 
+    private final static String TOKENSIGN = "token";//用于获取token
+
     public static void open(Context context, String token) {
         if (context == null) {
             return;
         }
         Intent intent = new Intent(context, RhFindPwdQuestionCheckActivity.class);
-        intent.putExtra("token", token);
+        intent.putExtra(TOKENSIGN, token);
         context.startActivity(intent);
     }
 
@@ -74,10 +73,10 @@ public class RhFindPwdQuestionCheckActivity extends AbsBaseLoadActivity {
     @Override
     public void afterCreate(Bundle savedInstanceState) {
 
-        mBaseBinding.titleView.setMidTitle("回答问题");
+        mBaseBinding.titleView.setMidTitle(getString(R.string.rh_check_question));
 
         if (getIntent() != null) {
-            mQuestionToken = getIntent().getStringExtra("token");
+            mQuestionToken = getIntent().getStringExtra(TOKENSIGN);
         }
 
         mBinding.btnSubmit.setOnClickListener(v -> {
@@ -85,11 +84,10 @@ public class RhFindPwdQuestionCheckActivity extends AbsBaseLoadActivity {
         });
         initAdapter();
         getRuestionRequest();
-//        rxParseQuestion(null);
     }
 
     /**
-     * 判断用户是否登录
+     * 判断用户是否回答了问题
      *
      * @return
      */
@@ -99,7 +97,7 @@ public class RhFindPwdQuestionCheckActivity extends AbsBaseLoadActivity {
             if (rhRuestionModel == null) continue;
 
             if (TextUtils.isEmpty(rhRuestionModel.getAnswerresult())) {
-                showToast("必须对所有的题作答！");
+                showToast(getString(R.string.rh_check_question_no_pass));
                 return false;
             }
             LogUtil.E("_______" + rhRuestionModel.getAnswerresult());
@@ -326,6 +324,8 @@ public class RhFindPwdQuestionCheckActivity extends AbsBaseLoadActivity {
                 })
                 .subscribe(qus -> {
 
+                    showLoadingDialog();
+
                     Call call = RetrofitUtils.createApi(MyApiServer.class).submitFindPwdQuestion(qus);
 
                     addCall(call);
@@ -335,7 +335,7 @@ public class RhFindPwdQuestionCheckActivity extends AbsBaseLoadActivity {
                         protected void onSuccess(Document doc) {
 
                             if (StringUtils.contains(doc.text(), getString(R.string.rh_find_pwd_check))) {
-                                mSubscription.clear();
+                                mSubscription.clear();      //停止定时器
                                 showSureDialog(getString(R.string.rh_find_pwd_done), view -> {
                                     finish();
                                 });

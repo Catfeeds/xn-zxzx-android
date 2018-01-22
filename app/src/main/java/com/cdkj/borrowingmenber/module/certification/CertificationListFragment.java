@@ -168,7 +168,7 @@ public class CertificationListFragment extends BaseLazyFragment {
 
             @Override
             protected void onSuccess(ResponseInListModel<CertListModel> data, String SucMessage) {
-                mRefreshHelper.setData(data.getList(), getString(R.string.no_cert_list), 0);
+                mRefreshHelper.setData(data.getList(), getString(R.string.no_cert_list), R.drawable.no_report);
             }
 
             @Override

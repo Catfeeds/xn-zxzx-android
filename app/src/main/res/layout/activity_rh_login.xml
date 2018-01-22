@@ -100,7 +100,6 @@
                 android:textColorHint="@color/text_hint_color"
                 android:textSize="14sp" />
 
-
         </LinearLayout>
 
         <TextView

@@ -86,7 +86,7 @@ public class RhQuestionCheckActivity extends AbsBaseLoadActivity {
         });
         initAdapter();
         getRuestionRequest();
-//        rxParseQuestion(null);
+
     }
 
     /**
@@ -100,7 +100,7 @@ public class RhQuestionCheckActivity extends AbsBaseLoadActivity {
             if (rhRuestionModel == null) continue;
 
             if (TextUtils.isEmpty(rhRuestionModel.getAnswerresult())) {
-                showToast("必须对所有的题作答！");
+                showToast(getString(R.string.rh_check_question_no_pass));
                 return false;
             }
             LogUtil.E("_______" + rhRuestionModel.getAnswerresult());
@@ -331,6 +331,8 @@ public class RhQuestionCheckActivity extends AbsBaseLoadActivity {
                     disMissLoading();
                 })
                 .subscribe(qus -> {
+
+                    showLoadingDialog();
 
                     Call call = RetrofitUtils.createApi(MyApiServer.class).submitQuestion(qus);
 

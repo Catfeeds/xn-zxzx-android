@@ -19,7 +19,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center"
-            android:layout_marginTop="-100dp"
+            android:layout_marginTop="-120dp"
             android:visibility="gone"
             tools:src="@drawable/default_pic" />
 
@@ -28,9 +28,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="-40dp"
+            android:layout_marginTop="-50dp"
             android:text="加载失败"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:visibility="gone" />
 
         <com.cdkj.baselibrary.views.LoadingView

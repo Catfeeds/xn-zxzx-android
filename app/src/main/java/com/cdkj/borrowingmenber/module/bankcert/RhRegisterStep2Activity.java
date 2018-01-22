@@ -4,22 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.View;
 
-import com.bigkoo.pickerview.OptionsPickerView;
-import com.bumptech.glide.Glide;
-import com.cdkj.baselibrary.activitys.WebViewActivity;
 import com.cdkj.baselibrary.base.AbsBaseLoadActivity;
 import com.cdkj.baselibrary.nets.RetrofitUtils;
 import com.cdkj.baselibrary.utils.AppUtils;
-import com.cdkj.baselibrary.utils.LogUtil;
 import com.cdkj.baselibrary.utils.StringUtils;
 import com.cdkj.borrowingmenber.R;
-import com.cdkj.borrowingmenber.databinding.ActivityRhRegiBinding;
 import com.cdkj.borrowingmenber.databinding.ActivityRhRegiStep2Binding;
-import com.cdkj.borrowingmenber.model.RhCardTypeModel;
 import com.cdkj.borrowingmenber.module.api.MyApiServer;
 import com.cdkj.borrowingmenber.weiget.bankcert.BaseRhCertCallBack;
 import com.cdkj.borrowingmenber.weiget.bankcert.RhHelper;
@@ -28,16 +21,10 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 
 /**
@@ -45,19 +32,21 @@ import retrofit2.Call;
  * Created by cdkj on 2018/1/4.
  */
 //TODO 人行注册输入正则验证
-public class RhRegister2Activity extends AbsBaseLoadActivity {
+public class RhRegisterStep2Activity extends AbsBaseLoadActivity {
 
 
     private String regiToken = "";//用于注册请求
 
     private String tcId = "";//获取得到验证码后得到 用于注册
 
+    private static final String INGENTTOKEN = "regiToken";  //请求参数
+
     public static void open(Context context, String regiToken) {
         if (context == null) {
             return;
         }
-        Intent intent = new Intent(context, RhRegister2Activity.class);
-        intent.putExtra("regiToken", regiToken);
+        Intent intent = new Intent(context, RhRegisterStep2Activity.class);
+        intent.putExtra(INGENTTOKEN, regiToken);
         context.startActivity(intent);
     }
 
@@ -76,7 +65,7 @@ public class RhRegister2Activity extends AbsBaseLoadActivity {
         mBaseBinding.titleView.setMidTitle("补充用户信息");
 
         if (getIntent() != null) {
-            regiToken = getIntent().getStringExtra("regiToken");
+            regiToken = getIntent().getStringExtra(INGENTTOKEN);
         }
 
         initListener();
@@ -85,7 +74,6 @@ public class RhRegister2Activity extends AbsBaseLoadActivity {
 
     private void initListener() {
         mBinding.btnSendCode.setOnClickListener(v -> {
-            checkRegiInfo();
             getRegi2Code();
         });
         mBinding.btnSubmin.setOnClickListener(v -> {
@@ -101,7 +89,7 @@ public class RhRegister2Activity extends AbsBaseLoadActivity {
     private void checkRegiInfo() {
 
         if (TextUtils.isEmpty(mBinding.editLoginName.getText().toString())) {
-            showError("请输入登录名");
+            showError(getString(R.string.please_input_login_name));
             return;
         }
         if (mBinding.editLoginName.getText().length() < 6 || mBinding.editLoginName.getText().length() > 16) {
@@ -110,7 +98,7 @@ public class RhRegister2Activity extends AbsBaseLoadActivity {
         }
 
         if (TextUtils.isEmpty(mBinding.editLoginPassword.getText().toString())) {
-            showError("请输入登录密码");
+            showError(getString(R.string.please_input_pwd));
             return;
         }
 
@@ -274,7 +262,7 @@ public class RhRegister2Activity extends AbsBaseLoadActivity {
                 Elements elemenRegi3 = doc.getElementsByClass("table-con");// 判断第三步是否注册成功
 
                 if (elemenRegi3 != null && StringUtils.contains(elemenRegi3.text(), "注册成功")) {
-                    RhRegister3Activity.open(RhRegister2Activity.this);
+                    RhRegisterStpe3Activity.open(RhRegisterStep2Activity.this);
                     finish();
                     return;
                 }

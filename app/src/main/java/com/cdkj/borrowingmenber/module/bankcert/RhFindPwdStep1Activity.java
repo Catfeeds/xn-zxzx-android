@@ -10,11 +10,9 @@ import android.view.View;
 import com.bumptech.glide.Glide;
 import com.cdkj.baselibrary.base.AbsBaseLoadActivity;
 import com.cdkj.baselibrary.nets.RetrofitUtils;
-import com.cdkj.baselibrary.utils.ImgUtils;
 import com.cdkj.baselibrary.utils.LogUtil;
 import com.cdkj.baselibrary.utils.StringUtils;
 import com.cdkj.borrowingmenber.R;
-import com.cdkj.borrowingmenber.databinding.ActivityRhFindLoginnameBinding;
 import com.cdkj.borrowingmenber.databinding.ActivityRhFindPwdBinding;
 import com.cdkj.borrowingmenber.module.api.MyApiServer;
 import com.cdkj.borrowingmenber.weiget.bankcert.BaseRhCertCallBack;
@@ -34,13 +32,13 @@ import retrofit2.Call;
  * Created by cdkj on 2018/1/15.
  */
 
-public class RhFindPwdActivity extends AbsBaseLoadActivity {
+public class RhFindPwdStep1Activity extends AbsBaseLoadActivity {
 
     public static void open(Context context) {
         if (context == null) {
             return;
         }
-        Intent intent = new Intent(context, RhFindPwdActivity.class);
+        Intent intent = new Intent(context, RhFindPwdStep1Activity.class);
         context.startActivity(intent);
     }
 
@@ -55,7 +53,7 @@ public class RhFindPwdActivity extends AbsBaseLoadActivity {
 
     @Override
     public void afterCreate(Bundle savedInstanceState) {
-        mBaseBinding.titleView.setMidTitle("找回密码");
+        mBaseBinding.titleView.setMidTitle(getString(R.string.rh_find_pwd_title));
 
         initListener();
 
@@ -66,29 +64,18 @@ public class RhFindPwdActivity extends AbsBaseLoadActivity {
 
         mBinding.tvChangeCode.setOnClickListener(v -> getCode());
 
-        mBinding.btnNext.setOnClickListener(v -> findPwd());
+        mBinding.btnNext.setOnClickListener(v -> findPwdRequest());
 
     }
 
-    private void findPwd() {
+    /**
+     * 找回密码请求
+     */
+    private void findPwdRequest() {
 
         mBinding.errorInfo.setVisibility(View.GONE);
-        if (TextUtils.isEmpty(mBinding.editLoginName.getText().toString())) {
-            showToast("请输入登录名");
-            return;
-        }
-        if (TextUtils.isEmpty(mBinding.editName.getText().toString())) {
-            showToast("请输入姓名");
-            return;
-        }
-        if (TextUtils.isEmpty(mBinding.editIdNum.getText().toString())) {
-            showToast("请输入身份证号码");
-            return;
-        }
-        if (TextUtils.isEmpty(mBinding.editCode.getText().toString())) {
-            showToast("请输入验证码");
-            return;
-        }
+
+        if (checkInputState()) return;
 
         Map<String, String> map = new HashMap<>();
 
@@ -118,13 +105,13 @@ public class RhFindPwdActivity extends AbsBaseLoadActivity {
                     getCode();
                     return;
                 }
-                if (StringUtils.contains(doc.text(), "姓名") && StringUtils.contains(doc.text(), "验证码")) {
-                    showToast("找回密码失败，请重试");
+                if (StringUtils.contains(doc.text(), getString(R.string.name)) && StringUtils.contains(doc.text(), getString(R.string.pass_code))) {
+                    showToast(getString(R.string.rh_find_pwd_error));
                     getCode();
                     return;
                 }
 
-                RhFindPwd2Activity.open(RhFindPwdActivity.this);
+                RhFindPwdStep2Activity.open(RhFindPwdStep1Activity.this);
                 finish();
 
             }
@@ -136,6 +123,31 @@ public class RhFindPwdActivity extends AbsBaseLoadActivity {
         });
 
 
+    }
+
+    /**
+     * 检查输入状态
+     *
+     * @return
+     */
+    private boolean checkInputState() {
+        if (TextUtils.isEmpty(mBinding.editLoginName.getText().toString())) {
+            showToast(getString(R.string.please_input_login_name));
+            return true;
+        }
+        if (TextUtils.isEmpty(mBinding.editName.getText().toString())) {
+            showToast(getString(R.string.please_input_name));
+            return true;
+        }
+        if (TextUtils.isEmpty(mBinding.editIdNum.getText().toString())) {
+            showToast(getString(R.string.please_input_idcard_num));
+            return true;
+        }
+        if (TextUtils.isEmpty(mBinding.editCode.getText().toString())) {
+            showToast(getString(R.string.please_input_phone_code));
+            return true;
+        }
+        return false;
     }
 
     public void getCode() {
@@ -151,7 +163,7 @@ public class RhFindPwdActivity extends AbsBaseLoadActivity {
             protected void onSuccess(ResponseBody responseBody) {
 
                 try {
-                    Glide.with(RhFindPwdActivity.this).load(responseBody.bytes()).error(com.cdkj.baselibrary.R.drawable.default_pic).into(mBinding.imgCode);
+                    Glide.with(RhFindPwdStep1Activity.this).load(responseBody.bytes()).error(com.cdkj.baselibrary.R.drawable.default_pic).into(mBinding.imgCode);
                 } catch (Exception e) {
                     LogUtil.E("加载" + e);
                 }

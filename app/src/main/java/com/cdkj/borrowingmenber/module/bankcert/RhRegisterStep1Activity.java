@@ -13,7 +13,6 @@ import com.bumptech.glide.Glide;
 import com.cdkj.baselibrary.activitys.WebViewActivity;
 import com.cdkj.baselibrary.base.AbsBaseLoadActivity;
 import com.cdkj.baselibrary.nets.RetrofitUtils;
-import com.cdkj.baselibrary.utils.ImgUtils;
 import com.cdkj.baselibrary.utils.LogUtil;
 import com.cdkj.baselibrary.utils.StringUtils;
 import com.cdkj.borrowingmenber.R;
@@ -42,8 +41,8 @@ import retrofit2.Call;
  * 人行注册页面
  * Created by cdkj on 2018/1/4.
  */
-//TODO 请求后状态判断检查
-public class RhRegisterActivity extends AbsBaseLoadActivity {
+
+public class RhRegisterStep1Activity extends AbsBaseLoadActivity {
 
     private List<RhCardTypeModel> rhCardTypeModels;
 
@@ -57,7 +56,7 @@ public class RhRegisterActivity extends AbsBaseLoadActivity {
         if (context == null) {
             return;
         }
-        Intent intent = new Intent(context, RhRegisterActivity.class);
+        Intent intent = new Intent(context, RhRegisterStep1Activity.class);
         context.startActivity(intent);
     }
 
@@ -110,20 +109,20 @@ public class RhRegisterActivity extends AbsBaseLoadActivity {
     private void regiNext() {
 
         if (TextUtils.isEmpty(mBinding.editRegiName.getText().toString())) {
-            showToast("请输入姓名");
+            showToast(getString(R.string.please_input_name));
             return;
         }
         if (TextUtils.isEmpty(mBinding.editCardNum.getText().toString())) {
-            showToast("请输入证件号码");
+            showToast(getString(R.string.please_input_idcard_num));
             return;
         }
         if (TextUtils.isEmpty(mBinding.editCode.getText().toString())) {
-            showToast("请输入验证码");
+            showToast(getString(R.string.please_input_phone_code));
             return;
         }
 
         if (!mBinding.checkboxRead.isChecked()) {
-            showToast("请认真阅读并勾选同意服务协议");
+            showToast(getString(R.string.rh_please_read_txt));
             return;
         }
         rhRegiRequest();
@@ -209,7 +208,7 @@ public class RhRegisterActivity extends AbsBaseLoadActivity {
             protected void onSuccess(ResponseBody responseBody) {
 
                 try {
-                    Glide.with(RhRegisterActivity.this).load(responseBody.bytes()).error(com.cdkj.baselibrary.R.drawable.default_pic).into(mBinding.imgCode);
+                    Glide.with(RhRegisterStep1Activity.this).load(responseBody.bytes()).error(com.cdkj.baselibrary.R.drawable.default_pic).into(mBinding.imgCode);
                 } catch (Exception e) {
                     LogUtil.E("加载" + e);
                 }
@@ -300,7 +299,7 @@ public class RhRegisterActivity extends AbsBaseLoadActivity {
 
         if (doc != null && StringUtils.contains(doc.text(), getString(R.string.rh_regi2_check1)) && StringUtils.contains(doc.text(), getString(R.string.rh_regi2_check2)) && StringUtils.contains(doc.text(), getString(R.string.rh_regi2_check3))) {
             regiToken = RhHelper.checkGetToken(doc); //用于获取下一个页面的token
-            RhRegister2Activity.open(RhRegisterActivity.this, regiToken);
+            RhRegisterStep2Activity.open(RhRegisterStep1Activity.this, regiToken);
             finish();
             return;
         }

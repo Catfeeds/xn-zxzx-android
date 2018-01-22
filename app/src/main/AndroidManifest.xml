@@ -170,12 +170,12 @@
             android:windowSoftInputMode="adjustPan" />
         <!--找回登录密码-->
         <activity
-            android:name=".module.bankcert.RhFindPwdActivity"
+            android:name=".module.bankcert.RhFindPwdStep1Activity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <!--找回登录密码2-->
         <activity
-            android:name=".module.bankcert.RhFindPwd2Activity"
+            android:name=".module.bankcert.RhFindPwdStep2Activity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <!--找回登录密码2-->
@@ -196,18 +196,18 @@
             android:windowSoftInputMode="adjustPan" />
         <!--人行注册-->
         <activity
-            android:name=".module.bankcert.RhRegisterActivity"
+            android:name=".module.bankcert.RhRegisterStep1Activity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
 
         <!--人行注册 2-->
         <activity
-            android:name=".module.bankcert.RhRegister2Activity"
+            android:name=".module.bankcert.RhRegisterStep2Activity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <!--人行注册 3-->
         <activity
-            android:name=".module.bankcert.RhRegister3Activity"
+            android:name=".module.bankcert.RhRegisterStpe3Activity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
 

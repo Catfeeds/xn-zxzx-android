@@ -52,7 +52,7 @@ public class RhNoReportActivity extends AbsBaseLoadActivity {
 
     @Override
     public void afterCreate(Bundle savedInstanceState) {
-        mBaseBinding.titleView.setMidTitle("资信报告");
+        mBaseBinding.titleView.setMidTitle(getString(R.string.rh_report));
     }
 
     @Override
@@ -115,8 +115,12 @@ public class RhNoReportActivity extends AbsBaseLoadActivity {
      */
     private void checkHasCode(Document doc) {
 
+
         if (StringUtils.contains(doc.text(), getString(R.string.rh_noreport_code_1)) || StringUtils.contains(doc.text(), getString(R.string.rh_noreport_code_2))) {
-            RhQuestionCodeCheckActivity.open(RhNoReportActivity.this, RhHelper.checkGetToken(doc), getAuthtype(doc));
+            showSureDialog(getString(R.string.rh_cant_use_question), view -> {
+                finish();
+            });
+//            RhQuestionCodeCheckActivity.open(RhNoReportActivity.this, RhHelper.checkGetToken(doc), getAuthtype(doc));
         } else {
             RhQuestionCheckActivity.open(RhNoReportActivity.this, RhHelper.checkGetToken(doc));
         }

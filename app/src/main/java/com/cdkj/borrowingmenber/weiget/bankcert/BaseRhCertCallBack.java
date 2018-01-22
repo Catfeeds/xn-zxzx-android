@@ -8,7 +8,6 @@ import com.cdkj.baselibrary.api.BaseResponseListModel;
 import com.cdkj.baselibrary.nets.NetHelper;
 import com.cdkj.baselibrary.nets.NetUtils;
 import com.cdkj.baselibrary.utils.LogUtil;
-import com.cdkj.baselibrary.utils.ToastUtil;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -76,7 +75,7 @@ public abstract class BaseRhCertCallBack<T> implements Callback<ResponseBody> {
             }
 
         } else {
-            onReqFailure(NETERRORCODE4, "系统繁忙,请稍后再试");
+            onReqFailure(NETERRORCODE4, "网络请求失败");
         }
 
     }
@@ -99,7 +98,7 @@ public abstract class BaseRhCertCallBack<T> implements Callback<ResponseBody> {
 
         if (TextUtils.isEmpty(strRe)) {
 
-            onReqFailure(NETERRORCODE4, "系统繁忙,请稍后再试");
+            onReqFailure(NETERRORCODE4, "数据获取失败");
 
             return;
 
@@ -113,22 +112,17 @@ public abstract class BaseRhCertCallBack<T> implements Callback<ResponseBody> {
             Document document = Jsoup.parse(strRe);
 
             if (document == null) {
-
                 onReqFailure(NETERRORCODE4, "系统繁忙,请稍后再试");
-
                 return;
             }
 
-            Elements elements = document.getElementsByClass("error");      //出现错误提示布局
 
-            if (elements != null && elements.size() > 0) {
-
+            if (document.body() == null || document.body().children() == null || document.body().children().size() == 0) {
                 onReqFailure(NETERRORCODE4, "系统繁忙,请稍后再试");
-
                 return;
             }
 
-            if (TextUtils.isEmpty(document.title()) || TextUtils.isEmpty(document.text())) { //判断长时间未操作
+            if (TextUtils.isEmpty(document.title()) || TextUtils.isEmpty(document.text())) { //判断长时间未操作 未操作时会返回一段js代码出一个alert弹框
                 onReqFailure(NETERRORCODE4, "系统繁忙,请稍后再试");
                 return;
             }
@@ -195,7 +189,7 @@ public abstract class BaseRhCertCallBack<T> implements Callback<ResponseBody> {
      * 请求数据为空
      */
     protected void onNull() {
-        ToastUtil.show(context, "系统繁忙,请稍后再试");
+        NetHelper.onNull(context);
     }
 
     /**

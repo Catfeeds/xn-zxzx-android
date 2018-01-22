@@ -137,7 +137,7 @@ public class AppUtils {
      * @return
      */
     public static Disposable startCodeDown(final int count, final Button btn) {
-        return Observable.interval(1, TimeUnit.SECONDS, AndroidSchedulers.mainThread())    // 创建一个按照给定的时间间隔发射从0开始的整数序列
+        return Observable.interval(0, 1, TimeUnit.SECONDS, AndroidSchedulers.mainThread())    // 创建一个按照给定的时间间隔发射从0开始的整数序列
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .take(count)//只发射开始的N项数据或者一定时间内的数据

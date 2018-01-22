@@ -29,7 +29,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 
 /**
- * 人行报告查看验证
+ * 人行报告查看验证  查看报告
  * Created by cdkj on 2017/12/28.
  */
 
@@ -61,6 +61,9 @@ public class RhReportLookCheckActivity extends AbsBaseLoadActivity {
         addWebView();
     }
 
+    /**
+     * 添加webView用于显示报告
+     */
     private void addWebView() {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         webView = new WebView(getApplicationContext());
@@ -168,7 +171,7 @@ reportformat	21*/
 reportformat	21
 tradeCode	tb4k7f*/
         Map<String, String> map = new HashMap<>();
-        map.put("counttime", "1");    //发送验证码后 验证码倒计时剩余数字 1-60 TODO counttime应该由解析而得到
+        map.put("counttime", "1");    //发送验证码后 验证码倒计时剩余数字 1-60
         map.put("tradeCode", mBinding.editCode.getText().toString());
         map.put("reportformat", RhHelper.reportType); //21 个人信用报告  24 个人信用概要 25 个人信息提示
 
@@ -180,9 +183,9 @@ tradeCode	tb4k7f*/
             @Override
             protected void onSuccess(String str) {
                 LogUtil.E("查看成功");
+                webView.loadData(str, "text/html;charset=UTF-8", "UTF-8");
                 webView.setVisibility(View.VISIBLE);
                 mBinding.linTopInput.setVisibility(View.GONE);
-                webView.loadData(str, "text/html;charset=UTF-8", "UTF-8");
             }
 
             @Override
