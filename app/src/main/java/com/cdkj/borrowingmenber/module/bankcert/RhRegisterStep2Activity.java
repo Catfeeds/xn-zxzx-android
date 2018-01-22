@@ -74,7 +74,6 @@ public class RhRegisterStep2Activity extends AbsBaseLoadActivity {
 
     private void initListener() {
         mBinding.btnSendCode.setOnClickListener(v -> {
-            checkRegiInfo();
             getRegi2Code();
         });
         mBinding.btnSubmin.setOnClickListener(v -> {
