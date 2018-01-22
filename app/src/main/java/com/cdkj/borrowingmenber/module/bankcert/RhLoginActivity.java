@@ -40,8 +40,6 @@ import retrofit2.Call;
 
 public class RhLoginActivity extends AbsBaseLoadActivity {
 
-//    private boolean isMe;//研发测试使用
-
     public static void open(Context context) {
         if (context == null) {
             return;
@@ -67,18 +65,6 @@ public class RhLoginActivity extends AbsBaseLoadActivity {
     }
 
     private void initListener() {
-
-//        isMe = true;
-//        mbinding.tvTop.setOnClickListener(v -> {
-//            if (isMe) {
-//                mbinding.editLoginName.setText("lixianjun_1995");
-//                mbinding.editLoginPassword.setText("lxjzx123456");
-//            } else {
-//                mbinding.editLoginName.setText("chenshan2819");
-//                mbinding.editLoginPassword.setText("q1i1a1n1");
-//            }
-//            isMe = !isMe;
-//        });
 
         mbinding.tvChangeCode.setOnClickListener(v -> getLoginCode(false));
         mbinding.imgCode.setOnClickListener(v -> getLoginCode(false));

@@ -115,6 +115,7 @@ public class RhNoReportActivity extends AbsBaseLoadActivity {
      */
     private void checkHasCode(Document doc) {
 
+
         if (StringUtils.contains(doc.text(), getString(R.string.rh_noreport_code_1)) || StringUtils.contains(doc.text(), getString(R.string.rh_noreport_code_2))) {
             showSureDialog(getString(R.string.rh_cant_use_question), view -> {
                 finish();
