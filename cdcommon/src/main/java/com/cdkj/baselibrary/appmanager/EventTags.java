@@ -20,4 +20,7 @@ public class EventTags {
     //登录成功
     public final static String LOGINREFRESH = "6";
 
+    //人行回答问题完成
+    public final static String RhQUESTIONFINISH = "7";
+
 }

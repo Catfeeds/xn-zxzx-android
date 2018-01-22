@@ -8,6 +8,9 @@ import android.widget.EditText;
 import com.alibaba.fastjson.JSON;
 import com.cdkj.baselibrary.appmanager.MyCdConfig;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -41,6 +44,10 @@ public class StringUtils {
     }
 
 
+    public static boolean contains(String s, String b) {
+        if (s == null || b == null) return false;
+        return s.contains(b);
+    }
 
 
     public static int parseInt(String s) {
@@ -114,12 +121,6 @@ public class StringUtils {
         return subString(s, start, s.length());
     }
 
-    public static String subStringLenghtEnd(String s) {
-        if (TextUtils.isEmpty(s)) {
-            return "";
-        }
-        return subString(s, s.length() - 1, s.length());
-    }
 
     //int前面补零
     public static String frontCompWithZoreString(Object sourceDate, int formatLength) {
@@ -129,6 +130,16 @@ public class StringUtils {
         } catch (Exception e) {
             return sourceDate.toString();
         }
+    }
+    /**
+     * 计算要显示的折扣
+     *
+     * @return
+     */
+    public static String formatInteger(Double discount) {
+        if (discount == null) return "00";
+        NumberFormat nf = new DecimalFormat("#.##");
+        return nf.format(discount);
     }
 
     /**

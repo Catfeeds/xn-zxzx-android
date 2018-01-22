@@ -43,7 +43,6 @@ public class LocalFocusOnDataParseHelper {
         if (detailBeans == null || myLocalFocusOnList == null || detailBeans.isEmpty() || myLocalFocusOnList.isEmpty()) {
             return list;
         }
-        FocusOnParseShowModel parseShowModel = new FocusOnParseShowModel();
 
         for (IndustryFocusOnListModel.DetailBean detailBean : detailBeans) {
 
@@ -57,6 +56,7 @@ public class LocalFocusOnDataParseHelper {
                 continue;
             }
 
+            FocusOnParseShowModel parseShowModel = new FocusOnParseShowModel();
 
             for (IndustryFocusOnListModel.DetailBean.ExtendInfoBean extendInfoBean : detailBean.getExtendInfo()) { //扩展字段处理
                 if (extendInfoBean == null) {
@@ -81,9 +81,11 @@ public class LocalFocusOnDataParseHelper {
             if (localFocusOnList.getType() != null) {
 
                 for (MyLocalFocusOnListModel.TypeBean.TypeCodeInfoBean typeCodeListBean : localFocusOnList.getType().getTypeCodeInfo()) {//对比风险类型code
+
                     if (typeCodeListBean == null) {
                         continue;
                     }
+
                     if (TextUtils.equals(typeCodeListBean.getCode(), detailBean.getType())) {
 
                         parseShowModel.setBizName(localFocusOnList.getBizName());

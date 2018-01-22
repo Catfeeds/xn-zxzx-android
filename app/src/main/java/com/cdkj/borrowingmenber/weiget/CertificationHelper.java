@@ -12,6 +12,7 @@ import com.cdkj.baselibrary.utils.StringUtils;
 import com.cdkj.borrowingmenber.model.CertListModel;
 import com.cdkj.borrowingmenber.model.ReportModel;
 import com.cdkj.borrowingmenber.module.api.MyApiServer;
+import com.cdkj.borrowingmenber.module.bankcert.RhLoginActivity;
 import com.cdkj.borrowingmenber.module.certification.AddressBookCertActivity;
 import com.cdkj.borrowingmenber.module.certification.BasicInfoCertActivity;
 import com.cdkj.borrowingmenber.module.certification.IdcardUploadActivity;
@@ -132,6 +133,11 @@ public class CertificationHelper {
             openStepPage(context, TdAllCertActivity.class, certListModel.getCode());
             return;
         }
+//        //打开人行认证
+//        if (isNeedCertRH(certListModel) || isNeedCertRH(reportModel, certListModel)) {
+//            openStepPage(context, RhLoginActivity.class, certListModel.getCode());
+//            return;
+//        }
 
         //打开认证报告
         MyReportActivity.open(context, reportModel.getCode());
@@ -387,6 +393,27 @@ public class CertificationHelper {
     public static boolean isNeedCertTd(ReportModel reportModel, CertListModel certListModel) {
         return TextUtils.isEmpty(reportModel.getPTD8()) && !TextUtils.equals(certListModel.getPTD8(), "Y") && !TextUtils.equals(certListModel.getPTD8(), "N") && !TextUtils.isEmpty(certListModel.getPTD8());
     }
+
+//    /**
+//     * 是否需要人行认证
+//     *
+//     * @param certListModel
+//     * @return
+//     */
+//    public static boolean isNeedCertRH(CertListModel certListModel) {
+//        return TextUtils.equals(certListModel.getPRH9(), "Y");
+//    }
+//
+//
+//    /**
+//     * 是否需要人行认证
+//     *
+//     * @param
+//     * @return
+//     */
+//    public static boolean isNeedCertRH(ReportModel reportModel, CertListModel certListModel) {
+//        return TextUtils.isEmpty(reportModel.getPRH9()) && !TextUtils.equals(certListModel.getPRH9(), "Y") && !TextUtils.equals(certListModel.getPRH9(), "N") && !TextUtils.isEmpty(certListModel.getPRH9());
+//    }
 
 
     /**

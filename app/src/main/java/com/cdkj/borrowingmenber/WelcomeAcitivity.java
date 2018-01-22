@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import com.cdkj.baselibrary.appmanager.SPUtilHelpr;
 import com.cdkj.baselibrary.base.BaseActivity;
+import com.cdkj.borrowingmenber.module.bankcert.RhFindPwdActivity;
 import com.cdkj.borrowingmenber.module.user.LoginActivity;
 
 import java.util.concurrent.TimeUnit;
@@ -43,7 +44,9 @@ public class WelcomeAcitivity extends BaseActivity {
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(aLong -> {//延迟两秒进行跳转
+//                    RhQuestionCheckActivity.open(WelcomeAcitivity.this, "");
                     startNext();
+//                    RhFindPwdActivity.open(this);
                 }, Throwable::printStackTrace));
     }
 

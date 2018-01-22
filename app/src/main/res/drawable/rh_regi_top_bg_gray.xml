@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<shape
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:shape="oval"
+
+    android:useLevel="false">
+
+    <solid android:color="@color/rh_regi_top_gray_bg2" />
+
+    <stroke
+
+        android:width="3dp"
+
+        android:color="@color/rh_regi_top_gray_bg" />
+
+    <size
+        android:width="50dp"
+
+        android:height="50dp" />
+
+</shape>
