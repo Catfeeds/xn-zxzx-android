@@ -20,6 +20,7 @@ import com.cdkj.borrowingmenber.weiget.bankcert.RhHelper;
 
 import org.greenrobot.eventbus.EventBus;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -112,6 +113,7 @@ public class RhQuestionCodeCheckActivity extends AbsBaseLoadActivity {
 
             @Override
             protected void onSuccess(Document doc) {
+
                 if (StringUtils.contains(doc.text(), "您的信用信息查询请求已提交")) {
                     EventBus.getDefault().post(EventTags.RhQUESTIONFINISH); //结束上一页
                     RhQuestionDoneActivity.open(RhQuestionCodeCheckActivity.this);
@@ -132,6 +134,7 @@ public class RhQuestionCodeCheckActivity extends AbsBaseLoadActivity {
      *
      */
     private void checkCode() {
+
         Map<String, String> map = new HashMap<>();
         map.put("org.apache.struts.taglib.html.TOKEN", checkQuestionToekn);
         map.put("counttime", "1");
@@ -150,7 +153,22 @@ public class RhQuestionCodeCheckActivity extends AbsBaseLoadActivity {
 
             @Override
             protected void onSuccess(Document doc) {
-                getReport();
+                Element error = doc.getElementById("messages");//判断有没有错误提醒出现
+
+                if (error != null && !TextUtils.isEmpty(error.text())) {
+                    checkQuestionToekn = RhHelper.checkGetToken(doc); //出现错误的情况
+                    showToast(error.text());
+                    return;
+                }
+
+                if (StringUtils.contains(doc.text(), "您的信用信息查询请求已提交")) {
+                    EventBus.getDefault().post(EventTags.RhQUESTIONFINISH); //结束上一页
+                    RhQuestionDoneActivity.open(RhQuestionCodeCheckActivity.this);
+                    finish();
+                } else {
+                    showToast("系统错误，请稍后再试");
+                }
+//                getReport();
             }
 
             @Override
