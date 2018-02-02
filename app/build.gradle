@@ -83,7 +83,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     api project(':cdcommon')
-
+    implementation 'com.android.support:multidex:1.0.1'
     //路由
     //arouter
     implementation 'com.alibaba:arouter-api:1.2.2'
